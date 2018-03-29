@@ -13,51 +13,51 @@
         TextOptions.TextRenderingMode="Auto"        
         Background="{DynamicResource MaterialDesignPaper}"
         FontFamily="{DynamicResource MaterialDesignFont}"
-        Title="Higurashi Patcher"  Height="900" Width="450" ResizeMode="NoResize" WindowStartupLocation="CenterScreen">
+        Title="Higurashi Patcher"  Height="550" Width="450" ResizeMode="NoResize" WindowStartupLocation="CenterScreen">
 
-    <Grid x:Name="MainGrid" Height="871" VerticalAlignment="Bottom" HorizontalAlignment="Left" Width="450" Margin="0,0,-6,0" >
-        <materialDesign:Card Margin="1,334,0,0" VerticalAlignment="Stretch" RenderTransformOrigin="0.511,0.166" HorizontalAlignment="Left" Width="440"  >
+    <Grid x:Name="MainGrid" Height="550" VerticalAlignment="Bottom" HorizontalAlignment="Left" Width="450" Margin="0,0,-6,0" >
+        <materialDesign:Card Margin="1,175,0,-2" VerticalAlignment="Stretch" RenderTransformOrigin="0.511,0.166" HorizontalAlignment="Left" Width="440"  >
             <Image x:Name="MainImage" HorizontalAlignment="Left" Height="217" Margin="0,1,-1,0" VerticalAlignment="Top" Width="440"/>
         </materialDesign:Card>
-        <Ellipse Margin="7,365,367,427" Stroke="White" StrokeThickness="1">
+        <Ellipse Margin="16,77,358,394" Stroke="White" StrokeThickness="1">
             <Ellipse.Fill>
                 <ImageBrush x:Name="MainImage1" ImageSource="Resources\07th_icons\ico\HigurashiEp01_0000.ico"/>
             </Ellipse.Fill>
         </Ellipse>
-        <Ellipse Margin="91,365,284,427"  Stroke="White" StrokeThickness="1">
+        <Ellipse Margin="100,77,275,394"  Stroke="White" StrokeThickness="1">
             <Ellipse.Fill>
                 <ImageBrush ImageSource="Resources\07th_icons\ico\HigurashiEp02_0000.ico"/>
             </Ellipse.Fill>
         </Ellipse>
-        <Ellipse Margin="175,365,198,427" Stroke="White" StrokeThickness="1">
+        <Ellipse Margin="181,77,192,394" Stroke="White" StrokeThickness="1">
             <Ellipse.Fill>
                 <ImageBrush ImageSource="Resources\07th_icons\ico\HigurashiEp03_0000.ico"/>
             </Ellipse.Fill>
         </Ellipse>
-        <Ellipse Margin="263,365,112,427" Stroke="White" StrokeThickness="1">
+        <Ellipse Margin="263,77,112,394" Stroke="White" StrokeThickness="1">
             <Ellipse.Fill>
                 <ImageBrush ImageSource="Resources\07th_icons\ico\HigurashiEp04_0000.ico"/>
             </Ellipse.Fill>
         </Ellipse>
-        <Ellipse Margin="350,365,25,427" Stroke="White" StrokeThickness="1">
+        <Ellipse Margin="350,77,25,394" Stroke="White" StrokeThickness="1">
             <Ellipse.Fill>
                 <ImageBrush ImageSource="Resources\07th_icons\ico\HigurashiEp05_00002.ico"/>
             </Ellipse.Fill>
         </Ellipse>
-        <Button x:Name="BtnWatanagashi" Content="Button" HorizontalAlignment="Left" Margin="8,365,0,0" VerticalAlignment="Top" Width="75" Height="79" Opacity="0" Click="BtnWatanagashi_Click"/>
-        <Button x:Name="BtnOnikakushi"  Content="Button" HorizontalAlignment="Left" Margin="91,365,0,0" VerticalAlignment="Top" Width="75" Height="79" Opacity="0" Click="BtnOnikakushi_Click"/>
-        <Button x:Name="BtnTatarigoroshi" Content="Button" HorizontalAlignment="Left" Margin="175,365,0,0" VerticalAlignment="Top" Width="75" Height="79" Opacity="0" Click="BtnTatarigoroshi_Click"/>
-        <Button x:Name="BtnHimatsubushi" Content="Button" HorizontalAlignment="Left" Margin="263,365,0,0" VerticalAlignment="Top" Width="75" Height="79" Opacity="0" Click="BtnHimatsubushi_Click"/>
-        <Button x:Name="BtnMeakashi" Content="Button" HorizontalAlignment="Left" Margin="350,365,0,0" VerticalAlignment="Top" Width="75" Height="79" Opacity="0" Click="BtnMeakashi_Click"/>
-        <Grid x:Name="InstallGrid" HorizontalAlignment="Left" Height="868" Margin="446,3,-490,0" VerticalAlignment="Top" Width="494">
-            <materialDesign:Card Height="868">
+        <Button x:Name="BtnWatanagashi" Content="Button" HorizontalAlignment="Left" Margin="16,77,0,0" VerticalAlignment="Top" Width="75" Height="79" Opacity="0" Click="BtnWatanagashi_Click"/>
+        <Button x:Name="BtnOnikakushi"  Content="Button" HorizontalAlignment="Left" Margin="100,77,0,0" VerticalAlignment="Top" Width="75" Height="79" Opacity="0" Click="BtnOnikakushi_Click"/>
+        <Button x:Name="BtnTatarigoroshi" Content="Button" HorizontalAlignment="Left" Margin="183,77,0,0" VerticalAlignment="Top" Width="75" Height="79" Opacity="0" Click="BtnTatarigoroshi_Click"/>
+        <Button x:Name="BtnHimatsubushi" Content="Button" HorizontalAlignment="Left" Margin="263,77,0,0" VerticalAlignment="Top" Width="75" Height="79" Opacity="0" Click="BtnHimatsubushi_Click"/>
+        <Button x:Name="BtnMeakashi" Content="Button" HorizontalAlignment="Left" Margin="350,77,0,0" VerticalAlignment="Top" Width="75" Height="79" Opacity="0" Click="BtnMeakashi_Click"/>
+        <Grid x:Name="InstallGrid" HorizontalAlignment="Left" Height="550" Margin="446,3,-490,0" VerticalAlignment="Top" Width="494">
+            <materialDesign:Card Height="550">
             </materialDesign:Card>
-            <Button Content="Install/Update" HorizontalAlignment="Left" Margin="180,618,0,0" VerticalAlignment="Top" Width="126"/>
-            <Button Content="Uninstall" HorizontalAlignment="Left" Margin="180,667,0,0" VerticalAlignment="Top" Width="126"/>
-            <CheckBox Content="Backup Files" HorizontalAlignment="Left" Margin="10,840,0,0" VerticalAlignment="Top" Width="101"/>
-            <CheckBox Content="Install Voice Patch" HorizontalAlignment="Left" Margin="132,331,0,0" VerticalAlignment="Top" Width="130"/>
-            <CheckBox Content="Install LipSync Patch" HorizontalAlignment="Left" Margin="132,349,0,0" VerticalAlignment="Top" Width="144"/>
-            <CheckBox Content="Install CG patch" HorizontalAlignment="Left" Margin="132,367,0,0" VerticalAlignment="Top" Width="114"/>
+            <Button Content="Install/Update" HorizontalAlignment="Left" Margin="184,325,0,0" VerticalAlignment="Top" Width="126"/>
+            <Button Content="Uninstall" HorizontalAlignment="Left" Margin="184,386,0,0" VerticalAlignment="Top" Width="126"/>
+            <CheckBox Content="Backup Files" HorizontalAlignment="Left" Margin="10,521,0,0" VerticalAlignment="Top" Width="101"/>
+            <CheckBox Content="Install Voice Patch" HorizontalAlignment="Left" Margin="180,250,0,0" VerticalAlignment="Top" Width="130"/>
+            <CheckBox Content="Install LipSync Patch" HorizontalAlignment="Left" Margin="180,227,0,0" VerticalAlignment="Top" Width="144"/>
+            <CheckBox Content="Install CG patch" HorizontalAlignment="Left" Margin="180,273,0,0" VerticalAlignment="Top" Width="114"/>
         </Grid>
 
     </Grid>
