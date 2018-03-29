@@ -115,7 +115,7 @@ namespace Higurashi_Installer_WPF
                     break;
                 case "Voice only":
                     ResetDropBox();
-                    patcher.IsCustom = true;
+                    patcher.IsVoiceOnly = true;
                     TreatCheckboxes(false);
                     break;
             }
