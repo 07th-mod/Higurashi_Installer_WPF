@@ -13,7 +13,7 @@
         TextOptions.TextRenderingMode="Auto"        
         Background="{DynamicResource MaterialDesignPaper}"
         FontFamily="{DynamicResource MaterialDesignFont}"
-        Title="Higurashi Patcher"  Height="550" Width="950" ResizeMode="NoResize" WindowStartupLocation="CenterScreen">
+        Title="Higurashi Patcher"  Height="550" Width="450" ResizeMode="NoResize" WindowStartupLocation="CenterScreen">
 
     <Grid x:Name="MainGrid" Height="550" VerticalAlignment="Bottom" HorizontalAlignment="Left" Width="450" Margin="0,0,-6,0" >
         <materialDesign:Card Margin="1,175,0,-2" VerticalAlignment="Stretch" RenderTransformOrigin="0.511,0.166" HorizontalAlignment="Left" Width="440"  >
@@ -52,19 +52,19 @@
         <Grid x:Name="InstallGrid" HorizontalAlignment="Left" Height="550" Margin="446,3,-490,0" VerticalAlignment="Top" Width="494">
             <materialDesign:Card Height="550">
             </materialDesign:Card>
-            <ComboBox x:Name="InstallCombo" HorizontalAlignment="Left" Margin="182,112,0,0" VerticalAlignment="Top" Width="120">
-                <ComboBoxItem Content="Full"/>
-                <ComboBoxItem Content="Custom"/>
-                <ComboBoxItem Content="Voice only"/>
+            <CheckBox x:Name="ChkPS3" Content="PS3 Graphics (Required)" HorizontalAlignment="Left" Margin="180,309,0,0" VerticalAlignment="Top" Width="164" IsChecked="True" IsEnabled="False" Opacity="0.7" Visibility="Collapsed"/>
+            <CheckBox x:Name="ChkSteamSprites" Content="Better Steam Sprites" HorizontalAlignment="Left" Margin="180,345,0,0" VerticalAlignment="Top" Width="143" Visibility="Collapsed"/>
+            <CheckBox x:Name="ChkVoices" Content="Voices (Required)" HorizontalAlignment="Left" Margin="180,327,0,0" VerticalAlignment="Top" Width="130" IsChecked="True" IsEnabled="False" Opacity="0.7" Visibility="Collapsed"/>
+            <CheckBox x:Name="ChkPatch" Content="Patch (Required)" HorizontalAlignment="Left" Margin="180,291,0,0" VerticalAlignment="Top" Width="130" IsChecked="True" IsEnabled="False" Opacity="0.7" Visibility="Collapsed"/>
+            <CheckBox x:Name="ChkUI" Content="UI Mod" HorizontalAlignment="Left" Margin="180,363,0,0" VerticalAlignment="Top" Width="130" Visibility="Collapsed"/>
+            <ComboBox x:Name="InstallCombo" HorizontalAlignment="Left" Margin="184,258,0,0" VerticalAlignment="Top" Width="120" SelectionChanged="InstallCombo_SelectionChanged" SelectedIndex="0">
+                <ComboBoxItem x:Name="FullInstall" Content="Full"/>
+                <ComboBoxItem x:Name="CustomInstall" Content="Custom"/>
+                <ComboBoxItem x:Name="VoiceInstall" Content="Voice only"/>
             </ComboBox>
-            <Button x:Name="BtnInstall" Content="Install/Update" HorizontalAlignment="Left" Margin="184,325,0,0" VerticalAlignment="Top" Width="126" Click="BtnInstall_Click"/>
-            <Button Content="Uninstall" HorizontalAlignment="Left" Margin="184,386,0,0" VerticalAlignment="Top" Width="126"/>
+            <Button x:Name="BtnInstall" Content="Install/Update" HorizontalAlignment="Left" Margin="184,411,0,0" VerticalAlignment="Top" Width="126" Click="BtnInstall_Click"/>
+            <Button Content="Uninstall" HorizontalAlignment="Left" Margin="184,467,0,0" VerticalAlignment="Top" Width="126"/>
             <CheckBox Content="Backup Files" HorizontalAlignment="Left" Margin="10,521,0,0" VerticalAlignment="Top" Width="101"/>
-            <CheckBox Content="PS3 Graphics (Required)" HorizontalAlignment="Left" Margin="180,207,0,0" VerticalAlignment="Top" Width="164"/>
-            <CheckBox Content="Better Steam Sprites" HorizontalAlignment="Left" Margin="180,248,0,0" VerticalAlignment="Top" Width="143"/>
-            <CheckBox Content="Voices (Required)" HorizontalAlignment="Left" Margin="180,227,0,0" VerticalAlignment="Top" Width="130"/>
-            <CheckBox x:Name="ChkPatch" Content="Patch (Required)" HorizontalAlignment="Left" Margin="180,187,0,0" VerticalAlignment="Top" Width="130"/>
-            <CheckBox Content="UI Mod" HorizontalAlignment="Left" Margin="180,269,0,0" VerticalAlignment="Top" Width="130"/>
         </Grid>
 
     </Grid>
