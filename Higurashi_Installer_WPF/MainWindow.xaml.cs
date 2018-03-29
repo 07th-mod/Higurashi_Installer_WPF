@@ -21,10 +21,12 @@ namespace Higurashi_Installer_WPF
     /// </summary>
     public partial class MainWindow : Window
     {
+        PatcherPOCO patcher = new PatcherPOCO();
+
         public MainWindow()
         {
             InitializeComponent();
-
+            ChkPatch.DataContext = this;
         }
 
         private void BtnOnikakushi_Click(object sender, RoutedEventArgs e)
@@ -35,6 +37,7 @@ namespace Higurashi_Installer_WPF
                 if (InstallGrid.Visibility.Equals(Visibility.Collapsed))
                 {
                     InstallGrid.Visibility = Visibility.Visible;
+                    
                 }
             }
             MainImage.Source = new BitmapImage(new Uri("/Resources/header2.jpg", UriKind.Relative));
@@ -49,6 +52,7 @@ namespace Higurashi_Installer_WPF
                 if (InstallGrid.Visibility.Equals(Visibility.Collapsed))
                 {
                     InstallGrid.Visibility = Visibility.Visible;
+
                 }
             }
             MainImage.Source = new BitmapImage(new Uri("/Resources/header1.jpg", UriKind.Relative));
@@ -64,6 +68,7 @@ namespace Higurashi_Installer_WPF
                 if (InstallGrid.Visibility.Equals(Visibility.Collapsed))
                 {
                     InstallGrid.Visibility = Visibility.Visible;
+                    
                 }
             }
             MainImage.Source = new BitmapImage(new Uri("/Resources/header3.jpg", UriKind.Relative));
@@ -100,6 +105,17 @@ namespace Higurashi_Installer_WPF
             MainGrid.Visibility = Visibility.Visible;
             InstallGrid.Visibility = Visibility.Collapsed;
         }
+
+        private void CheckBox_Checked(object sender, RoutedEventArgs e)
+        {
+
+        }
+
+        private void BtnInstall_Click(object sender, RoutedEventArgs e)
+        {
+
+        }
+
     }
 
     public static class WindowUtilties
