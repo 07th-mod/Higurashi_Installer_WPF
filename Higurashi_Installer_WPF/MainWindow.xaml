@@ -19,36 +19,6 @@
         <materialDesign:Card Margin="1,175,0,-2" VerticalAlignment="Stretch" RenderTransformOrigin="0.511,0.166" HorizontalAlignment="Left" Width="440"  >
             <Image x:Name="MainImage" HorizontalAlignment="Left" Height="217" Margin="0,1,-1,0" VerticalAlignment="Top" Width="440"/>
         </materialDesign:Card>
-        <Ellipse Margin="16,77,358,394" Stroke="White" StrokeThickness="1">
-            <Ellipse.Fill>
-                <ImageBrush x:Name="MainImage1" ImageSource="Resources\07th_icons\ico\HigurashiEp01_0000.ico"/>
-            </Ellipse.Fill>
-        </Ellipse>
-        <Ellipse Margin="100,77,275,394"  Stroke="White" StrokeThickness="1">
-            <Ellipse.Fill>
-                <ImageBrush ImageSource="Resources\07th_icons\ico\HigurashiEp02_0000.ico"/>
-            </Ellipse.Fill>
-        </Ellipse>
-        <Ellipse Margin="181,77,192,394" Stroke="White" StrokeThickness="1">
-            <Ellipse.Fill>
-                <ImageBrush ImageSource="Resources\07th_icons\ico\HigurashiEp03_0000.ico"/>
-            </Ellipse.Fill>
-        </Ellipse>
-        <Ellipse Margin="265,77,110,394" Stroke="White" StrokeThickness="1">
-            <Ellipse.Fill>
-                <ImageBrush ImageSource="Resources\07th_icons\ico\HigurashiEp04_0000.ico"/>
-            </Ellipse.Fill>
-        </Ellipse>
-        <Ellipse Margin="350,77,25,394" Stroke="White" StrokeThickness="1">
-            <Ellipse.Fill>
-                <ImageBrush ImageSource="Resources\07th_icons\ico\HigurashiEp05_00002.ico"/>
-            </Ellipse.Fill>
-        </Ellipse>
-        <Button x:Name="BtnWatanagashi" Content="Button" HorizontalAlignment="Left" Margin="100,77,0,0" VerticalAlignment="Top" Width="75" Height="79" Opacity="0" Click="BtnWatanagashi_Click"/>
-        <Button x:Name="BtnOnikakushi"  Content="Button" HorizontalAlignment="Left" Margin="17,77,0,0" VerticalAlignment="Top" Width="75" Height="79" Opacity="0" Click="BtnOnikakushi_Click"/>
-        <Button x:Name="BtnTatarigoroshi" Content="Button" HorizontalAlignment="Left" Margin="183,77,0,0" VerticalAlignment="Top" Width="75" Height="79" Opacity="0" Click="BtnTatarigoroshi_Click"/>
-        <Button x:Name="BtnHimatsubushi" Content="Button" HorizontalAlignment="Left" Margin="265,77,0,0" VerticalAlignment="Top" Width="75" Height="79" Opacity="0" Click="BtnHimatsubushi_Click"/>
-        <Button x:Name="BtnMeakashi" Content="Button" HorizontalAlignment="Left" Margin="350,77,0,0" VerticalAlignment="Top" Width="75" Height="79" Opacity="0" Click="BtnMeakashi_Click"/>
         <Grid x:Name="InstallGrid" HorizontalAlignment="Left" Height="550" Margin="446,3,-490,0" VerticalAlignment="Top" Width="494">
             <materialDesign:Card Height="550">
                 <materialDesign:Card Height="201" Margin="10,22,10,0">
@@ -67,9 +37,63 @@
             </ComboBox>
             <Button x:Name="BtnInstall" Content="Install/Update" HorizontalAlignment="Left" Margin="184,411,0,0" VerticalAlignment="Top" Width="126" Click="BtnInstall_Click"/>
             <Button x:Name="BtnUninstall" Content="Uninstall" HorizontalAlignment="Left" Margin="184,467,0,0" VerticalAlignment="Top" Width="126"/>
-            <CheckBox Content="Backup Files" HorizontalAlignment="Left" Margin="10,521,0,0" VerticalAlignment="Top" Width="101"/>
+            <CheckBox x:Name="ChkBackup" Content="Backup Files" HorizontalAlignment="Left" Margin="10,521,0,0" VerticalAlignment="Top" Width="101"/>
             <TextBox x:Name="PathText" HorizontalAlignment="Center" Height="23" Margin="37,76,70,0"  Text="Insert install folder for the chapter" VerticalAlignment="Top" Width="387" IsEnabled="False"/>
             <TextBlock x:Name="TextWarningPath" HorizontalAlignment="Center" Margin="50,179,22,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="422" IsEnabled="False" FontWeight="Bold" Foreground="#DDFFFFFF" Visibility="Collapsed"/>
+        </Grid>
+        <Grid x:Name="ConfirmationGrid" HorizontalAlignment="Left" Height="550" Margin="446,3,-490,0" VerticalAlignment="Top" Width="494" Visibility="Collapsed">
+            <materialDesign:Card Height="550">
+                <materialDesign:Card Height="340" Margin="10,73,10,0">
+                </materialDesign:Card>
+            </materialDesign:Card>
+            <Button Content="Confirm" HorizontalAlignment="Left" Margin="140,443,0,0" VerticalAlignment="Top" Width="95"/>
+            <Button x:Name="ConfirmBack" Content="Go back" HorizontalAlignment="Left" Margin="259,443,0,0" VerticalAlignment="Top" Width="95" Click="ConfirmBack_Click"/>
+            <ListView x:Name="InstallList" HorizontalAlignment="Left" Height="279" Margin="21,119,0,0" VerticalAlignment="Top" Width="443" IsEnabled="False" FontWeight="Bold">
+                <ListView.View>
+                    <GridView>
+                        <GridViewColumn/>
+                    </GridView>
+                </ListView.View>
+                <ListBoxItem x:Name="List1" Content="" Width="408" FontWeight="Bold"/>
+                <ListBoxItem x:Name="List2" Height="32" Width="408"/>
+                <ListBoxItem x:Name="List3" Width="408" Height="32"/>
+                <ListBoxItem x:Name="List4" Width="408" Height="32"/>
+                <ListBoxItem x:Name="List5" Width="408" Height="32"/>
+            </ListView>
+            <TextBlock HorizontalAlignment="Center" Margin="45,65,21,0" TextWrapping="Wrap" Text="Confirm your install preferences" VerticalAlignment="Top" Width="428" FontWeight="Bold" FontSize="25"/>
+
+        </Grid>
+        <Grid x:Name="IconGrid" Height="550" VerticalAlignment="Bottom" HorizontalAlignment="Left" Width="450" Margin="0,0,-6,0" >
+            <Ellipse Margin="16,77,358,394" Stroke="White" StrokeThickness="1">
+                <Ellipse.Fill>
+                    <ImageBrush x:Name="MainImage1" ImageSource="Resources\07th_icons\ico\HigurashiEp01_0000.ico"/>
+                </Ellipse.Fill>
+            </Ellipse>
+            <Ellipse Margin="100,77,275,394"  Stroke="White" StrokeThickness="1">
+                <Ellipse.Fill>
+                    <ImageBrush ImageSource="Resources\07th_icons\ico\HigurashiEp02_0000.ico"/>
+                </Ellipse.Fill>
+            </Ellipse>
+            <Ellipse Margin="181,77,192,394" Stroke="White" StrokeThickness="1">
+                <Ellipse.Fill>
+                    <ImageBrush ImageSource="Resources\07th_icons\ico\HigurashiEp03_0000.ico"/>
+                </Ellipse.Fill>
+            </Ellipse>
+            <Ellipse Margin="265,77,110,394" Stroke="White" StrokeThickness="1">
+                <Ellipse.Fill>
+                    <ImageBrush ImageSource="Resources\07th_icons\ico\HigurashiEp04_0000.ico"/>
+                </Ellipse.Fill>
+            </Ellipse>
+            <Ellipse Margin="350,77,25,394" Stroke="White" StrokeThickness="1">
+                <Ellipse.Fill>
+                    <ImageBrush ImageSource="Resources\07th_icons\ico\HigurashiEp05_00002.ico"/>
+                </Ellipse.Fill>
+            </Ellipse>
+            <Button x:Name="BtnWatanagashi" Content="Button" HorizontalAlignment="Left" Margin="100,77,0,0" VerticalAlignment="Top" Width="75" Height="79" Opacity="0" Click="BtnWatanagashi_Click"/>
+            <Button x:Name="BtnOnikakushi"  Content="Button" HorizontalAlignment="Left" Margin="17,77,0,0" VerticalAlignment="Top" Width="75" Height="79" Opacity="0" Click="BtnOnikakushi_Click"/>
+            <Button x:Name="BtnTatarigoroshi" Content="Button" HorizontalAlignment="Left" Margin="183,77,0,0" VerticalAlignment="Top" Width="75" Height="79" Opacity="0" Click="BtnTatarigoroshi_Click"/>
+            <Button x:Name="BtnHimatsubushi" Content="Button" HorizontalAlignment="Left" Margin="265,77,0,0" VerticalAlignment="Top" Width="75" Height="79" Opacity="0" Click="BtnHimatsubushi_Click"/>
+            <Button x:Name="BtnMeakashi" Content="Button" HorizontalAlignment="Left" Margin="350,77,0,0" VerticalAlignment="Top" Width="75" Height="79" Opacity="0" Click="BtnMeakashi_Click"/>
         </Grid>
 
     </Grid>

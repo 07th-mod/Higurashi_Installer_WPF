@@ -128,7 +128,55 @@ namespace Higurashi_Installer_WPF
 
         private void BtnInstall_Click(object sender, RoutedEventArgs e)
         {
+            if (PathText.Text != defaultPathText)
+            {
+                InstallGrid.Visibility = Visibility.Collapsed;
+                ConfirmationGrid.Visibility = Visibility.Visible;
+                IconGrid.IsEnabled = false;
+                ConstructPatcher();
+            }else
+            {
 
+                TextWarningPath.Width = 250;
+                TextWarningPath.Text = "Please select a folder before installing!";
+                TextWarningPath.Visibility = Visibility.Visible;
+            }
+
+        }
+
+        private void ConfirmBack_Click(object sender, RoutedEventArgs e)
+        {
+            ConfirmationGrid.Visibility = Visibility.Collapsed;
+            InstallGrid.Visibility = Visibility.Visible;
+            IconGrid.IsEnabled = true;
+        }
+
+        private void BtnPath_Click(object sender, RoutedEventArgs e)
+        {
+            var dialog = new CommonOpenFileDialog();
+            dialog.IsFolderPicker = true;
+            CommonFileDialogResult result = dialog.ShowDialog();
+            if (result.ToString() == "Ok")
+            {
+                PathText.Text = dialog.FileName;
+                if (!CheckValidFileExists(dialog.FileName))
+                {
+                    TextWarningPath.Width = 422;
+                    TextWarningPath.Text = "Invalid path! Please select a folder with the " + patcher.ChapterName + " .exe file";
+                    TextWarningPath.Visibility = Visibility.Visible;
+                    BtnInstall.IsEnabled = false;
+                    BtnUninstall.IsEnabled = false;
+                }
+                else
+                {
+                    TextWarningPath.Text = patcher.ChapterName + " .exe file found!";
+                    TextWarningPath.Visibility = Visibility.Visible;
+                    BtnInstall.IsEnabled = true;
+                    BtnUninstall.IsEnabled = true;
+                    TextWarningPath.Width = 180;
+                }
+
+            }
         }
 
         private void ResetDropBox()
@@ -158,33 +206,6 @@ namespace Higurashi_Installer_WPF
             }
         }
 
-        private void BtnPath_Click(object sender, RoutedEventArgs e)
-        {
-            var dialog = new CommonOpenFileDialog();
-            dialog.IsFolderPicker = true;
-            CommonFileDialogResult result = dialog.ShowDialog();
-            if (result.ToString() == "Ok")
-            {
-                PathText.Text = dialog.FileName;
-                if (!CheckValidFileExists(dialog.FileName))
-                {
-                    TextWarningPath.Width = 422;
-                    TextWarningPath.Text = "Invalid path! Please select a folder with the " + patcher.ChapterName + " .exe file";
-                    TextWarningPath.Visibility = Visibility.Visible;
-                    BtnInstall.IsEnabled = false;
-                    BtnUninstall.IsEnabled = false;
-                } else
-                {
-                    TextWarningPath.Text = patcher.ChapterName + " .exe file found!";
-                    TextWarningPath.Visibility = Visibility.Visible;
-                    BtnInstall.IsEnabled = true;
-                    BtnUninstall.IsEnabled = true;
-                    TextWarningPath.Width = 180;
-                }
-
-            }
-        }
-
         private Boolean CheckValidFileExists(String path)
         {
             string file = path + "\\" + patcher.ExeName;
@@ -203,7 +224,36 @@ namespace Higurashi_Installer_WPF
             BtnUninstall.IsEnabled = true;
         }
 
+        /* Populates the object for installation
+           And fills the list in the grid for user confirmation */
+        private void ConstructPatcher()
+        {           
+            patcher.InstallPath = PathText.Text;
+            patcher.IsBackup = (Boolean) ChkBackup.IsChecked;
+            patcher.InstallUpdate = "Installation";
 
+            List1.Content = "Chapter: " + patcher.ChapterName;
+            List2.Content = "Path: " + PathText.Text;
+            List3.Content = "Process: Installation";
+            List5.Content = "Backup: " + (patcher.IsBackup ? "Yes" : "No");
+
+
+
+            if (patcher.IsCustom)
+            {
+                patcher.InstallType = "Custom";
+                List4.Content = "Installation Type: Custom";
+            } else if(patcher.IsFull)
+            {
+                patcher.InstallType = "Full";
+                List4.Content = "Installation Type: Full";
+            }
+            else
+            {
+                patcher.InstallType = "Voice Only";
+                List4.Content = "Installation Type: Voice Only";
+            }
+        }
     }
 
     public static class WindowUtilties

@@ -26,6 +26,8 @@ namespace Higurashi_Installer_WPF
         public String ChapterName { get; set; }
         public String ExeName { get; set; }
         public String Version { get; set; }
+        public String InstallUpdate { get; set; }
+        public String InstallType { get; set; }
 
         //Install path of each chapter
         public String PathWatanagashi { get; set; }
