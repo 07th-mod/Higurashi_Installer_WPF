@@ -24,6 +24,7 @@ namespace Higurashi_Installer_WPF
         //Chapter information for install
         public String InstallPath { get; set; }
         public String ChapterName { get; set; }
+        public String ExeName { get; set; }
         public String Version { get; set; }
 
         //Install path of each chapter

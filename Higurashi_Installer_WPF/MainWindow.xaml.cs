@@ -1,18 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using Microsoft.WindowsAPICodePack.Dialogs;
+using System;
+using System.IO;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
 using System.Windows.Media.Animation;
 using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
 
 namespace Higurashi_Installer_WPF
 {
@@ -20,6 +13,7 @@ namespace Higurashi_Installer_WPF
     public partial class MainWindow : Window
     {
         PatcherPOCO patcher = new PatcherPOCO();
+        String defaultPathText = "Insert install folder for the chapter";
 
         public MainWindow()
         {
@@ -39,7 +33,9 @@ namespace Higurashi_Installer_WPF
                 }
             }
             MainImage.Source = new BitmapImage(new Uri("/Resources/header2.jpg", UriKind.Relative));
+            ResetPath(true);
             patcher.ChapterName = "Onikakushi";
+            patcher.ExeName = "HigurashiEp02.exe";
         }
 
         private void BtnWatanagashi_Click(object sender, RoutedEventArgs e)
@@ -54,7 +50,9 @@ namespace Higurashi_Installer_WPF
                 }
             }
             MainImage.Source = new BitmapImage(new Uri("/Resources/header1.jpg", UriKind.Relative));
+            ResetPath(true);
             patcher.ChapterName = "Watanagashi";
+            patcher.ExeName = "HigurashiEp01.exe";
         }
 
         private void BtnTatarigoroshi_Click(object sender, RoutedEventArgs e)
@@ -69,7 +67,9 @@ namespace Higurashi_Installer_WPF
                 }
             }
             MainImage.Source = new BitmapImage(new Uri("/Resources/header3.jpg", UriKind.Relative));
+            ResetPath(true);
             patcher.ChapterName = "Tatarigoroshi";
+            patcher.ExeName = "HigurashiEp03.exe";
         }
 
         private void BtnHimatsubushi_Click(object sender, RoutedEventArgs e)
@@ -83,7 +83,9 @@ namespace Higurashi_Installer_WPF
                 }
             }
             MainImage.Source = new BitmapImage(new Uri("/Resources/header4.jpg", UriKind.Relative));
+            ResetPath(true);
             patcher.ChapterName = "Himatsubushi";
+            patcher.ExeName = "HigurashiEp04.exe";
         }
 
         private void BtnMeakashi_Click(object sender, RoutedEventArgs e)
@@ -97,7 +99,9 @@ namespace Higurashi_Installer_WPF
                 }
             }
             MainImage.Source = new BitmapImage(new Uri("/Resources/header5.jpg", UriKind.Relative));
+            ResetPath(true);
             patcher.ChapterName = "Meakashi";
+            patcher.ExeName = "HigurashiEp05.exe";
         }
 
         private void InstallCombo_SelectionChanged(object sender, SelectionChangedEventArgs e)
@@ -152,6 +156,51 @@ namespace Higurashi_Installer_WPF
                 ChkVoices.Visibility = Visibility.Collapsed;
             }
         }
+
+        private void BtnPath_Click(object sender, RoutedEventArgs e)
+        {
+            var dialog = new CommonOpenFileDialog();
+            dialog.IsFolderPicker = true;
+            CommonFileDialogResult result = dialog.ShowDialog();
+            if (result.ToString() == "Ok")
+            {
+                PathText.Text = dialog.FileName;
+                if (!CheckValidFileExists(dialog.FileName))
+                {
+                    TextWarningPath.Width = 422;
+                    TextWarningPath.Text = "Invalid path! Please select a folder with the " + patcher.ChapterName + " .exe file";
+                    TextWarningPath.Visibility = Visibility.Visible;
+                    BtnInstall.IsEnabled = false;
+                    BtnUninstall.IsEnabled = false;
+                } else
+                {
+                    TextWarningPath.Text = patcher.ChapterName + " .exe file found!";
+                    TextWarningPath.Visibility = Visibility.Visible;
+                    TextWarningPath.Width = 180;
+                }
+
+            }
+        }
+
+        private Boolean CheckValidFileExists(String path)
+        {
+            string file = path + "\\" + patcher.ExeName;
+            return File.Exists(file);
+        }
+
+        public void ResetPath(Boolean ChangedChapter)
+        {   
+            if (ChangedChapter)
+            {
+                PathText.Text = defaultPathText;
+            }
+            TextWarningPath.Width = 422;
+            TextWarningPath.Visibility = Visibility.Collapsed;
+            BtnInstall.IsEnabled = true;
+            BtnUninstall.IsEnabled = true;
+        }
+
+
     }
 
     public static class WindowUtilties
