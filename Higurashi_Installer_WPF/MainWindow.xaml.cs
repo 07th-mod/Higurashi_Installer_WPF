@@ -32,10 +32,10 @@ namespace Higurashi_Installer_WPF
                     
                 }
             }
-            MainImage.Source = new BitmapImage(new Uri("/Resources/header2.jpg", UriKind.Relative));
+            MainImage.Source = new BitmapImage(new Uri("/Resources/header1.jpg", UriKind.Relative));
             ResetPath(true);
             patcher.ChapterName = "Onikakushi";
-            patcher.ExeName = "HigurashiEp02.exe";
+            patcher.ExeName = "HigurashiEp01.exe";
         }
 
         private void BtnWatanagashi_Click(object sender, RoutedEventArgs e)
@@ -49,10 +49,11 @@ namespace Higurashi_Installer_WPF
 
                 }
             }
-            MainImage.Source = new BitmapImage(new Uri("/Resources/header1.jpg", UriKind.Relative));
+            MainImage.Source = new BitmapImage(new Uri("/Resources/header2.jpg", UriKind.Relative));
             ResetPath(true);
             patcher.ChapterName = "Watanagashi";
-            patcher.ExeName = "HigurashiEp01.exe";
+            patcher.ExeName = "HigurashiEp02.exe";
+
         }
 
         private void BtnTatarigoroshi_Click(object sender, RoutedEventArgs e)
