@@ -177,6 +177,8 @@ namespace Higurashi_Installer_WPF
                 {
                     TextWarningPath.Text = patcher.ChapterName + " .exe file found!";
                     TextWarningPath.Visibility = Visibility.Visible;
+                    BtnInstall.IsEnabled = true;
+                    BtnUninstall.IsEnabled = true;
                     TextWarningPath.Width = 180;
                 }
 
