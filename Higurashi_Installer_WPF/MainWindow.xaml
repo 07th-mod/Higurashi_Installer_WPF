@@ -44,8 +44,8 @@
                 <ImageBrush ImageSource="Resources\07th_icons\ico\HigurashiEp05_00002.ico"/>
             </Ellipse.Fill>
         </Ellipse>
-        <Button x:Name="BtnWatanagashi" Content="Button" HorizontalAlignment="Left" Margin="16,77,0,0" VerticalAlignment="Top" Width="75" Height="79" Opacity="0" Click="BtnWatanagashi_Click"/>
-        <Button x:Name="BtnOnikakushi"  Content="Button" HorizontalAlignment="Left" Margin="100,77,0,0" VerticalAlignment="Top" Width="75" Height="79" Opacity="0" Click="BtnOnikakushi_Click"/>
+        <Button x:Name="BtnWatanagashi" Content="Button" HorizontalAlignment="Left" Margin="100,77,0,0" VerticalAlignment="Top" Width="75" Height="79" Opacity="0" Click="BtnWatanagashi_Click"/>
+        <Button x:Name="BtnOnikakushi"  Content="Button" HorizontalAlignment="Left" Margin="17,77,0,0" VerticalAlignment="Top" Width="75" Height="79" Opacity="0" Click="BtnOnikakushi_Click"/>
         <Button x:Name="BtnTatarigoroshi" Content="Button" HorizontalAlignment="Left" Margin="183,77,0,0" VerticalAlignment="Top" Width="75" Height="79" Opacity="0" Click="BtnTatarigoroshi_Click"/>
         <Button x:Name="BtnHimatsubushi" Content="Button" HorizontalAlignment="Left" Margin="265,77,0,0" VerticalAlignment="Top" Width="75" Height="79" Opacity="0" Click="BtnHimatsubushi_Click"/>
         <Button x:Name="BtnMeakashi" Content="Button" HorizontalAlignment="Left" Margin="350,77,0,0" VerticalAlignment="Top" Width="75" Height="79" Opacity="0" Click="BtnMeakashi_Click"/>
