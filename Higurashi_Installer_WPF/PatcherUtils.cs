@@ -6,6 +6,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.IO;
 using Microsoft.WindowsAPICodePack.Dialogs;
+using System.Windows.Media.Animation;
 
 
 //Util class for all methods related to the grid and general flow of the layout
@@ -154,6 +155,43 @@ namespace Higurashi_Installer_WPF
                     TreatCheckboxes(window, false);
                     break;
             }
+        }
+
+        public void ResizeWindow(MainWindow window)
+        {
+            if (window.ActualWidth < 950)
+            {
+                window.AnimateWindowSize(window.ActualWidth + 500);
+                if (window.InstallGrid.Visibility.Equals(Visibility.Collapsed))
+                {
+                    window.InstallGrid.Visibility = Visibility.Visible;
+
+                }
+            }
+        }
+    }
+
+    public static class WindowUtilties
+    {
+        public static void AnimateWindowSize(this Window target, double newWidth)
+        {
+
+            var sb = new Storyboard { Duration = new Duration(new TimeSpan(0, 0, 0, 0, 200)) };
+
+            var aniWidth = new DoubleAnimationUsingKeyFrames();
+
+            aniWidth.Duration = new Duration(new TimeSpan(0, 0, 0, 0, 200));
+
+            aniWidth.KeyFrames.Add(new EasingDoubleKeyFrame(target.ActualWidth, KeyTime.FromTimeSpan(new TimeSpan(0, 0, 0, 0, 00))));
+            aniWidth.KeyFrames.Add(new EasingDoubleKeyFrame(newWidth, KeyTime.FromTimeSpan(new TimeSpan(0, 0, 0, 0, 200))));
+
+            Storyboard.SetTarget(aniWidth, target);
+            Storyboard.SetTargetProperty(aniWidth, new PropertyPath(Window.WidthProperty));
+
+            sb.Children.Add(aniWidth);
+
+            sb.Begin();
+
         }
     }
 }

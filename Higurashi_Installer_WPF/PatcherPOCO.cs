@@ -28,6 +28,7 @@ namespace Higurashi_Installer_WPF
         public String Version { get; set; }
         public String InstallUpdate { get; set; }
         public String InstallType { get; set; }
+        public Boolean isDRM { get; set; }
 
         //Install path of each chapter
         public String PathWatanagashi { get; set; }
