@@ -13,11 +13,11 @@ namespace Higurashi_Installer_WPF
     public partial class MainWindow : Window
     {
         PatcherPOCO patcher = new PatcherPOCO();
-        String defaultPathText = "Insert install folder for the chapter";
+        PatcherUtils Utils = new PatcherUtils();
 
         public MainWindow()
         {
-            InitializeComponent();            
+            InitializeComponent();
             patcher.IsFull = true;
         }
 
@@ -29,11 +29,11 @@ namespace Higurashi_Installer_WPF
                 if (InstallGrid.Visibility.Equals(Visibility.Collapsed))
                 {
                     InstallGrid.Visibility = Visibility.Visible;
-                    
+
                 }
             }
             MainImage.Source = new BitmapImage(new Uri("/Resources/header1.jpg", UriKind.Relative));
-            ResetPath(true);
+            Utils.ResetPath(this, true);
             patcher.ChapterName = "Onikakushi";
             patcher.ExeName = "HigurashiEp01.exe";
         }
@@ -50,7 +50,7 @@ namespace Higurashi_Installer_WPF
                 }
             }
             MainImage.Source = new BitmapImage(new Uri("/Resources/header2.jpg", UriKind.Relative));
-            ResetPath(true);
+            Utils.ResetPath(this, true);
             patcher.ChapterName = "Watanagashi";
             patcher.ExeName = "HigurashiEp02.exe";
 
@@ -64,11 +64,11 @@ namespace Higurashi_Installer_WPF
                 if (InstallGrid.Visibility.Equals(Visibility.Collapsed))
                 {
                     InstallGrid.Visibility = Visibility.Visible;
-                    
+
                 }
             }
             MainImage.Source = new BitmapImage(new Uri("/Resources/header3.jpg", UriKind.Relative));
-            ResetPath(true);
+            Utils.ResetPath(this, true);
             patcher.ChapterName = "Tatarigoroshi";
             patcher.ExeName = "HigurashiEp03.exe";
         }
@@ -84,7 +84,7 @@ namespace Higurashi_Installer_WPF
                 }
             }
             MainImage.Source = new BitmapImage(new Uri("/Resources/header4.jpg", UriKind.Relative));
-            ResetPath(true);
+            Utils.ResetPath(this, true);
             patcher.ChapterName = "Himatsubushi";
             patcher.ExeName = "HigurashiEp04.exe";
         }
@@ -100,49 +100,21 @@ namespace Higurashi_Installer_WPF
                 }
             }
             MainImage.Source = new BitmapImage(new Uri("/Resources/header5.jpg", UriKind.Relative));
-            ResetPath(true);
+            Utils.ResetPath(this, true);
             patcher.ChapterName = "Meakashi";
             patcher.ExeName = "HigurashiEp05.exe";
         }
 
         private void InstallCombo_SelectionChanged(object sender, SelectionChangedEventArgs e)
-        {          
-            switch (InstallCombo.SelectedItem.ToString().Split(new string[] { ": " }, StringSplitOptions.None).Last()) {
-                case "Full":
-                    ResetDropBox();
-                    patcher.IsFull = true;
-                    TreatCheckboxes(false);
-                    break;
-                case "Custom":
-                    ResetDropBox();
-                    patcher.IsCustom = true;
-                    TreatCheckboxes(true);
-                    break;
-                case "Voice only":
-                    ResetDropBox();
-                    patcher.IsVoiceOnly = true;
-                    TreatCheckboxes(false);
-                    break;
-            }
+        {
+            Utils.InstallComboChoose(this, patcher);           
         }
 
         private void BtnInstall_Click(object sender, RoutedEventArgs e)
         {
-            if (PathText.Text != defaultPathText)
-            {
-                InstallGrid.Visibility = Visibility.Collapsed;
-                ConfirmationGrid.Visibility = Visibility.Visible;
-                IconGrid.IsEnabled = false;
-                ConstructPatcher();
-            }else
-            {
-
-                TextWarningPath.Width = 250;
-                TextWarningPath.Text = "Please select a folder before installing!";
-                TextWarningPath.Visibility = Visibility.Visible;
-            }
-
+            Utils.CheckValidFilePath(this, patcher);
         }
+
 
         private void ConfirmBack_Click(object sender, RoutedEventArgs e)
         {
@@ -153,106 +125,7 @@ namespace Higurashi_Installer_WPF
 
         private void BtnPath_Click(object sender, RoutedEventArgs e)
         {
-            var dialog = new CommonOpenFileDialog();
-            dialog.IsFolderPicker = true;
-            CommonFileDialogResult result = dialog.ShowDialog();
-            if (result.ToString() == "Ok")
-            {
-                PathText.Text = dialog.FileName;
-                if (!CheckValidFileExists(dialog.FileName))
-                {
-                    TextWarningPath.Width = 422;
-                    TextWarningPath.Text = "Invalid path! Please select a folder with the " + patcher.ChapterName + " .exe file";
-                    TextWarningPath.Visibility = Visibility.Visible;
-                    BtnInstall.IsEnabled = false;
-                    BtnUninstall.IsEnabled = false;
-                }
-                else
-                {
-                    TextWarningPath.Text = patcher.ChapterName + " .exe file found!";
-                    TextWarningPath.Visibility = Visibility.Visible;
-                    BtnInstall.IsEnabled = true;
-                    BtnUninstall.IsEnabled = true;
-                    TextWarningPath.Width = 180;
-                }
-
-            }
-        }
-
-        private void ResetDropBox()
-        {
-            patcher.IsVoiceOnly = false;
-            patcher.IsCustom = false;
-            patcher.IsFull = false;
-        }
-
-        private void TreatCheckboxes(Boolean IsCustom)
-        {
-            if (IsCustom)
-            {
-                ChkPatch.Visibility = Visibility.Visible;
-                ChkPS3.Visibility = Visibility.Visible;
-                ChkSteamSprites.Visibility = Visibility.Visible;
-                ChkUI.Visibility = Visibility.Visible;
-                ChkVoices.Visibility = Visibility.Visible;
-            }
-            else
-            {
-                ChkPatch.Visibility = Visibility.Collapsed;
-                ChkPS3.Visibility = Visibility.Collapsed;
-                ChkSteamSprites.Visibility = Visibility.Collapsed;
-                ChkUI.Visibility = Visibility.Collapsed;
-                ChkVoices.Visibility = Visibility.Collapsed;
-            }
-        }
-
-        private Boolean CheckValidFileExists(String path)
-        {
-            string file = path + "\\" + patcher.ExeName;
-            return File.Exists(file);
-        }
-
-        public void ResetPath(Boolean ChangedChapter)
-        {   
-            if (ChangedChapter)
-            {
-                PathText.Text = defaultPathText;
-            }
-            TextWarningPath.Width = 422;
-            TextWarningPath.Visibility = Visibility.Collapsed;
-            BtnInstall.IsEnabled = true;
-            BtnUninstall.IsEnabled = true;
-        }
-
-        /* Populates the object for installation
-           And fills the list in the grid for user confirmation */
-        private void ConstructPatcher()
-        {           
-            patcher.InstallPath = PathText.Text;
-            patcher.IsBackup = (Boolean) ChkBackup.IsChecked;
-            patcher.InstallUpdate = "Installation";
-
-            List1.Content = "Chapter: " + patcher.ChapterName;
-            List2.Content = "Path: " + PathText.Text;
-            List3.Content = "Process: Installation";
-            List5.Content = "Backup: " + (patcher.IsBackup ? "Yes" : "No");
-
-
-
-            if (patcher.IsCustom)
-            {
-                patcher.InstallType = "Custom";
-                List4.Content = "Installation Type: Custom";
-            } else if(patcher.IsFull)
-            {
-                patcher.InstallType = "Full";
-                List4.Content = "Installation Type: Full";
-            }
-            else
-            {
-                patcher.InstallType = "Voice Only";
-                List4.Content = "Installation Type: Voice Only";
-            }
+            Utils.ValidateFilePath(this, patcher);          
         }
     }
 
@@ -260,23 +133,23 @@ namespace Higurashi_Installer_WPF
     {
         public static void AnimateWindowSize(this Window target, double newWidth)
         {
-            
-                var sb = new Storyboard { Duration = new Duration(new TimeSpan(0, 0, 0, 0, 200)) };
 
-                var aniWidth = new DoubleAnimationUsingKeyFrames();
+            var sb = new Storyboard { Duration = new Duration(new TimeSpan(0, 0, 0, 0, 200)) };
 
-                aniWidth.Duration = new Duration(new TimeSpan(0, 0, 0, 0, 200));
+            var aniWidth = new DoubleAnimationUsingKeyFrames();
 
-                aniWidth.KeyFrames.Add(new EasingDoubleKeyFrame(target.ActualWidth, KeyTime.FromTimeSpan(new TimeSpan(0, 0, 0, 0, 00))));
-                aniWidth.KeyFrames.Add(new EasingDoubleKeyFrame(newWidth, KeyTime.FromTimeSpan(new TimeSpan(0, 0, 0, 0, 200))));
+            aniWidth.Duration = new Duration(new TimeSpan(0, 0, 0, 0, 200));
 
-                Storyboard.SetTarget(aniWidth, target);
-                Storyboard.SetTargetProperty(aniWidth, new PropertyPath(Window.WidthProperty));
+            aniWidth.KeyFrames.Add(new EasingDoubleKeyFrame(target.ActualWidth, KeyTime.FromTimeSpan(new TimeSpan(0, 0, 0, 0, 00))));
+            aniWidth.KeyFrames.Add(new EasingDoubleKeyFrame(newWidth, KeyTime.FromTimeSpan(new TimeSpan(0, 0, 0, 0, 200))));
 
-                sb.Children.Add(aniWidth);
+            Storyboard.SetTarget(aniWidth, target);
+            Storyboard.SetTargetProperty(aniWidth, new PropertyPath(Window.WidthProperty));
 
-                sb.Begin();
-            
+            sb.Children.Add(aniWidth);
+
+            sb.Begin();
+
         }
     }
 }

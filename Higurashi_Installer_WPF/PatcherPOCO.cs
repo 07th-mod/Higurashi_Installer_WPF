@@ -42,6 +42,5 @@ namespace Higurashi_Installer_WPF
         public Boolean IsInstallTatarigoroshi { get; set; }
         public Boolean IsInstallHimatsubushi { get; set; }
         public Boolean IsInstallMeakashi { get; set; }
-
     }
 }
