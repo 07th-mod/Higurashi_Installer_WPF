@@ -13,7 +13,6 @@ namespace Higurashi_Installer_WPF
     public partial class MainWindow : Window
     {
         PatcherPOCO patcher = new PatcherPOCO();
-        PatcherUtils Utils = new PatcherUtils();
 
         public MainWindow()
         {

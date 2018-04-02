@@ -13,9 +13,9 @@ using System.Windows.Media.Animation;
 
 namespace Higurashi_Installer_WPF
 {
-    class PatcherUtils
+    static class Utils
     {
-        public void TreatCheckboxes(MainWindow window, Boolean IsCustom)
+        public static void TreatCheckboxes(MainWindow window, Boolean IsCustom)
         {
             if (IsCustom)
             {
@@ -36,7 +36,7 @@ namespace Higurashi_Installer_WPF
         }
 
 
-        public void ResetPath(MainWindow window, Boolean ChangedChapter)
+        public static void ResetPath(MainWindow window, Boolean ChangedChapter)
         {
             if (ChangedChapter)
             {
@@ -48,7 +48,7 @@ namespace Higurashi_Installer_WPF
             window.BtnUninstall.IsEnabled = true;
         }
 
-        public void ResetDropBox(PatcherPOCO patcher)
+        public static void ResetDropBox(PatcherPOCO patcher)
         {
             patcher.IsVoiceOnly = false;
             patcher.IsCustom = false;
@@ -57,7 +57,7 @@ namespace Higurashi_Installer_WPF
 
         /* Populates the object for installation
            And fills the list in the grid for user confirmation */
-        public void ConstructPatcher(MainWindow window, PatcherPOCO patcher)
+        public static void ConstructPatcher(MainWindow window, PatcherPOCO patcher)
         {
             patcher.InstallPath = window.PathText.Text;
             patcher.IsBackup = (Boolean)window.ChkBackup.IsChecked;
@@ -85,13 +85,13 @@ namespace Higurashi_Installer_WPF
             }
         }
 
-        public Boolean CheckValidFileExists(String path, PatcherPOCO patcher)
+        public static Boolean CheckValidFileExists(String path, PatcherPOCO patcher)
         {
             string file = path + "\\" + patcher.ExeName;
             return File.Exists(file);
         }
 
-        public void CheckValidFilePath(MainWindow window, PatcherPOCO patcher)
+        public static void CheckValidFilePath(MainWindow window, PatcherPOCO patcher)
         {
             if (window.PathText.Text != "Insert install folder for the chapter")
             {
@@ -108,7 +108,7 @@ namespace Higurashi_Installer_WPF
             }
         }
 
-        public void ValidateFilePath(MainWindow window, PatcherPOCO patcher)
+        public static void ValidateFilePath(MainWindow window, PatcherPOCO patcher)
         {
             var dialog = new CommonOpenFileDialog();
             dialog.IsFolderPicker = true;
@@ -135,7 +135,7 @@ namespace Higurashi_Installer_WPF
             }
         }
 
-        public void InstallComboChoose(MainWindow window, PatcherPOCO patcher)
+        public static void InstallComboChoose(MainWindow window, PatcherPOCO patcher)
         {
             switch (window.InstallCombo.SelectedItem.ToString().Split(new string[] { ": " }, StringSplitOptions.None).Last())
             {
@@ -157,7 +157,7 @@ namespace Higurashi_Installer_WPF
             }
         }
 
-        public void ResizeWindow(MainWindow window)
+        public static void ResizeWindow(MainWindow window)
         {
             if (window.ActualWidth < 950)
             {
