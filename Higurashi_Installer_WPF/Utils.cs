@@ -7,6 +7,8 @@ using System.Threading.Tasks;
 using System.IO;
 using Microsoft.WindowsAPICodePack.Dialogs;
 using System.Windows.Media.Animation;
+using System.Diagnostics;
+using System.Windows.Threading;
 
 
 //Util class for all methods related to the grid and general flow of the layout
@@ -135,6 +137,20 @@ namespace Higurashi_Installer_WPF
             }
         }
 
+        public static void DelayAction(int millisecond, Action action)
+        {
+            var timer = new DispatcherTimer();
+            timer.Tick += delegate
+
+            {
+                action.Invoke();
+                timer.Stop();
+            };
+
+            timer.Interval = TimeSpan.FromMilliseconds(millisecond);
+            timer.Start();
+        }
+
         public static void InstallComboChoose(MainWindow window, PatcherPOCO patcher)
         {
             switch (window.InstallCombo.SelectedItem.ToString().Split(new string[] { ": " }, StringSplitOptions.None).Last())
@@ -169,6 +185,60 @@ namespace Higurashi_Installer_WPF
                 }
             }
         }
+
+        /*It's dangerous to go alone, take this 
+         https://msdn.microsoft.com/en-us/library/system.diagnostics.processstartinfo.redirectstandardoutput.aspx
+         https://stackoverflow.com            
+         */
+        public static void runInstaller(MainWindow window, string filename, string dir, string exePath) { 
+       
+            Process process = new Process();
+            process.StartInfo.CreateNoWindow = true;
+            process.StartInfo.FileName = filename;
+            process.StartInfo.UseShellExecute = false;
+            process.StartInfo.RedirectStandardOutput = true;
+
+            process.OutputDataReceived += (sender, args) => HandleData(process, args, window);
+
+            process.Start();
+            process.BeginOutputReadLine();
+
+            //This makes the installer stop, if you can find a way to make it work, be my guest
+           // process.WaitForExit();
+        }
+
+        public static void HandleData(Process sendingProcess, DataReceivedEventArgs outLine, MainWindow window)
+        {
+            string e = outLine.Data;
+
+            if (e.StartsWith("["))
+            {
+                if (!e.Contains("0B/0B"))
+                {
+                    string filesize = e.Split(new string[] { " " }, StringSplitOptions.None).GetValue(1).ToString();
+                    string downloadSpeed = e.Split(new string[] { " " }, StringSplitOptions.None).GetValue(3).ToString().Replace("DL:", "");
+                    string timeRemaining = e.Split(new string[] { " " }, StringSplitOptions.None).Last().Replace("ETA:", "Time Remaining:").Replace("]", "");
+
+                    Trace.WriteLine(filesize + " - " + downloadSpeed + "/Sec" + "  " + timeRemaining);
+                    string progress = filesize.Split(new string[] { "(" }, StringSplitOptions.None).Last();
+                    double progressValue = Convert.ToDouble(progress.Split(new string[] { "%" }, StringSplitOptions.None).First());
+                    window.Dispatcher.Invoke(() =>
+                    {
+                        InstallProgress(window, filesize, downloadSpeed, timeRemaining, progressValue);
+
+                    });
+
+                }
+            }
+        }
+
+        public static void InstallProgress(MainWindow window, String filesize, String speed, String time, double progress)
+        {
+            window.InstallLabel.Content = filesize + " - " + speed + " - " + time;
+            window.InstallBar.Value = progress;
+
+        }
+
     }
 
     public static class WindowUtilties

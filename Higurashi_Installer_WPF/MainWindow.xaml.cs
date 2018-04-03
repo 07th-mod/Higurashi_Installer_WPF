@@ -1,11 +1,14 @@
 ﻿using Microsoft.WindowsAPICodePack.Dialogs;
 using System;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
+using System.Net;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media.Animation;
 using System.Windows.Media.Imaging;
+using System.Windows.Threading;
 
 namespace Higurashi_Installer_WPF
 {
@@ -13,6 +16,7 @@ namespace Higurashi_Installer_WPF
     public partial class MainWindow : Window
     {
         PatcherPOCO patcher = new PatcherPOCO();
+        WebClient downloader = new WebClient();
 
         public MainWindow()
         {
@@ -24,8 +28,8 @@ namespace Higurashi_Installer_WPF
         {
 
             Utils.ResizeWindow(this);
-            MainImage.Source = new BitmapImage(new Uri("/Resources/header1.jpg", UriKind.Relative));
             Utils.ResetPath(this, true);
+            MainImage.Source = new BitmapImage(new Uri("/Resources/header1.jpg", UriKind.Relative));
             patcher.ChapterName = "Onikakushi";
             patcher.ExeName = "HigurashiEp01.exe";
         }
@@ -33,8 +37,8 @@ namespace Higurashi_Installer_WPF
         private void BtnWatanagashi_Click(object sender, RoutedEventArgs e)
         {
             Utils.ResizeWindow(this);
-            MainImage.Source = new BitmapImage(new Uri("/Resources/header2.jpg", UriKind.Relative));
             Utils.ResetPath(this, true);
+            MainImage.Source = new BitmapImage(new Uri("/Resources/header2.jpg", UriKind.Relative));
             patcher.ChapterName = "Watanagashi";
             patcher.ExeName = "HigurashiEp02.exe";
 
@@ -43,8 +47,8 @@ namespace Higurashi_Installer_WPF
         private void BtnTatarigoroshi_Click(object sender, RoutedEventArgs e)
         {
             Utils.ResizeWindow(this);
-            MainImage.Source = new BitmapImage(new Uri("/Resources/header3.jpg", UriKind.Relative));
             Utils.ResetPath(this, true);
+            MainImage.Source = new BitmapImage(new Uri("/Resources/header3.jpg", UriKind.Relative));
             patcher.ChapterName = "Tatarigoroshi";
             patcher.ExeName = "HigurashiEp03.exe";
         }
@@ -52,8 +56,8 @@ namespace Higurashi_Installer_WPF
         private void BtnHimatsubushi_Click(object sender, RoutedEventArgs e)
         {
             Utils.ResizeWindow(this);
-            MainImage.Source = new BitmapImage(new Uri("/Resources/header4.jpg", UriKind.Relative));
             Utils.ResetPath(this, true);
+            MainImage.Source = new BitmapImage(new Uri("/Resources/header4.jpg", UriKind.Relative));
             patcher.ChapterName = "Himatsubushi";
             patcher.ExeName = "HigurashiEp04.exe";
         }
@@ -61,15 +65,15 @@ namespace Higurashi_Installer_WPF
         private void BtnMeakashi_Click(object sender, RoutedEventArgs e)
         {
             Utils.ResizeWindow(this);
-            MainImage.Source = new BitmapImage(new Uri("/Resources/header5.jpg", UriKind.Relative));
             Utils.ResetPath(this, true);
+            MainImage.Source = new BitmapImage(new Uri("/Resources/header5.jpg", UriKind.Relative));
             patcher.ChapterName = "Meakashi";
             patcher.ExeName = "HigurashiEp05.exe";
         }
 
         private void InstallCombo_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            Utils.InstallComboChoose(this, patcher);           
+            Utils.InstallComboChoose(this, patcher);
         }
 
         private void BtnInstall_Click(object sender, RoutedEventArgs e)
@@ -87,7 +91,22 @@ namespace Higurashi_Installer_WPF
 
         private void BtnPath_Click(object sender, RoutedEventArgs e)
         {
-            Utils.ValidateFilePath(this, patcher);          
+            Utils.ValidateFilePath(this, patcher);
+        }
+
+        private void Confirm_Click(object sender, RoutedEventArgs e)
+        {
+            
+            ConfirmationGrid.Visibility = Visibility.Collapsed;
+            InstallerGrid.Visibility = Visibility.Visible;
+            string workingdir = "C:\\Users\\desenv01\\Downloads";
+            string fullPath = Directory.GetCurrentDirectory();
+
+            //If you don't do this, the InstallerGrid won't be visible
+            Utils.DelayAction(5000, new Action(() => {
+                Utils.runInstaller(this, "install.bat", workingdir, fullPath);
+
+            }));
         }
     }
 }
