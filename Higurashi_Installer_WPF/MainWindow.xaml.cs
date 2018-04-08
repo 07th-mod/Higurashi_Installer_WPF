@@ -41,6 +41,7 @@ namespace Higurashi_Installer_WPF
             Utils.ResetPath(this, true);
             MainImage.Source = new BitmapImage(new Uri("/Resources/header2.jpg", UriKind.Relative));
             patcher.ChapterName = "watanagashi";
+            patcher.DataFolder = "HigurashiEp02_Data";
             patcher.ExeName = "HigurashiEp02.exe";
 
         }
@@ -51,6 +52,7 @@ namespace Higurashi_Installer_WPF
             Utils.ResetPath(this, true);
             MainImage.Source = new BitmapImage(new Uri("/Resources/header3.jpg", UriKind.Relative));
             patcher.ChapterName = "tatarigoroshi";
+            patcher.DataFolder = "HigurashiEp03_Data";
             patcher.ExeName = "HigurashiEp03.exe";
         }
 
@@ -60,6 +62,7 @@ namespace Higurashi_Installer_WPF
             Utils.ResetPath(this, true);
             MainImage.Source = new BitmapImage(new Uri("/Resources/header4.jpg", UriKind.Relative));
             patcher.ChapterName = "himatsubushi";
+            patcher.DataFolder = "HigurashiEp04_Data";
             patcher.ExeName = "HigurashiEp04.exe";
         }
 
