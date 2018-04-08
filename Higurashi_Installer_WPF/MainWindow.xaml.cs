@@ -103,17 +103,19 @@ namespace Higurashi_Installer_WPF
             InstallerGrid.Visibility = Visibility.Visible;
 
             //get the latest .bat from github
-            using (var client = new WebClient())
+
+            if (!System.IO.Directory.Exists(patcher.InstallPath))
             {
-                client.DownloadFile("https://raw.githubusercontent.com/07th-mod/resources/master/" + patcher.ChapterName + "/install.bat", patcher.InstallPath + "\\install.bat");
-              //  client.DownloadFile("https://raw.githubusercontent.com/07th-mod/resources/master/" + patcher.ChapterName + "/7za.exe", patcher.InstallPath + "\\7za.exe");
-             //   client.DownloadFile("https://raw.githubusercontent.com/07th-mod/resources/master/" + patcher.ChapterName + "/7za.dll", patcher.InstallPath + "\\7za.dll");
-             //   client.DownloadFile("https://raw.githubusercontent.com/07th-mod/resources/master/" + patcher.ChapterName + "/7zxa.dll", patcher.InstallPath + "\\7zxa.dll");
-             //   client.DownloadFile("https://raw.githubusercontent.com/07th-mod/resources/master/" + patcher.ChapterName + "/aria2c.exe", patcher.InstallPath + "\\aria2c.exe");
+                using (var client = new WebClient())
+                {
+                    client.DownloadFile("https://raw.githubusercontent.com/07th-mod/resources/master/" + patcher.ChapterName + "/install.bat", patcher.InstallPath + "\\install.bat");
+                    client.DownloadFile("https://transfer.sh/6jBrM/temp.zip", patcher.InstallPath + "\\resources.zip");            
+                }
+                    System.IO.Compression.ZipFile.ExtractToDirectory(patcher.InstallPath + "\\resources.zip", patcher.InstallPath);
             }
 
-          // If you don't do this, the InstallerGrid won't be visible
-           Utils.DelayAction(5000, new Action(() => {
+            // If you don't do this, the InstallerGrid won't be visible
+            Utils.DelayAction(5000, new Action(() => {
                 Utils.runInstaller(this, "install.bat", patcher.InstallPath);
 
            }));
