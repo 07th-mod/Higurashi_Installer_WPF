@@ -13,7 +13,7 @@
         TextOptions.TextRenderingMode="Auto"        
         Background="{DynamicResource MaterialDesignPaper}"
         FontFamily="{DynamicResource MaterialDesignFont}"
-        Title="Higurashi Patcher"  Height="550" Width="950" ResizeMode="NoResize" WindowStartupLocation="CenterScreen"
+        Title="Higurashi Patcher"  Height="550" Width="450" ResizeMode="NoResize" WindowStartupLocation="CenterScreen"
         RenderOptions.BitmapScalingMode="HighQuality">
 
     <Grid x:Name="MainGrid" Height="550" VerticalAlignment="Bottom" HorizontalAlignment="Left" Width="450" Margin="0,0,-6,0" >
@@ -42,7 +42,7 @@
             <TextBox x:Name="PathText" HorizontalAlignment="Center" Height="23" Margin="37,76,70,0"  Text="Insert install folder for the chapter" VerticalAlignment="Top" Width="387" IsEnabled="False"/>
             <TextBlock x:Name="TextWarningPath" HorizontalAlignment="Center" Margin="50,179,22,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="422" IsEnabled="False" FontWeight="Bold" Foreground="#DDFFFFFF" Visibility="Collapsed"/>
         </Grid>
-        <Grid x:Name="ConfirmationGrid" HorizontalAlignment="Left" Height="550" Margin="446,3,-490,0" VerticalAlignment="Top" Width="494" Visibility="Visible">
+        <Grid x:Name="ConfirmationGrid" HorizontalAlignment="Left" Height="550" Margin="446,3,-490,0" VerticalAlignment="Top" Width="494" Visibility="Collapsed">
             <materialDesign:Card Height="550">
                 <materialDesign:Card Height="340" Margin="10,73,10,0">
                 </materialDesign:Card>

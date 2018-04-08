@@ -61,7 +61,10 @@ namespace Higurashi_Installer_WPF
            And fills the list in the grid for user confirmation */
         public static void ConstructPatcher(MainWindow window, PatcherPOCO patcher)
         {
-            patcher.InstallPath = window.PathText.Text;
+            string tempFolder = window.PathText.Text + "\\" + patcher.DataFolder + "\\temp";
+            System.IO.Directory.CreateDirectory(tempFolder);
+            patcher.InstallPath = tempFolder;
+            patcher.DataFolder = tempFolder + "\\install.bat";
             patcher.IsBackup = (Boolean)window.ChkBackup.IsChecked;
             patcher.InstallUpdate = "Installation";
 

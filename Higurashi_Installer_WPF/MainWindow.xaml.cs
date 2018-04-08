@@ -30,7 +30,8 @@ namespace Higurashi_Installer_WPF
             Utils.ResizeWindow(this);
             Utils.ResetPath(this, true);
             MainImage.Source = new BitmapImage(new Uri("/Resources/header1.jpg", UriKind.Relative));
-            patcher.ChapterName = "Onikakushi";
+            patcher.ChapterName = "onikakushi";
+            patcher.DataFolder = "HigurashiEp01_Data";
             patcher.ExeName = "HigurashiEp01.exe";
         }
 
@@ -39,7 +40,7 @@ namespace Higurashi_Installer_WPF
             Utils.ResizeWindow(this);
             Utils.ResetPath(this, true);
             MainImage.Source = new BitmapImage(new Uri("/Resources/header2.jpg", UriKind.Relative));
-            patcher.ChapterName = "Watanagashi";
+            patcher.ChapterName = "watanagashi";
             patcher.ExeName = "HigurashiEp02.exe";
 
         }
@@ -49,7 +50,7 @@ namespace Higurashi_Installer_WPF
             Utils.ResizeWindow(this);
             Utils.ResetPath(this, true);
             MainImage.Source = new BitmapImage(new Uri("/Resources/header3.jpg", UriKind.Relative));
-            patcher.ChapterName = "Tatarigoroshi";
+            patcher.ChapterName = "tatarigoroshi";
             patcher.ExeName = "HigurashiEp03.exe";
         }
 
@@ -58,7 +59,7 @@ namespace Higurashi_Installer_WPF
             Utils.ResizeWindow(this);
             Utils.ResetPath(this, true);
             MainImage.Source = new BitmapImage(new Uri("/Resources/header4.jpg", UriKind.Relative));
-            patcher.ChapterName = "Himatsubushi";
+            patcher.ChapterName = "himatsubushi";
             patcher.ExeName = "HigurashiEp04.exe";
         }
 
@@ -67,7 +68,8 @@ namespace Higurashi_Installer_WPF
             Utils.ResizeWindow(this);
             Utils.ResetPath(this, true);
             MainImage.Source = new BitmapImage(new Uri("/Resources/header5.jpg", UriKind.Relative));
-            patcher.ChapterName = "Meakashi";
+            patcher.ChapterName = "meakashi";
+            patcher.DataFolder = "HigurashiEp05_Data";
             patcher.ExeName = "HigurashiEp05.exe";
         }
 
@@ -99,14 +101,23 @@ namespace Higurashi_Installer_WPF
             
             ConfirmationGrid.Visibility = Visibility.Collapsed;
             InstallerGrid.Visibility = Visibility.Visible;
+
+            System.IO.Directory.CreateDirectory(patcher.InstallPath);
+
+            //get the latest .bat from github
+            using (var client = new WebClient())
+            {
+                client.DownloadFile("https://raw.githubusercontent.com/07th-mod/resources/master/" + patcher.ChapterName + "/install.bat", patcher.DataFolder);
+            }
+
             string workingdir = "C:\\Users\\desenv01\\Downloads";
             string fullPath = Directory.GetCurrentDirectory();
 
-            //If you don't do this, the InstallerGrid won't be visible
-            Utils.DelayAction(5000, new Action(() => {
+          // If you don't do this, the InstallerGrid won't be visible
+           Utils.DelayAction(5000, new Action(() => {
                 Utils.runInstaller(this, "install.bat", workingdir, fullPath);
 
-            }));
+           }));
         }
     }
 }
