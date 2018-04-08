@@ -195,9 +195,9 @@ namespace Higurashi_Installer_WPF
         public static void runInstaller(MainWindow window, string bat, string dir) { 
        
             Process process = new Process();
+            Directory.SetCurrentDirectory(dir);
             process.StartInfo.CreateNoWindow = true;
-            process.StartInfo.FileName = bat;
-            process.StartInfo.WorkingDirectory = dir;
+            process.StartInfo.FileName = bat;          
             process.StartInfo.UseShellExecute = false;
             process.StartInfo.RedirectStandardOutput = true;
 
