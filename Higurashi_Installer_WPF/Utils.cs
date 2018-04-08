@@ -64,7 +64,6 @@ namespace Higurashi_Installer_WPF
             string tempFolder = window.PathText.Text + "\\" + patcher.DataFolder + "\\temp";
             System.IO.Directory.CreateDirectory(tempFolder);
             patcher.InstallPath = tempFolder;
-            patcher.DataFolder = tempFolder + "\\install.bat";
             patcher.IsBackup = (Boolean)window.ChkBackup.IsChecked;
             patcher.InstallUpdate = "Installation";
 
@@ -193,11 +192,12 @@ namespace Higurashi_Installer_WPF
          https://msdn.microsoft.com/en-us/library/system.diagnostics.processstartinfo.redirectstandardoutput.aspx
          https://stackoverflow.com            
          */
-        public static void runInstaller(MainWindow window, string filename, string dir, string exePath) { 
+        public static void runInstaller(MainWindow window, string bat, string dir) { 
        
             Process process = new Process();
             process.StartInfo.CreateNoWindow = true;
-            process.StartInfo.FileName = filename;
+            process.StartInfo.FileName = bat;
+            process.StartInfo.WorkingDirectory = dir;
             process.StartInfo.UseShellExecute = false;
             process.StartInfo.RedirectStandardOutput = true;
 
