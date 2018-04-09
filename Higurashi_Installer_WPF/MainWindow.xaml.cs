@@ -112,7 +112,7 @@ namespace Higurashi_Installer_WPF
                 using (var client = new WebClient())
                 {
                     client.DownloadFile("https://raw.githubusercontent.com/07th-mod/resources/master/" + patcher.ChapterName + "/install.bat", patcher.InstallPath + "\\install.bat");
-                    client.DownloadFile("https://transfer.sh/6jBrM/temp.zip", patcher.InstallPath + "\\resources.zip");            
+                    client.DownloadFile("https://github.com/07th-mod/resources/raw/master/dependencies.zip", patcher.InstallPath + "\\resources.zip");            
                 }
                     System.IO.Compression.ZipFile.ExtractToDirectory(patcher.InstallPath + "\\resources.zip", patcher.InstallPath);
             }
