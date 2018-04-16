@@ -9,6 +9,7 @@ using Microsoft.WindowsAPICodePack.Dialogs;
 using System.Windows.Media.Animation;
 using System.Diagnostics;
 using System.Windows.Threading;
+using System.Windows.Media.Imaging;
 
 
 //Util class for all methods related to the grid and general flow of the layout
@@ -37,7 +38,7 @@ namespace Higurashi_Installer_WPF
             }
         }
 
-
+        //Reset the path in case the user changes chapters
         public static void ResetPath(MainWindow window, Boolean ChangedChapter)
         {
             if (ChangedChapter)
@@ -47,7 +48,7 @@ namespace Higurashi_Installer_WPF
             window.TextWarningPath.Width = 422;
             window.TextWarningPath.Visibility = Visibility.Collapsed;
             window.BtnInstall.IsEnabled = true;
-            window.BtnUninstall.IsEnabled = true;
+         //   window.BtnUninstall.IsEnabled = true;
         }
 
         public static void ResetDropBox(PatcherPOCO patcher)
@@ -95,6 +96,9 @@ namespace Higurashi_Installer_WPF
             return File.Exists(file);
         }
 
+        /*Checks if there's something informed in the path component before switching grids
+        No need to check if the path is valid because the method below already does just that.
+        Also disables the icon grid so the user can't change chapters after this point*/
         public static void CheckValidFilePath(MainWindow window, PatcherPOCO patcher)
         {
             if (window.PathText.Text != "Insert install folder for the chapter")
@@ -112,6 +116,7 @@ namespace Higurashi_Installer_WPF
             }
         }
 
+        //Validates the path the user informs in the install grid
         public static void ValidateFilePath(MainWindow window, PatcherPOCO patcher)
         {
             var dialog = new CommonOpenFileDialog();
@@ -126,31 +131,17 @@ namespace Higurashi_Installer_WPF
                     window.TextWarningPath.Text = "Invalid path! Please select a folder with the " + patcher.ChapterName + " .exe file";
                     window.TextWarningPath.Visibility = Visibility.Visible;
                     window.BtnInstall.IsEnabled = false;
-                    window.BtnUninstall.IsEnabled = false;
+                //    window.BtnUninstall.IsEnabled = false;
                 }
                 else
                 {
                     window.TextWarningPath.Text = patcher.ChapterName + " .exe file found!";
                     window.TextWarningPath.Visibility = Visibility.Visible;
                     window.BtnInstall.IsEnabled = true;
-                    window.BtnUninstall.IsEnabled = true;
+                 //   window.BtnUninstall.IsEnabled = true;
                     window.TextWarningPath.Width = 180;
                 }
             }
-        }
-
-        public static void DelayAction(int millisecond, Action action)
-        {
-            var timer = new DispatcherTimer();
-            timer.Tick += delegate
-
-            {
-                action.Invoke();
-                timer.Stop();
-            };
-
-            timer.Interval = TimeSpan.FromMilliseconds(millisecond);
-            timer.Start();
         }
 
         public static void InstallComboChoose(MainWindow window, PatcherPOCO patcher)
@@ -174,18 +165,14 @@ namespace Higurashi_Installer_WPF
                     break;
             }
         }
-
-        public static void ResizeWindow(MainWindow window)
+        
+        public static void FinishInstallation(MainWindow window)
         {
-            if (window.ActualWidth < 950)
-            {
-                window.AnimateWindowSize(window.ActualWidth + 500);
-                if (window.InstallGrid.Visibility.Equals(Visibility.Collapsed))
-                {
-                    window.InstallGrid.Visibility = Visibility.Visible;
-
-                }
-            }
+            window.AnimateWindowSize(window.ActualWidth - 500);
+            window.InstallerGrid.Visibility = Visibility.Collapsed;
+            window.IconGrid.IsEnabled = true;
+            window.EpisodeImage.Visibility = Visibility.Collapsed;
+            window.MainImage.Source = new BitmapImage(new Uri("/Resources/logo.png", UriKind.Relative));
         }
 
         /*It's dangerous to go alone, take this 
@@ -210,13 +197,14 @@ namespace Higurashi_Installer_WPF
            // process.WaitForExit();
         }
 
+        //Main method for filtering the Aria2c log and populating the main window
         public static void HandleData(Process sendingProcess, DataReceivedEventArgs outLine, MainWindow window)
         {
             string e = outLine.Data;
 
-            if (e.StartsWith("["))
+            if (e != null && e.StartsWith("["))
             {
-                if (!e.Contains("0B/0B"))
+                if (!e.Contains("0B/0B") && e.Contains("ETA"))
                 {
                     string filesize = e.Split(new string[] { " " }, StringSplitOptions.None).GetValue(1).ToString();
                     string downloadSpeed = e.Split(new string[] { " " }, StringSplitOptions.None).GetValue(3).ToString().Replace("DL:", "");
@@ -227,21 +215,116 @@ namespace Higurashi_Installer_WPF
                     double progressValue = Convert.ToDouble(progress.Split(new string[] { "%" }, StringSplitOptions.None).First());
                     window.Dispatcher.Invoke(() =>
                     {
-                        InstallProgress(window, filesize, downloadSpeed, timeRemaining, progressValue);
+                        InstallerProgress(window, filesize, downloadSpeed, timeRemaining, progressValue);
 
                     });
 
+                } else if (!e.Contains("ETA"))
+                {
+                    window.Dispatcher.Invoke(() =>
+                    {
+                        InstallerProgressMessages(window, "Finishing downloading File...", 100);
+                    });
                 }
+            }
+
+            if (e != null && e.StartsWith("Downloading"))
+            {
+                window.Dispatcher.Invoke(() =>
+                {
+                    InstallerPatchMessage(window, e);
+                });
+            }
+
+            if (e != null && e.Contains("All done, finishing in three seconds"))
+            {
+                window.Dispatcher.Invoke(() =>
+                {
+                    InstallerCompleteMessage(window);
+                });
+            }
+
+            if (e != null && e.Contains("Extracting files"))
+            {
+                window.Dispatcher.Invoke(() =>
+                {
+                    InstallerProgressMessages(window, "Extracting and installing files..", 100);
+                });
             }
         }
 
-        public static void InstallProgress(MainWindow window, String filesize, String speed, String time, double progress)
+        public static void InstallerProgress(MainWindow window, String filesize, String speed, String time, double progress)
         {
             window.InstallLabel.Content = filesize + " - " + speed + " - " + time;
             window.InstallBar.Value = progress;
 
         }
 
+        public static void InstallerProgressMessages(MainWindow window, string message, double progress)
+        {
+            window.InstallLabel.Content = message;
+            window.InstallBar.Value = progress;
+            if (message.Contains("Extracting and installing files.."))
+            {
+                window.InstallLabelPatch3.Content = "Downloading patch... (Done)";
+            }
+
+        }
+
+        public static void InstallerPatchMessage(MainWindow window, String message)
+        {
+            if (message.Contains("Downloading graphics patch"))
+            {
+                window.InstallCard1.Visibility = Visibility.Visible;
+                window.InstallLabelPatch1.Visibility = Visibility.Visible;
+            }
+            else if (message.Contains("Downloading voice patch"))
+            {
+                window.InstallCard2.Visibility = Visibility.Visible;
+                window.InstallLabelPatch2.Visibility = Visibility.Visible;
+                window.InstallLabelPatch1.Content = "Downloading graphics patch... (Done)";
+            }
+            else
+            {
+                window.InstallCard3.Visibility = Visibility.Visible;
+                window.InstallLabelPatch3.Visibility = Visibility.Visible;
+                window.InstallLabelPatch2.Content = "Downloading voice patch... (Done)";                
+            }
+        }
+
+        public static void InstallerCompleteMessage(MainWindow window)
+        {           
+            window.InstallerText.Text = "Installation Complete";
+            window.InstallLabel.Content = "";
+            window.BtnInstallerFinish.Visibility = Visibility.Visible;
+        }
+
+        public static void DelayAction(int millisecond, Action action)
+        {
+            var timer = new DispatcherTimer();
+            timer.Tick += delegate
+
+            {
+                action.Invoke();
+                timer.Stop();
+            };
+
+            timer.Interval = TimeSpan.FromMilliseconds(millisecond);
+            timer.Start();
+        }
+
+        public static void ResizeWindow(MainWindow window)
+        {
+            if (window.ActualWidth < 950)
+            {
+                window.AnimateWindowSize(window.ActualWidth + 500);
+                if (window.InstallGrid.Visibility.Equals(Visibility.Collapsed))
+                {
+                    window.InstallGrid.Visibility = Visibility.Visible;
+
+                }
+            }
+        }
     }
 
     public static class WindowUtilties
