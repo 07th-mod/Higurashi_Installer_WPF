@@ -1,9 +1,12 @@
-﻿using Microsoft.WindowsAPICodePack.Dialogs;
+﻿using log4net;
+using log4net.Config;
+using Microsoft.WindowsAPICodePack.Dialogs;
 using System;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Net;
+using System.Reflection;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
@@ -16,17 +19,20 @@ namespace Higurashi_Installer_WPF
 
     public partial class MainWindow : Window
     {
+        private static readonly ILog _log = LogManager.GetLogger(MethodBase.GetCurrentMethod().DeclaringType);
         PatcherPOCO patcher = new PatcherPOCO();
         WebClient downloader = new WebClient();
 
         public MainWindow()
         {
             InitializeComponent();
+            Logger.Setup();
             patcher.IsFull = true;
         }
        
         private void BtnOnikakushi_Click(object sender, RoutedEventArgs e)
         {
+            _log.Info("clicked onikakushi");
             Utils.ResizeWindow(this);
             Utils.ResetPath(this, true);
             EpisodeImage.Visibility = Visibility.Visible;
@@ -39,6 +45,7 @@ namespace Higurashi_Installer_WPF
 
         private void BtnWatanagashi_Click(object sender, RoutedEventArgs e)
         {
+            _log.Info("Clicked Watanagashi");
             Utils.ResizeWindow(this);
             Utils.ResetPath(this, true);
             EpisodeImage.Visibility = Visibility.Visible;
@@ -51,6 +58,7 @@ namespace Higurashi_Installer_WPF
 
         private void BtnTatarigoroshi_Click(object sender, RoutedEventArgs e)
         {
+            _log.Info("Clicked Tatarigoroshi");
             Utils.ResizeWindow(this);
             Utils.ResetPath(this, true);
             EpisodeImage.Visibility = Visibility.Visible;
@@ -63,6 +71,7 @@ namespace Higurashi_Installer_WPF
 
         private void BtnHimatsubushi_Click(object sender, RoutedEventArgs e)
         {
+            _log.Info("Clicked Himatsubushi");
             Utils.ResizeWindow(this);
             Utils.ResetPath(this, true);
             EpisodeImage.Visibility = Visibility.Visible;
@@ -75,6 +84,7 @@ namespace Higurashi_Installer_WPF
 
         private void BtnMeakashi_Click(object sender, RoutedEventArgs e)
         {
+            _log.Info("Clicked Meakashi");
             Utils.ResizeWindow(this);
             Utils.ResetPath(this, true);
             EpisodeImage.Visibility = Visibility.Visible;
@@ -118,7 +128,7 @@ namespace Higurashi_Installer_WPF
         //Main install logic starts here after the confirmation button is clicked
         private void Confirm_Click(object sender, RoutedEventArgs e)
         {
-            
+            _log.Info("Starting the installer");
             ConfirmationGrid.Visibility = Visibility.Collapsed;
             InstallerGrid.Visibility = Visibility.Visible;
 
@@ -126,7 +136,8 @@ namespace Higurashi_Installer_WPF
 
            
                 using (var client = new WebClient())
-                {                                       
+                {
+                    _log.Info("Downloading install bat and creating temp folder");
                     client.DownloadFile("https://raw.githubusercontent.com/07th-mod/resources/master/" + patcher.ChapterName + "/install.bat", patcher.InstallPath + "\\install.bat");                  
                     client.DownloadFile("https://github.com/07th-mod/resources/raw/master/dependencies.zip", patcher.InstallPath + "\\resources.zip");                                
                 }

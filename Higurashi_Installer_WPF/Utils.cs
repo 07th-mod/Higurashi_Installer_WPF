@@ -10,6 +10,8 @@ using System.Windows.Media.Animation;
 using System.Diagnostics;
 using System.Windows.Threading;
 using System.Windows.Media.Imaging;
+using log4net;
+using System.Reflection;
 
 
 //Util class for all methods related to the grid and general flow of the layout
@@ -18,6 +20,7 @@ namespace Higurashi_Installer_WPF
 {
     static class Utils
     {
+        private static readonly ILog _log = LogManager.GetLogger(MethodBase.GetCurrentMethod().DeclaringType);
         public static void TreatCheckboxes(MainWindow window, Boolean IsCustom)
         {
             if (IsCustom)
@@ -43,6 +46,7 @@ namespace Higurashi_Installer_WPF
         {
             if (ChangedChapter)
             {
+                _log.Info("Changed chapter");
                 window.PathText.Text = "Insert install folder for the chapter";
             }
             window.TextWarningPath.Width = 422;
@@ -62,8 +66,9 @@ namespace Higurashi_Installer_WPF
            And fills the list in the grid for user confirmation */
         public static void ConstructPatcher(MainWindow window, PatcherPOCO patcher)
         {
+            _log.Info("Constructing the patcher");
             string tempFolder = window.PathText.Text + "\\" + patcher.DataFolder + "\\temp";
-            System.IO.Directory.CreateDirectory(tempFolder);
+            Directory.CreateDirectory(tempFolder);
             patcher.InstallPath = tempFolder;
             patcher.IsBackup = (Boolean)window.ChkBackup.IsChecked;
             patcher.InstallUpdate = "Installation";
@@ -103,6 +108,7 @@ namespace Higurashi_Installer_WPF
         {
             if (window.PathText.Text != "Insert install folder for the chapter")
             {
+                _log.Info("Confirmation grid");
                 window.InstallGrid.Visibility = Visibility.Collapsed;
                 window.ConfirmationGrid.Visibility = Visibility.Visible;
                 window.IconGrid.IsEnabled = false;
@@ -119,6 +125,7 @@ namespace Higurashi_Installer_WPF
         //Validates the path the user informs in the install grid
         public static void ValidateFilePath(MainWindow window, PatcherPOCO patcher)
         {
+            _log.Info("Checking if path is valid");
             var dialog = new CommonOpenFileDialog();
             dialog.IsFolderPicker = true;
             CommonFileDialogResult result = dialog.ShowDialog();
@@ -127,6 +134,7 @@ namespace Higurashi_Installer_WPF
                 window.PathText.Text = dialog.FileName;
                 if (!CheckValidFileExists(dialog.FileName, patcher))
                 {
+                    _log.Info("Wrong path selected");
                     window.TextWarningPath.Width = 422;
                     window.TextWarningPath.Text = "Invalid path! Please select a folder with the " + patcher.ChapterName + " .exe file";
                     window.TextWarningPath.Visibility = Visibility.Visible;
@@ -135,6 +143,7 @@ namespace Higurashi_Installer_WPF
                 }
                 else
                 {
+                    _log.Info("Correct path selected");
                     window.TextWarningPath.Text = patcher.ChapterName + " .exe file found!";
                     window.TextWarningPath.Visibility = Visibility.Visible;
                     window.BtnInstall.IsEnabled = true;
@@ -167,11 +176,11 @@ namespace Higurashi_Installer_WPF
         }
         
         public static void FinishInstallation(MainWindow window)
-        {
+        {           
             window.AnimateWindowSize(window.ActualWidth - 500);
             window.InstallerGrid.Visibility = Visibility.Collapsed;
             window.IconGrid.IsEnabled = true;
-            window.EpisodeImage.Visibility = Visibility.Collapsed;
+            window.EpisodeImage.Visibility = Visibility.Collapsed;           
             window.MainImage.Source = new BitmapImage(new Uri("/Resources/logo.png", UriKind.Relative));
         }
 
@@ -179,8 +188,9 @@ namespace Higurashi_Installer_WPF
          https://msdn.microsoft.com/en-us/library/system.diagnostics.processstartinfo.redirectstandardoutput.aspx
          https://stackoverflow.com            
          */
-        public static void runInstaller(MainWindow window, string bat, string dir) { 
-       
+        public static void runInstaller(MainWindow window, string bat, string dir) {
+
+            _log.Info("Initializing cmd process");
             Process process = new Process();
             Directory.SetCurrentDirectory(dir);
             process.StartInfo.CreateNoWindow = true;
@@ -202,6 +212,7 @@ namespace Higurashi_Installer_WPF
         {
             string e = outLine.Data;
 
+            //Main part with the download speed, ETA, etc
             if (e != null && e.StartsWith("["))
             {
                 if (!e.Contains("0B/0B") && e.Contains("ETA"))
@@ -209,17 +220,17 @@ namespace Higurashi_Installer_WPF
                     string filesize = e.Split(new string[] { " " }, StringSplitOptions.None).GetValue(1).ToString();
                     string downloadSpeed = e.Split(new string[] { " " }, StringSplitOptions.None).GetValue(3).ToString().Replace("DL:", "");
                     string timeRemaining = e.Split(new string[] { " " }, StringSplitOptions.None).Last().Replace("ETA:", "Time Remaining:").Replace("]", "");
-
-                    Trace.WriteLine(filesize + " - " + downloadSpeed + "/Sec" + "  " + timeRemaining);
+           
                     string progress = filesize.Split(new string[] { "(" }, StringSplitOptions.None).Last();
                     double progressValue = Convert.ToDouble(progress.Split(new string[] { "%" }, StringSplitOptions.None).First());
                     window.Dispatcher.Invoke(() =>
                     {
-                        InstallerProgress(window, filesize, downloadSpeed, timeRemaining, progressValue);
+                        InstallerProgressBar(window, filesize, downloadSpeed, timeRemaining, progressValue);
 
                     });
 
-                } else if (!e.Contains("ETA"))
+                }               
+                else if (!e.Contains("ETA"))
                 {
                     window.Dispatcher.Invoke(() =>
                     {
@@ -228,6 +239,7 @@ namespace Higurashi_Installer_WPF
                 }
             }
 
+            //Especific filterings for the other parts of the installer
             if (e != null && e.StartsWith("Downloading"))
             {
                 window.Dispatcher.Invoke(() =>
@@ -251,9 +263,16 @@ namespace Higurashi_Installer_WPF
                     InstallerProgressMessages(window, "Extracting and installing files..", 100);
                 });
             }
-        }
 
-        public static void InstallerProgress(MainWindow window, String filesize, String speed, String time, double progress)
+            if (e != null && e.Contains("Extracting archive:"))
+            {
+                window.Dispatcher.Invoke(() =>
+                {
+                    ExtractingMessages(window, e);
+                });
+            }
+        }
+        public static void InstallerProgressBar(MainWindow window, String filesize, String speed, String time, double progress)
         {
             window.InstallLabel.Content = filesize + " - " + speed + " - " + time;
             window.InstallBar.Value = progress;
@@ -275,17 +294,20 @@ namespace Higurashi_Installer_WPF
         {
             if (message.Contains("Downloading graphics patch"))
             {
+                _log.Info("Started downloading graphic patch");
                 window.InstallCard1.Visibility = Visibility.Visible;
                 window.InstallLabelPatch1.Visibility = Visibility.Visible;
             }
             else if (message.Contains("Downloading voice patch"))
             {
+                _log.Info("Started downloading voice patch");
                 window.InstallCard2.Visibility = Visibility.Visible;
                 window.InstallLabelPatch2.Visibility = Visibility.Visible;
                 window.InstallLabelPatch1.Content = "Downloading graphics patch... (Done)";
             }
             else
             {
+                _log.Info("Started downloading patch");
                 window.InstallCard3.Visibility = Visibility.Visible;
                 window.InstallLabelPatch3.Visibility = Visibility.Visible;
                 window.InstallLabelPatch2.Content = "Downloading voice patch... (Done)";                
@@ -293,10 +315,22 @@ namespace Higurashi_Installer_WPF
         }
 
         public static void InstallerCompleteMessage(MainWindow window)
-        {           
+        {
+            _log.Info("Finishing installation");
             window.InstallerText.Text = "Installation Complete";
             window.InstallLabel.Content = "";
+            window.ExtractLabel.Content = "";
             window.BtnInstallerFinish.Visibility = Visibility.Visible;
+        }
+
+        public static void ExtractingMessages(MainWindow window, String message)
+        {
+            window.ExtractLabel.Content = message;
+            if(window.InstallBar.Value == 100)
+            {
+                window.InstallBar.Value = 0;
+            }
+            window.InstallBar.Value = window.InstallBar.Value + 20;
         }
 
         public static void DelayAction(int millisecond, Action action)
@@ -315,8 +349,10 @@ namespace Higurashi_Installer_WPF
 
         public static void ResizeWindow(MainWindow window)
         {
+            
             if (window.ActualWidth < 950)
             {
+                _log.Info("Resizing window");
                 window.AnimateWindowSize(window.ActualWidth + 500);
                 if (window.InstallGrid.Visibility.Equals(Visibility.Collapsed))
                 {

@@ -119,6 +119,7 @@
             <materialDesign:Card x:Name="InstallCard3" Height="236" Margin="10,190,10,0" Visibility="Collapsed">
             </materialDesign:Card>
             <Label x:Name="InstallLabel" Content="" HorizontalAlignment="Left" Margin="52,185,0,0" VerticalAlignment="Top" Width="391"/>
+            <Label x:Name="ExtractLabel" Content="" HorizontalAlignment="Left" Margin="52,211,0,0" VerticalAlignment="Top" Width="391"/>
             <ProgressBar x:Name="InstallBar" HorizontalAlignment="Left" Height="25" Margin="52,160,0,0" VerticalAlignment="Top" Width="388"/>
             <TextBlock x:Name="InstallerText" HorizontalAlignment="Center" Margin="105,65,21,0" TextWrapping="Wrap" Text="Installation in progress" VerticalAlignment="Top" Width="368" FontWeight="Bold" FontSize="25"/>
             <Label x:Name="InstallLabelPatch1" Content="Downloading graphics patch..." HorizontalAlignment="Left" Margin="52,279,0,0" VerticalAlignment="Top" Width="391" Visibility="Collapsed"/>
