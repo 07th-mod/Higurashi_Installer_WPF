@@ -220,7 +220,7 @@ namespace Higurashi_Installer_WPF
                     string filesize = e.Split(new string[] { " " }, StringSplitOptions.None).GetValue(1).ToString();
                     string downloadSpeed = e.Split(new string[] { " " }, StringSplitOptions.None).GetValue(3).ToString().Replace("DL:", "");
                     string timeRemaining = e.Split(new string[] { " " }, StringSplitOptions.None).Last().Replace("ETA:", "Time Remaining:").Replace("]", "");
-           
+
                     string progress = filesize.Split(new string[] { "(" }, StringSplitOptions.None).Last();
                     double progressValue = Convert.ToDouble(progress.Split(new string[] { "%" }, StringSplitOptions.None).First());
                     window.Dispatcher.Invoke(() =>
@@ -229,7 +229,7 @@ namespace Higurashi_Installer_WPF
 
                     });
 
-                }               
+                }
                 else if (!e.Contains("ETA"))
                 {
                     window.Dispatcher.Invoke(() =>
@@ -271,6 +271,15 @@ namespace Higurashi_Installer_WPF
                     ExtractingMessages(window, e);
                 });
             }
+
+            if (e != null && e.Contains("Moving folders"))
+            {
+                window.Dispatcher.Invoke(() =>
+                {
+                    ExtractingMessages(window, e);
+                });
+            }
+
         }
         public static void InstallerProgressBar(MainWindow window, String filesize, String speed, String time, double progress)
         {
@@ -325,12 +334,19 @@ namespace Higurashi_Installer_WPF
 
         public static void ExtractingMessages(MainWindow window, String message)
         {
-            window.ExtractLabel.Content = message;
-            if(window.InstallBar.Value == 100)
+            if (message.Contains("Moving folders"))
             {
-                window.InstallBar.Value = 0;
+                window.ExtractLabel.Content = "Moving files...";
             }
-            window.InstallBar.Value = window.InstallBar.Value + 20;
+            else
+            {
+                window.ExtractLabel.Content = message;
+                if (window.InstallBar.Value == 100)
+                {
+                    window.InstallBar.Value = 0;
+                }
+                window.InstallBar.Value = window.InstallBar.Value + 20;
+            }
         }
 
         //Resets the installer grid
