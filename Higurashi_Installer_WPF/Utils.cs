@@ -177,11 +177,11 @@ namespace Higurashi_Installer_WPF
         
         public static void FinishInstallation(MainWindow window)
         {           
-            window.AnimateWindowSize(window.ActualWidth - 500);
-            window.InstallerGrid.Visibility = Visibility.Collapsed;
+            window.AnimateWindowSize(window.ActualWidth - 500);           
             window.IconGrid.IsEnabled = true;
-            window.EpisodeImage.Visibility = Visibility.Collapsed;           
+            window.EpisodeImage.Visibility = Visibility.Collapsed;
             window.MainImage.Source = new BitmapImage(new Uri("/Resources/logo.png", UriKind.Relative));
+            ResetInstallerGrid(window);
         }
 
         /*It's dangerous to go alone, take this 
@@ -331,6 +331,27 @@ namespace Higurashi_Installer_WPF
                 window.InstallBar.Value = 0;
             }
             window.InstallBar.Value = window.InstallBar.Value + 20;
+        }
+
+        //Resets the installer grid
+        public static void ResetInstallerGrid(MainWindow window)
+        {
+            window.InstallerGrid.Visibility = Visibility.Collapsed;
+            window.BtnInstallerFinish.Visibility = Visibility.Collapsed;
+            window.InstallBar.Value = 0;
+
+            window.InstallCard1.Visibility = Visibility.Collapsed;
+            window.InstallLabelPatch1.Visibility = Visibility.Collapsed;
+
+            window.InstallCard2.Visibility = Visibility.Collapsed;
+            window.InstallLabelPatch2.Visibility = Visibility.Collapsed;
+
+            window.InstallCard3.Visibility = Visibility.Collapsed;
+            window.InstallLabelPatch3.Visibility = Visibility.Collapsed;
+
+            window.InstallLabelPatch1.Content = "Downloading graphics patch...";
+            window.InstallLabelPatch2.Content = "Downloading voice patch...";
+            window.InstallLabelPatch3.Content = "Downloading patch...";
         }
 
         public static void DelayAction(int millisecond, Action action)
