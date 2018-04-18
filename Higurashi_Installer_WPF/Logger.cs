@@ -23,14 +23,19 @@ namespace Higurashi_Installer_WPF
 
             RollingFileAppender roller = new RollingFileAppender();
             roller.AppendToFile = false;
-            roller.File = @"Logs\PatcherLog.txt";
+            roller.File = @"Logs\PatcherLog.txt";           
             roller.Layout = patternLayout;
-            roller.MaxSizeRollBackups = 5;
+            roller.MaxSizeRollBackups = 5;            
             roller.MaximumFileSize = "1GB";
             roller.RollingStyle = RollingFileAppender.RollingMode.Size;
             roller.StaticLogFileName = true;
             roller.ActivateOptions();
             hierarchy.Root.AddAppender(roller);
+
+            ConsoleAppender console = new ConsoleAppender();
+            console.Layout = patternLayout;
+            console.ActivateOptions();
+            hierarchy.Root.AddAppender(console);
 
             MemoryAppender memory = new MemoryAppender();
             memory.ActivateOptions();
