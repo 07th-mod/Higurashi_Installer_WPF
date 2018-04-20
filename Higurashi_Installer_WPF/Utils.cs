@@ -307,7 +307,7 @@ namespace Higurashi_Installer_WPF
                 window.InstallCard1.Visibility = Visibility.Visible;
                 window.InstallLabelPatch1.Visibility = Visibility.Visible;
             }
-            else if (message.Contains("Downloading voice patch"))
+            else if (message.Contains("Downloading voice"))
             {
                 _log.Info("Started downloading voice patch");
                 window.InstallCard2.Visibility = Visibility.Visible;

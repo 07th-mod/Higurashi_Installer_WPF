@@ -95,6 +95,19 @@ namespace Higurashi_Installer_WPF
             patcher.ImagePath = "/Resources/header5.jpg";
         }
 
+        private void BtnConsole_Click(object sender, RoutedEventArgs e)
+        {
+            _log.Info("Clicked Himatsubushi");
+            Utils.ResizeWindow(this);
+            Utils.ResetPath(this, true);
+            EpisodeImage.Visibility = Visibility.Visible;
+            EpisodeImage.Source = new BitmapImage(new Uri("/Resources/console.png", UriKind.Relative));
+            patcher.ChapterName = "console0arcs";
+            patcher.DataFolder = "HigurashiEp04_Data";
+            patcher.ExeName = "HigurashiEp04.exe";
+            patcher.ImagePath = "/Resources/console.png";
+        }
+
         private void InstallCombo_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             Utils.InstallComboChoose(this, patcher);
@@ -180,6 +193,12 @@ namespace Higurashi_Installer_WPF
         {
             EpisodeImage.Visibility = Visibility.Visible;
             EpisodeImage.Source = new BitmapImage(new Uri("/Resources/header5.jpg", UriKind.Relative));
+        }
+
+        private void MouseEnterConsole(object sender, MouseEventArgs e)
+        {
+            EpisodeImage.Visibility = Visibility.Visible;
+            EpisodeImage.Source = new BitmapImage(new Uri("/Resources/console.png", UriKind.Relative));
         }
 
         private void MouseLeaveEpisode(object sender, MouseEventArgs e)
