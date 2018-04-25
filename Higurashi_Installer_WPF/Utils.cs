@@ -1,9 +1,6 @@
 ﻿using System;
 using System.Windows;
-using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.IO;
 using Microsoft.WindowsAPICodePack.Dialogs;
 using System.Windows.Media.Animation;
@@ -15,7 +12,7 @@ using System.Reflection;
 using System.Net;
 
 
-//Util class for all methods related to the grid, intallation and general flow of the layout
+//Util class for all methods related to the grid, installation and general flow of the layout
 
 namespace Higurashi_Installer_WPF
 {

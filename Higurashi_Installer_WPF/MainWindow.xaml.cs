@@ -1,18 +1,10 @@
 ﻿using log4net;
-using log4net.Config;
-using Microsoft.WindowsAPICodePack.Dialogs;
 using System;
-using System.Diagnostics;
-using System.IO;
-using System.Linq;
-using System.Net;
 using System.Reflection;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
-using System.Windows.Media.Animation;
 using System.Windows.Media.Imaging;
-using System.Windows.Threading;
 
 namespace Higurashi_Installer_WPF
 {
