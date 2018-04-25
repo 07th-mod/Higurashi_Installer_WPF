@@ -12,34 +12,16 @@ using System.Windows.Threading;
 using System.Windows.Media.Imaging;
 using log4net;
 using System.Reflection;
+using System.Net;
 
 
-//Util class for all methods related to the grid and general flow of the layout
+//Util class for all methods related to the grid, intallation and general flow of the layout
 
 namespace Higurashi_Installer_WPF
 {
     static class Utils
     {
         private static readonly ILog _log = LogManager.GetLogger(MethodBase.GetCurrentMethod().DeclaringType);
-        public static void TreatCheckboxes(MainWindow window, Boolean IsCustom)
-        {
-            if (IsCustom)
-            {
-                window.ChkPatch.Visibility = Visibility.Visible;
-                window.ChkPS3.Visibility = Visibility.Visible;
-                window.ChkSteamSprites.Visibility = Visibility.Visible;
-                window.ChkUI.Visibility = Visibility.Visible;
-                window.ChkVoices.Visibility = Visibility.Visible;
-            }
-            else
-            {
-                window.ChkPatch.Visibility = Visibility.Collapsed;
-                window.ChkPS3.Visibility = Visibility.Collapsed;
-                window.ChkSteamSprites.Visibility = Visibility.Collapsed;
-                window.ChkUI.Visibility = Visibility.Collapsed;
-                window.ChkVoices.Visibility = Visibility.Collapsed;
-            }
-        }
 
         //Reset the path in case the user changes chapters
         public static void ResetPath(MainWindow window, Boolean ChangedChapter)
@@ -49,6 +31,7 @@ namespace Higurashi_Installer_WPF
                 _log.Info("Changed chapter");
                 window.PathText.Text = "Insert install folder for the chapter";
             }
+
             window.TextWarningPath.Width = 422;
             window.TextWarningPath.Visibility = Visibility.Collapsed;
             window.BtnInstall.IsEnabled = true;
@@ -62,43 +45,34 @@ namespace Higurashi_Installer_WPF
             patcher.IsFull = false;
         }
 
-        /* Populates the object for installation
-           And fills the list in the grid for user confirmation */
-        public static void ConstructPatcher(MainWindow window, PatcherPOCO patcher)
+        public static void DelayAction(int millisecond, Action action)
         {
-            _log.Info("Constructing the patcher");
-            string tempFolder = window.PathText.Text + "\\" + patcher.DataFolder + "\\temp";
-            Directory.CreateDirectory(tempFolder);
-            patcher.InstallPath = tempFolder;
-            patcher.IsBackup = (Boolean)window.ChkBackup.IsChecked;
-            patcher.InstallUpdate = "Installation";
+            var timer = new DispatcherTimer();
+            timer.Tick += delegate
 
-            window.List1.Content = "Chapter: " + patcher.ChapterName;
-            window.List2.Content = "Path: " + window.PathText.Text;
-            window.List3.Content = "Process: Installation";
-            window.List5.Content = "Backup: " + (patcher.IsBackup ? "Yes" : "No");
+            {
+                action.Invoke();
+                timer.Stop();
+            };
 
-            if (patcher.IsCustom)
-            {
-                patcher.InstallType = "Custom";
-                window.List4.Content = "Installation Type: Custom";
-            }
-            else if (patcher.IsFull)
-            {
-                patcher.InstallType = "Full";
-                window.List4.Content = "Installation Type: Full";
-            }
-            else
-            {
-                patcher.InstallType = "Voice Only";
-                window.List4.Content = "Installation Type: Voice Only";
-            }
+            timer.Interval = TimeSpan.FromMilliseconds(millisecond);
+            timer.Start();
         }
 
-        public static Boolean CheckValidFileExists(String path, PatcherPOCO patcher)
+        //Main Util method to resize the window
+        public static void ResizeWindow(MainWindow window)
         {
-            string file = path + "\\" + patcher.ExeName;
-            return File.Exists(file);
+
+            if (window.ActualWidth < 950)
+            {
+                _log.Info("Resizing window");
+                window.AnimateWindowSize(window.ActualWidth + 500);
+                if (window.InstallGrid.Visibility.Equals(Visibility.Collapsed))
+                {
+                    window.InstallGrid.Visibility = Visibility.Visible;
+
+                }
+            }
         }
 
         /*Checks if there's something informed in the path component before switching grids
@@ -153,6 +127,13 @@ namespace Higurashi_Installer_WPF
             }
         }
 
+        public static Boolean CheckValidFileExists(String path, PatcherPOCO patcher)
+        {
+            string file = path + "\\" + patcher.ExeName;
+            return File.Exists(file);
+        }
+
+        //Responsible for changing the layout depending on what option is selected in the combo
         public static void InstallComboChoose(MainWindow window, PatcherPOCO patcher)
         {
             switch (window.InstallCombo.SelectedItem.ToString().Split(new string[] { ": " }, StringSplitOptions.None).Last())
@@ -174,14 +155,72 @@ namespace Higurashi_Installer_WPF
                     break;
             }
         }
-        
-        public static void FinishInstallation(MainWindow window)
-        {           
-            window.AnimateWindowSize(window.ActualWidth - 500);           
-            window.IconGrid.IsEnabled = true;
-            window.EpisodeImage.Visibility = Visibility.Collapsed;
-            window.MainImage.Source = new BitmapImage(new Uri("/Resources/logo.png", UriKind.Relative));
-            ResetInstallerGrid(window);
+
+        public static void TreatCheckboxes(MainWindow window, Boolean IsCustom)
+        {
+            if (IsCustom)
+            {
+                window.ChkPatch.Visibility = Visibility.Visible;
+                window.ChkPS3.Visibility = Visibility.Visible;
+                window.ChkSteamSprites.Visibility = Visibility.Visible;
+                window.ChkUI.Visibility = Visibility.Visible;
+                window.ChkVoices.Visibility = Visibility.Visible;
+            }
+            else
+            {
+                window.ChkPatch.Visibility = Visibility.Collapsed;
+                window.ChkPS3.Visibility = Visibility.Collapsed;
+                window.ChkSteamSprites.Visibility = Visibility.Collapsed;
+                window.ChkUI.Visibility = Visibility.Collapsed;
+                window.ChkVoices.Visibility = Visibility.Collapsed;
+            }
+        }
+
+        /* Populates the object for installation
+          And fills the list in the grid for user confirmation */
+        public static void ConstructPatcher(MainWindow window, PatcherPOCO patcher)
+        {
+            _log.Info("Constructing the patcher");
+            string tempFolder = window.PathText.Text + "\\" + patcher.DataFolder + "\\temp";
+            Directory.CreateDirectory(tempFolder);
+            patcher.InstallPath = tempFolder;
+            patcher.IsBackup = (Boolean)window.ChkBackup.IsChecked;
+            patcher.InstallUpdate = "Installation";
+
+            window.List1.Content = "Chapter: " + patcher.ChapterName;
+            window.List2.Content = "Path: " + window.PathText.Text;
+            window.List3.Content = "Process: Installation";
+            window.List5.Content = "Backup: " + (patcher.IsBackup ? "Yes" : "No");
+
+            if (patcher.IsCustom)
+            {
+                patcher.InstallType = "Custom";
+                window.List4.Content = "Installation Type: Custom";
+            }
+            else if (patcher.IsFull)
+            {
+                patcher.InstallType = "Full";
+                window.List4.Content = "Installation Type: Full";
+            }
+            else
+            {
+                patcher.InstallType = "Voice Only";
+                window.List4.Content = "Installation Type: Voice Only";
+            }
+        }
+
+        //Only the installer related methods from here
+
+        //downloads and extracts the resources of the temp folder
+        public static void DownloadResources(PatcherPOCO patcher)
+        {
+            using (var client = new WebClient())
+            {
+                _log.Info("Downloading install bat and creating temp folder");
+                client.DownloadFile("https://raw.githubusercontent.com/07th-mod/resources/master/" + patcher.ChapterName + "/install.bat", patcher.InstallPath + "\\install.bat");
+                client.DownloadFile("https://github.com/07th-mod/resources/raw/master/dependencies.zip", patcher.InstallPath + "\\resources.zip");
+            }
+            System.IO.Compression.ZipFile.ExtractToDirectory(patcher.InstallPath + "\\resources.zip", patcher.InstallPath);
         }
 
         /*It's dangerous to go alone, take this 
@@ -285,7 +324,6 @@ namespace Higurashi_Installer_WPF
         {
             window.InstallLabel.Content = filesize + " - " + speed + " - " + time;
             window.InstallBar.Value = progress;
-
         }
 
         public static void InstallerProgressMessages(MainWindow window, string message, double progress)
@@ -336,7 +374,7 @@ namespace Higurashi_Installer_WPF
         {
             if (message.Contains("Moving folders"))
             {
-                window.ExtractLabel.Content = "Moving files...";
+                window.ExtractLabel.Content = "Moving files...   (This may take a while)";
             }
             else
             {
@@ -347,6 +385,16 @@ namespace Higurashi_Installer_WPF
                 }
                 window.InstallBar.Value = window.InstallBar.Value + 20;
             }
+        }
+
+        //Reset the window back to default
+        public static void FinishInstallation(MainWindow window)
+        {
+            window.AnimateWindowSize(window.ActualWidth - 500);
+            window.IconGrid.IsEnabled = true;
+            window.EpisodeImage.Visibility = Visibility.Collapsed;
+            window.MainImage.Source = new BitmapImage(new Uri("/Resources/logo.png", UriKind.Relative));
+            ResetInstallerGrid(window);
         }
 
         //Resets the installer grid
@@ -369,37 +417,9 @@ namespace Higurashi_Installer_WPF
             window.InstallLabelPatch2.Content = "Downloading voice patch...";
             window.InstallLabelPatch3.Content = "Downloading patch...";
         }
-
-        public static void DelayAction(int millisecond, Action action)
-        {
-            var timer = new DispatcherTimer();
-            timer.Tick += delegate
-
-            {
-                action.Invoke();
-                timer.Stop();
-            };
-
-            timer.Interval = TimeSpan.FromMilliseconds(millisecond);
-            timer.Start();
-        }
-
-        public static void ResizeWindow(MainWindow window)
-        {
-            
-            if (window.ActualWidth < 950)
-            {
-                _log.Info("Resizing window");
-                window.AnimateWindowSize(window.ActualWidth + 500);
-                if (window.InstallGrid.Visibility.Equals(Visibility.Collapsed))
-                {
-                    window.InstallGrid.Visibility = Visibility.Visible;
-
-                }
-            }
-        }
     }
 
+    //This class is responsible for the resize animation
     public static class WindowUtilties
     {
         public static void AnimateWindowSize(this Window target, double newWidth)
@@ -424,7 +444,3 @@ namespace Higurashi_Installer_WPF
         }
     }
 }
-
-
-
-

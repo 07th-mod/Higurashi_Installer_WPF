@@ -16,12 +16,14 @@ using System.Windows.Threading;
 
 namespace Higurashi_Installer_WPF
 {
-
     public partial class MainWindow : Window
     {
         private static readonly ILog _log = LogManager.GetLogger(MethodBase.GetCurrentMethod().DeclaringType);
-        PatcherPOCO patcher = new PatcherPOCO();
-        WebClient downloader = new WebClient();
+
+        /* The patcher is the main object that will be used to store
+         * all the information necessary for the installer to operate, making it easier to add new chapters
+         * since you just need to populate it and the rest will be automatic. */
+        PatcherPOCO patcher = new PatcherPOCO();  
 
         public MainWindow()
         {
@@ -35,8 +37,10 @@ namespace Higurashi_Installer_WPF
             _log.Info("clicked onikakushi");
             Utils.ResizeWindow(this);
             Utils.ResetPath(this, true);
+
             EpisodeImage.Visibility = Visibility.Visible;
             EpisodeImage.Source = new BitmapImage(new Uri("/Resources/header1.jpg", UriKind.Relative));
+
             patcher.ChapterName = "onikakushi";
             patcher.DataFolder = "HigurashiEp01_Data";
             patcher.ExeName = "HigurashiEp01.exe";
@@ -48,8 +52,10 @@ namespace Higurashi_Installer_WPF
             _log.Info("Clicked Watanagashi");
             Utils.ResizeWindow(this);
             Utils.ResetPath(this, true);
+
             EpisodeImage.Visibility = Visibility.Visible;
             EpisodeImage.Source = new BitmapImage(new Uri("/Resources/header2.jpg", UriKind.Relative));
+
             patcher.ChapterName = "watanagashi";
             patcher.DataFolder = "HigurashiEp02_Data";
             patcher.ExeName = "HigurashiEp02.exe";
@@ -61,8 +67,10 @@ namespace Higurashi_Installer_WPF
             _log.Info("Clicked Tatarigoroshi");
             Utils.ResizeWindow(this);
             Utils.ResetPath(this, true);
+
             EpisodeImage.Visibility = Visibility.Visible;
             EpisodeImage.Source = new BitmapImage(new Uri("/Resources/header3.jpg", UriKind.Relative));
+
             patcher.ChapterName = "tatarigoroshi";
             patcher.DataFolder = "HigurashiEp03_Data";
             patcher.ExeName = "HigurashiEp03.exe";
@@ -74,8 +82,10 @@ namespace Higurashi_Installer_WPF
             _log.Info("Clicked Himatsubushi");
             Utils.ResizeWindow(this);
             Utils.ResetPath(this, true);
+
             EpisodeImage.Visibility = Visibility.Visible;
             EpisodeImage.Source = new BitmapImage(new Uri("/Resources/header4.jpg", UriKind.Relative));
+
             patcher.ChapterName = "himatsubushi";
             patcher.DataFolder = "HigurashiEp04_Data";
             patcher.ExeName = "HigurashiEp04.exe";
@@ -87,8 +97,10 @@ namespace Higurashi_Installer_WPF
             _log.Info("Clicked Meakashi");
             Utils.ResizeWindow(this);
             Utils.ResetPath(this, true);
+
             EpisodeImage.Visibility = Visibility.Visible;
             EpisodeImage.Source = new BitmapImage(new Uri("/Resources/header5.jpg", UriKind.Relative));
+
             patcher.ChapterName = "meakashi";
             patcher.DataFolder = "HigurashiEp05_Data";
             patcher.ExeName = "HigurashiEp05.exe";
@@ -97,11 +109,13 @@ namespace Higurashi_Installer_WPF
 
         private void BtnConsole_Click(object sender, RoutedEventArgs e)
         {
-            _log.Info("Clicked Himatsubushi");
+            _log.Info("Clicked Console Arcs");
             Utils.ResizeWindow(this);
             Utils.ResetPath(this, true);
+
             EpisodeImage.Visibility = Visibility.Visible;
             EpisodeImage.Source = new BitmapImage(new Uri("/Resources/console.png", UriKind.Relative));
+
             patcher.ChapterName = "console0arcs";
             patcher.DataFolder = "HigurashiEp04_Data";
             patcher.ExeName = "HigurashiEp04.exe";
@@ -117,7 +131,6 @@ namespace Higurashi_Installer_WPF
         {
             Utils.CheckValidFilePath(this, patcher);
         }
-
 
         private void ConfirmBack_Click(object sender, RoutedEventArgs e)
         {
@@ -137,7 +150,6 @@ namespace Higurashi_Installer_WPF
             Utils.FinishInstallation(this);
         }
 
-
         //Main install logic starts here after the confirmation button is clicked
         private void Confirm_Click(object sender, RoutedEventArgs e)
         {
@@ -146,19 +158,11 @@ namespace Higurashi_Installer_WPF
             InstallerGrid.Visibility = Visibility.Visible;
 
             //get the latest .bat from github
-
-           
-                using (var client = new WebClient())
-                {
-                    _log.Info("Downloading install bat and creating temp folder");
-                    client.DownloadFile("https://raw.githubusercontent.com/07th-mod/resources/master/" + patcher.ChapterName + "/install.bat", patcher.InstallPath + "\\install.bat");                  
-                    client.DownloadFile("https://github.com/07th-mod/resources/raw/master/dependencies.zip", patcher.InstallPath + "\\resources.zip");                                
-                }
-                    System.IO.Compression.ZipFile.ExtractToDirectory(patcher.InstallPath + "\\resources.zip", patcher.InstallPath);
-            
+            Utils.DownloadResources(patcher);
 
             // If you don't do this, the InstallerGrid won't be visible
             Utils.DelayAction(5000, new Action(() => {
+                //Initiates installation process
                 Utils.runInstaller(this, "install.bat", patcher.InstallPath);
 
            }));
