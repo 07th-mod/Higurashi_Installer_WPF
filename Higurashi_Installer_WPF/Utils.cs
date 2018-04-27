@@ -204,6 +204,16 @@ namespace Higurashi_Installer_WPF
                 patcher.InstallType = "Voice Only";
                 window.List4.Content = "Installation Type: Voice Only";
             }
+
+            //For the log
+            PatcherInfo(patcher);
+        }
+
+        public static void PatcherInfo(PatcherPOCO patcher)
+        {
+            _log.Info("Chapter: " + patcher.ChapterName);
+            _log.Info("Install path: " + patcher.InstallPath);
+
         }
 
         //Only the installer related methods from here
@@ -211,12 +221,15 @@ namespace Higurashi_Installer_WPF
         //downloads and extracts the resources of the temp folder
         public static void DownloadResources(PatcherPOCO patcher)
         {
+            _log.Info("Downloading install bat and creating temp folder");
             using (var client = new WebClient())
             {
-                _log.Info("Downloading install bat and creating temp folder");
+                _log.Info("Downloading install.bat");
                 client.DownloadFile("https://raw.githubusercontent.com/07th-mod/resources/master/" + patcher.ChapterName + "/install.bat", patcher.InstallPath + "\\install.bat");
+                _log.Info("Downloading resources.zip");
                 client.DownloadFile("https://github.com/07th-mod/resources/raw/master/dependencies.zip", patcher.InstallPath + "\\resources.zip");
             }
+            _log.Info("Extracting resources");
             System.IO.Compression.ZipFile.ExtractToDirectory(patcher.InstallPath + "\\resources.zip", patcher.InstallPath);
         }
 
@@ -264,12 +277,12 @@ namespace Higurashi_Installer_WPF
                         InstallerProgressBar(window, filesize, downloadSpeed, timeRemaining, progressValue);
 
                     });
-
+                  //  _log.Info(e);
                 }
                 else if (!e.Contains("ETA"))
                 {
                     window.Dispatcher.Invoke(() =>
-                    {
+                    {                      
                         InstallerProgressMessages(window, "Finishing downloading File...", 100);
                     });
                 }
@@ -329,6 +342,7 @@ namespace Higurashi_Installer_WPF
             window.InstallBar.Value = progress;
             if (message.Contains("Extracting and installing files.."))
             {
+                _log.Info("Extracting and installing files..");
                 window.InstallLabelPatch3.Content = "Downloading patch... (Done)";
             }
 
@@ -371,10 +385,12 @@ namespace Higurashi_Installer_WPF
         {
             if (message.Contains("Moving folders"))
             {
+                _log.Info("Moving folders");
                 window.ExtractLabel.Content = "Moving files...   (This may take a while)";
             }
             else
             {
+                _log.Info(message);
                 window.ExtractLabel.Content = message;
                 if (window.InstallBar.Value == 100)
                 {
@@ -387,6 +403,7 @@ namespace Higurashi_Installer_WPF
         //Reset the window back to default
         public static void FinishInstallation(MainWindow window)
         {
+            _log.Info("Reseting window back to original position");
             window.AnimateWindowSize(window.ActualWidth - 500);
             window.IconGrid.IsEnabled = true;
             window.EpisodeImage.Visibility = Visibility.Collapsed;
@@ -397,6 +414,7 @@ namespace Higurashi_Installer_WPF
         //Resets the installer grid
         public static void ResetInstallerGrid(MainWindow window)
         {
+            _log.Info("Reseting installer grid");
             window.InstallerGrid.Visibility = Visibility.Collapsed;
             window.BtnInstallerFinish.Visibility = Visibility.Collapsed;
             window.InstallBar.Value = 0;
@@ -410,6 +428,7 @@ namespace Higurashi_Installer_WPF
             window.InstallCard3.Visibility = Visibility.Collapsed;
             window.InstallLabelPatch3.Visibility = Visibility.Collapsed;
 
+            window.InstallerText.Text = "Installation in progress";
             window.InstallLabelPatch1.Content = "Downloading graphics patch...";
             window.InstallLabelPatch2.Content = "Downloading voice patch...";
             window.InstallLabelPatch3.Content = "Downloading patch...";

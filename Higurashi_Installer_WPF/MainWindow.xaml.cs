@@ -145,19 +145,28 @@ namespace Higurashi_Installer_WPF
         //Main install logic starts here after the confirmation button is clicked
         private void Confirm_Click(object sender, RoutedEventArgs e)
         {
-            _log.Info("Starting the installer");
-            ConfirmationGrid.Visibility = Visibility.Collapsed;
-            InstallerGrid.Visibility = Visibility.Visible;
+            try
+            {
+                _log.Info("Starting the installer");
+                ConfirmationGrid.Visibility = Visibility.Collapsed;
+                InstallerGrid.Visibility = Visibility.Visible;
 
-            //get the latest .bat from github
-            Utils.DownloadResources(patcher);
+                //get the latest .bat from github
+                Utils.DownloadResources(patcher);
 
-            // If you don't do this, the InstallerGrid won't be visible
-            Utils.DelayAction(5000, new Action(() => {
-                //Initiates installation process
-                Utils.runInstaller(this, "install.bat", patcher.InstallPath);
+                // If you don't do this, the InstallerGrid won't be visible
+                Utils.DelayAction(5000, new Action(() =>
+                {
+                    //Initiates installation process
+                    Utils.runInstaller(this, "install.bat", patcher.InstallPath);
 
-           }));
+                }));
+            }
+            catch (Exception error)
+            {
+                _log.Info(error);
+                Environment.Exit(1);
+            } 
         }
 
         //Listeners for mouse
