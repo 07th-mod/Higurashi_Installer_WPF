@@ -79,6 +79,9 @@
     <Reference Include="Resourcer, Version=1.7.0.0, Culture=neutral, PublicKeyToken=409b3227471b0f0d, processorArchitecture=MSIL">
       <HintPath>..\packages\Resourcer.Fody.1.7.0\lib\net452\Resourcer.dll</HintPath>
     </Reference>
+    <Reference Include="SharpCompress, Version=0.21.0.0, Culture=neutral, PublicKeyToken=afb0a02973931d96, processorArchitecture=MSIL">
+      <HintPath>..\packages\SharpCompress.0.21.0\lib\net45\SharpCompress.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Data" />
     <Reference Include="System.IO.Compression.FileSystem" />

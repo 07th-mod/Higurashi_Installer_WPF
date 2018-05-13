@@ -143,7 +143,7 @@ namespace Higurashi_Installer_WPF
         }
 
         //Main install logic starts here after the confirmation button is clicked
-        private void Confirm_Click(object sender, RoutedEventArgs e)
+        private async void Confirm_Click(object sender, RoutedEventArgs e)
         {
             try
             {
@@ -152,7 +152,7 @@ namespace Higurashi_Installer_WPF
                 InstallerGrid.Visibility = Visibility.Visible;
 
                 //get the latest .bat from github
-                Utils.DownloadResources(patcher);
+                await Utils.DownloadResources(patcher);
 
                 // If you don't do this, the InstallerGrid won't be visible
                 Utils.DelayAction(5000, new Action(() =>

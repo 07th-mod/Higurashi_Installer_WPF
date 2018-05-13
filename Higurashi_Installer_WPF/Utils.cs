@@ -10,7 +10,10 @@ using System.Windows.Media.Imaging;
 using log4net;
 using System.Reflection;
 using System.Net;
-
+using SharpCompress.Readers;
+using SharpCompress.Archives.Zip;
+using SharpCompress.Archives;
+using System.Threading.Tasks;
 
 //Util class for all methods related to the grid, installation and general flow of the layout
 
@@ -218,19 +221,45 @@ namespace Higurashi_Installer_WPF
 
         //Only the installer related methods from here
 
+        /// <summary>
+        /// Extract a zip file, overwriting if files already exist. Does not handle multi-part archives.
+        /// </summary>
+        /// <param name="inputArchivePath">Full path to the archive to be extracted</param>
+        /// <param name="outputDirectory">Folder where files should be extracted to</param>
+        public static void ExtractZipArchive(string inputArchivePath, string outputDirectory)
+        {
+            using (var archive = ZipArchive.Open(inputArchivePath))
+            {
+                foreach (ZipArchiveEntry entry in archive.Entries.Where(entry => !entry.IsDirectory))
+                {
+                    entry.WriteToDirectory(outputDirectory, new ExtractionOptions()
+                    {
+                        ExtractFullPath = true,
+                        Overwrite = true
+                    });
+                }
+            }
+        }
+
         //downloads and extracts the resources of the temp folder
-        public static void DownloadResources(PatcherPOCO patcher)
+        public static async Task<bool> DownloadResources(PatcherPOCO patcher, bool downloadBatchFile = true)
         {
             _log.Info("Downloading install bat and creating temp folder");
             using (var client = new WebClient())
             {
-                _log.Info("Downloading install.bat");
-                client.DownloadFile("https://raw.githubusercontent.com/07th-mod/resources/master/" + patcher.ChapterName + "/install.bat", patcher.InstallPath + "\\install.bat");
+                if (downloadBatchFile)
+                {
+                    _log.Info("Downloading install.bat");
+                    await client.DownloadFileTaskAsync("https://raw.githubusercontent.com/07th-mod/resources/master/" + patcher.ChapterName + "/install.bat", patcher.InstallPath + "\\install.bat");
+                }
                 _log.Info("Downloading resources.zip");
-                client.DownloadFile("https://github.com/07th-mod/resources/raw/master/dependencies.zip", patcher.InstallPath + "\\resources.zip");
+                await client.DownloadFileTaskAsync("https://github.com/07th-mod/resources/raw/master/dependencies.zip", patcher.InstallPath + "\\resources.zip");
             }
             _log.Info("Extracting resources");
-            System.IO.Compression.ZipFile.ExtractToDirectory(patcher.InstallPath + "\\resources.zip", patcher.InstallPath);
+
+            ExtractZipArchive(Path.Combine(patcher.InstallPath, "resources.zip"), patcher.InstallPath);
+
+            return true;
         }
 
         /*It's dangerous to go alone, take this 
