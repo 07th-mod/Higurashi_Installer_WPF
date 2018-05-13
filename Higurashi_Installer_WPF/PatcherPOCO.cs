@@ -1,4 +1,5 @@
 ﻿using System;
+using Higurashi_Installer_WPF.InstallerScripts;
 using System.IO;
 
 namespace Higurashi_Installer_WPF
@@ -52,5 +53,8 @@ namespace Higurashi_Installer_WPF
         //These two functions will vary depending on linux/windows/mac - how to deal with this?
         public string SevenZipPath { get => Path.Combine(InstallPath, "7za.exe"); }
         public string Aria2cPath { get => Path.Combine(InstallPath, "aria2c.exe"); }
+
+        //This is the main installer object which performs the installation
+        public InstallerScriptInterface InstallerScript;
     }
 }

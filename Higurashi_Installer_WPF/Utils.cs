@@ -118,6 +118,7 @@ namespace Higurashi_Installer_WPF
                 else
                 {
                     _log.Info("Correct path selected");
+                    patcher.GamePath = dialog.FileName;
                     window.TextWarningPath.Text = patcher.ChapterName + " .exe file found!";
                     window.TextWarningPath.Visibility = Visibility.Visible;
                     window.BtnInstall.IsEnabled = true;

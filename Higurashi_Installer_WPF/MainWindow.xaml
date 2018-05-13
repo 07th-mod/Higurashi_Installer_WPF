@@ -102,12 +102,18 @@
                     <ImageBrush ImageSource="Resources\07th_icons\ico\console.ico"/>
                 </Ellipse.Fill>
             </Ellipse>
+            <Ellipse Margin="16,260,359,211" Stroke="White" StrokeThickness="1">
+                <Ellipse.Fill>
+                    <ImageBrush ImageSource="Resources\07th_icons\ico\HigurashiEp01_0000.ico"/>
+                </Ellipse.Fill>
+            </Ellipse>
             <Button x:Name="BtnWatanagashi" Content="Button" HorizontalAlignment="Left" Margin="100,77,0,0" VerticalAlignment="Top" Width="75" Height="79" Opacity="0" Click="BtnWatanagashi_Click" MouseEnter="MouseEnterWata" MouseLeave="MouseLeaveEpisode"/>
             <Button x:Name="BtnOnikakushi"  Content="Button" HorizontalAlignment="Left" Margin="17,77,0,0" VerticalAlignment="Top" Width="75" Height="79" Opacity="0" Click="BtnOnikakushi_Click" MouseEnter="MouseEnterOni" MouseLeave="MouseLeaveEpisode"/>
             <Button x:Name="BtnTatarigoroshi" Content="Button" HorizontalAlignment="Left" Margin="183,77,0,0" VerticalAlignment="Top" Width="75" Height="79" Opacity="0" Click="BtnTatarigoroshi_Click" MouseEnter="MouseEnterTata" MouseLeave="MouseLeaveEpisode"/>
             <Button x:Name="BtnHimatsubushi" Content="Button" HorizontalAlignment="Left" Margin="265,77,0,0" VerticalAlignment="Top" Width="75" Height="79" Opacity="0" Click="BtnHimatsubushi_Click" MouseEnter="MouseEnterHima" MouseLeave="MouseLeaveEpisode"/>
             <Button x:Name="BtnMeakashi" Content="Button" HorizontalAlignment="Left" Margin="350,77,0,0" VerticalAlignment="Top" Width="75" Height="79" Opacity="0" Click="BtnMeakashi_Click" MouseEnter="MouseEnterMea" MouseLeave="MouseLeaveEpisode"/>
             <Button x:Name="BtnConsole" Content="Button" HorizontalAlignment="Left" Margin="17,161,0,0" VerticalAlignment="Top" Width="75" Height="79" Opacity="0" MouseEnter="MouseEnterConsole" MouseLeave="MouseLeaveEpisode" Click="BtnConsole_Click"/>
+            <Button x:Name="BtnUminekoQuestion"  Content="Button" HorizontalAlignment="Left" Margin="16,260,0,0" VerticalAlignment="Top" Width="75" Height="79" Opacity="0" Click="BtnUminekoQuestion_Click" MouseEnter="UminekoQuestion_MouseEnter" MouseLeave="MouseLeaveEpisode"/>
             <TextBlock HorizontalAlignment="Left" Margin="153,38,0,0" TextWrapping="Wrap" Text="Select Chapter" VerticalAlignment="Top" Width="131" FontSize="20"/>
         </Grid>
 

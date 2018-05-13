@@ -1,6 +1,8 @@
 ﻿using log4net;
+using Higurashi_Installer_WPF.InstallerScripts;
 using System;
 using System.Reflection;
+using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
@@ -37,6 +39,7 @@ namespace Higurashi_Installer_WPF
             patcher.DataFolder = "HigurashiEp01_Data";
             patcher.ExeName = "HigurashiEp01.exe";
             patcher.ImagePath = "/Resources/header1.jpg";
+            patcher.InstallerScript = null;
         }
 
         private void BtnWatanagashi_Click(object sender, RoutedEventArgs e)
@@ -52,6 +55,7 @@ namespace Higurashi_Installer_WPF
             patcher.DataFolder = "HigurashiEp02_Data";
             patcher.ExeName = "HigurashiEp02.exe";
             patcher.ImagePath = "/Resources/header2.jpg";
+            patcher.InstallerScript = null;
         }
 
         private void BtnTatarigoroshi_Click(object sender, RoutedEventArgs e)
@@ -67,6 +71,7 @@ namespace Higurashi_Installer_WPF
             patcher.DataFolder = "HigurashiEp03_Data";
             patcher.ExeName = "HigurashiEp03.exe";
             patcher.ImagePath = "/Resources/header3.jpg";
+            patcher.InstallerScript = null;
         }
 
         private void BtnHimatsubushi_Click(object sender, RoutedEventArgs e)
@@ -82,6 +87,7 @@ namespace Higurashi_Installer_WPF
             patcher.DataFolder = "HigurashiEp04_Data";
             patcher.ExeName = "HigurashiEp04.exe";
             patcher.ImagePath = "/Resources/header4.jpg";
+            patcher.InstallerScript = null;
         }
 
         private void BtnMeakashi_Click(object sender, RoutedEventArgs e)
@@ -97,6 +103,7 @@ namespace Higurashi_Installer_WPF
             patcher.DataFolder = "HigurashiEp05_Data";
             patcher.ExeName = "HigurashiEp05.exe";
             patcher.ImagePath = "/Resources/header5.jpg";
+            patcher.InstallerScript = null;
         }
 
         private void BtnConsole_Click(object sender, RoutedEventArgs e)
@@ -112,6 +119,23 @@ namespace Higurashi_Installer_WPF
             patcher.DataFolder = "HigurashiEp04_Data";
             patcher.ExeName = "HigurashiEp04.exe";
             patcher.ImagePath = "/Resources/console.png";
+            patcher.InstallerScript = null;
+        }
+
+        private void BtnUminekoQuestion_Click(object sender, RoutedEventArgs e)
+        {
+            _log.Info("Clicked Umineko Question");
+            Utils.ResizeWindow(this);
+            Utils.ResetPath(this, true);
+
+            EpisodeImage.Visibility = Visibility.Visible;
+            EpisodeImage.Source = new BitmapImage(new Uri("/Resources/console.png", UriKind.Relative));
+
+            patcher.ChapterName = "Umineko Question";
+            patcher.DataFolder = "UminekoQuestion_Data";
+            patcher.ExeName = "arc.nsa";
+            patcher.ImagePath = "/Resources/console.png";
+            patcher.InstallerScript = new UminekoQuestionInstaller();
         }
 
         private void InstallCombo_SelectionChanged(object sender, SelectionChangedEventArgs e)
@@ -151,16 +175,24 @@ namespace Higurashi_Installer_WPF
                 ConfirmationGrid.Visibility = Visibility.Collapsed;
                 InstallerGrid.Visibility = Visibility.Visible;
 
-                //get the latest .bat from github
-                await Utils.DownloadResources(patcher);
-
-                // If you don't do this, the InstallerGrid won't be visible
-                Utils.DelayAction(5000, new Action(() =>
+                if (patcher.InstallerScript == null)
                 {
-                    //Initiates installation process
-                    Utils.runInstaller(this, "install.bat", patcher.InstallPath);
+                    //get the latest .bat from github
+                    await Utils.DownloadResources(patcher);
 
-                }));
+                    // If you don't do this, the InstallerGrid won't be visible
+                    Utils.DelayAction(5000, new Action(() =>
+                    {
+                        //Initiates installation process
+                        Utils.runInstaller(this, "install.bat", patcher.InstallPath);
+
+                    }));
+                }
+                else
+                {
+                    await Utils.DownloadResources(patcher, false);
+                    var t = Task.Run(() => patcher.InstallerScript.DoInstall(patcher));
+                }
             }
             catch (Exception error)
             {
@@ -206,6 +238,12 @@ namespace Higurashi_Installer_WPF
             EpisodeImage.Source = new BitmapImage(new Uri("/Resources/console.png", UriKind.Relative));
         }
 
+        private void UminekoQuestion_MouseEnter(object sender, MouseEventArgs e)
+        {
+            EpisodeImage.Visibility = Visibility.Visible;
+            EpisodeImage.Source = new BitmapImage(new Uri("/Resources/console.png", UriKind.Relative));
+        }
+
         private void MouseLeaveEpisode(object sender, MouseEventArgs e)
         {
             if (ActualWidth < 950)
@@ -216,5 +254,7 @@ namespace Higurashi_Installer_WPF
                 EpisodeImage.Source = new BitmapImage(new Uri(patcher.ImagePath, UriKind.Relative));
             }
         }
+
+
     }
 }
