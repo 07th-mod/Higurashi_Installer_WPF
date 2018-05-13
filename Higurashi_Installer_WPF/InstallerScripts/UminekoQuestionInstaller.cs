@@ -57,16 +57,19 @@ namespace Higurashi_Installer_WPF.InstallerScripts
             }
 
             //TODO: make this repeat if download fails
+            _log.Info("Downloading and verifying all files. You can close and reopen this at any time, your progress will be saved.");
             try
             {
-                for (int i = 0; i < 20; i++)
+                bool downloadWasSuccessful = false;
+                for (int i = 0; i < 20 || downloadWasSuccessful; i++)
                 {
-                    _log.Info("Downloading and verifying all files. You can close and reopen this at any time, your progress will be saved.");
-                    if (!DownloadToDownloadFolder(@"https://github.com/07th-mod/resources/raw/master/umineko-question/umi_full.meta4"))
-                    {
-                        _log.Warn("Couldn't download files... - installer stopped");
-                        return false;
-                    }
+                    downloadWasSuccessful = DownloadToDownloadFolder(@"https://github.com/07th-mod/resources/raw/master/umineko-question/umi_full.meta4");
+                }
+
+                if(!downloadWasSuccessful)
+                {
+                    _log.Warn("Couldn't download files... - installer stopped");
+                    return false;
                 }
             }
             catch (Exception e)
