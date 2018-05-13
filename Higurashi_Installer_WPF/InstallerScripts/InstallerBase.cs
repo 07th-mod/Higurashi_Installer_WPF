@@ -33,6 +33,20 @@ namespace Higurashi_Installer_WPF.InstallerScripts
     /// </summary>
     public abstract class InstallerBase
     {
+        //Is there an easier way to do this?
+        public class DownloadException : Exception {
+            public DownloadException(string message) : base(message) { }
+            public DownloadException(string message, Exception innnerException) : base(message, innnerException) { }
+        }
+        public class FileMoveCopyCreateException : Exception {
+            public FileMoveCopyCreateException(string message) : base(message) { }
+            public FileMoveCopyCreateException(string message, Exception innnerException) : base(message, innnerException) { }
+        }
+        public class FileExtractionException : Exception {
+            public FileExtractionException(string message) : base(message) { }
+            public FileExtractionException(string message, Exception innnerException) : base(message, innnerException) { }
+        }
+
         //TODO: is this correct?
         private static readonly ILog _log = LogManager.GetLogger(MethodBase.GetCurrentMethod().DeclaringType);
 
@@ -103,7 +117,17 @@ namespace Higurashi_Installer_WPF.InstallerScripts
         /// </summary>
         /// <param name="sourcePath">The path, relative to the game directory, of the file to be moved.</param>
         /// <param name="destPath">The path, relative to the game directory, where the file should be placed.</param>
-        protected void RelFileMove(string sourcePath, string destPath) => File.Move(RelPath(sourcePath), RelPath(destPath));
+        protected void RelFileCopy(string sourcePath, string destPath)
+        {
+            try
+            {
+                File.Copy(RelPath(sourcePath), RelPath(destPath), overwrite: true);
+            }
+            catch (Exception e)
+            {
+                throw new FileMoveCopyCreateException($"Failed to copy file from {sourcePath} to {destPath}", e);
+            }
+        }
 
         /// <summary>
         /// Copy from one folder to another, overwriting any existing files (by default)
@@ -112,7 +136,17 @@ namespace Higurashi_Installer_WPF.InstallerScripts
         /// <param name="sourcePath"></param>
         /// <param name="destPath"></param>
         /// <param name="overwrite"></param>
-        protected void RelFolderCopy(string sourcePath, string destPath, bool overwrite = true) => Microsoft.VisualBasic.FileIO.FileSystem.CopyDirectory(RelPath(sourcePath), RelPath(destPath), overwrite);
+        protected void RelFolderCopy(string sourcePath, string destPath, bool overwrite = true)
+        {
+            try
+            {
+                Microsoft.VisualBasic.FileIO.FileSystem.CopyDirectory(RelPath(sourcePath), RelPath(destPath), overwrite);
+            }
+            catch(Exception e)
+            {
+                throw new FileMoveCopyCreateException($"Failed to move folder from {sourcePath} to {destPath} (overwrite={overwrite})", e);
+            }
+        }
 
         //TODO: Maybe just move the files to be deleted to a separate folder, for safety.
 
@@ -145,19 +179,64 @@ namespace Higurashi_Installer_WPF.InstallerScripts
         /// </summary>
         /// <param name="filename"></param>
         /// <returns></returns>
-        protected bool ExtractDownloadedFileToGameRoot(string filename) =>
-            ExternalProgramRunner.ExtractFile(sevenZipPath: settings.SevenZipPath,
-                                              archivePath: Path.Combine(settings.DownloadFolderPath, filename),
-                                              extractionPath: settings.GamePath);
+        protected void ExtractDownloadedFileToGameRoot(string filename) {
+            try
+            {
+                bool result = ExternalProgramRunner.ExtractFile(sevenZipPath: settings.SevenZipPath,
+                                                   archivePath: Path.Combine(settings.DownloadFolderPath, filename),
+                                                   extractionPath: settings.GamePath);
+                if(!result)
+                    throw new FileExtractionException($"Could not extract downloaded file {filename} to game root");
+            }
+            catch (Exception e)
+            {
+                throw new FileExtractionException($"Unexpected Exception while extracting downloaded file {filename} to game root", e);
+            }
+        }
 
         /// <summary>
         /// Begins Download of a metalink file. All downloaded files are placed in the download folder (set in the 'settings' variable).
         /// </summary>
-        /// <param name="metaLinkURL"></param>
+        /// <param name="metaLinkURL">The URL of the metalink to download</param>
         /// <returns></returns>
         protected bool DownloadToDownloadFolder(string metaLinkURL) =>
             ExternalProgramRunner.DownloadMetaLink(aria2cPath: settings.Aria2cPath,
                                                    metaLinkURL: metaLinkURL,
                                                    downloadFolder: settings.DownloadFolderPath);
+
+        /// <summary>
+        /// Begins Download of a metalink file, but if download fails, will retry numberOfAttempts times (defaults to 20 times). 
+        /// All downloaded files are placed in the download folder (set in the 'settings' variable).
+        /// </summary>
+        /// <param name="metaLinkURL">The URL of the metalink to download</param>
+        /// <param name="numberOfAttempts">The number of times to try to download the metalink</param>
+        /// <returns></returns>
+        protected void DownloadToDownloadFolderWithRetry(string metaLinkURL, int numberOfAttempts = 20)
+        {
+            bool downloadWasSuccessful = false;
+
+            try
+            {
+                for (int i = 0; i < numberOfAttempts; i++)
+                {
+                    downloadWasSuccessful = DownloadToDownloadFolder(@"https://github.com/07th-mod/resources/raw/master/umineko-question/umi_full.meta4");
+                    if (downloadWasSuccessful)
+                        break;
+                }
+            }
+            catch (Exception e)
+            {
+                throw new DownloadException($"Unexpected exception while downloading {metaLinkURL}", e);
+            }
+
+            if (!downloadWasSuccessful)
+                throw new DownloadException($"After 20 attempts, download failed for {metaLinkURL}");
+        }
+
+        protected static string GetDateString()
+        {
+            return DateTime.Now.ToString("yy-MM-dd-HH-mm-ss");
+        }
+
     }
 }
