@@ -70,6 +70,7 @@
     <Reference Include="MaterialDesignThemes.Wpf, Version=2.4.0.1044, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\MaterialDesignThemes.2.4.0.1044\lib\net45\MaterialDesignThemes.Wpf.dll</HintPath>
     </Reference>
+    <Reference Include="Microsoft.VisualBasic" />
     <Reference Include="Microsoft.WindowsAPICodePack, Version=1.1.2.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\WindowsAPICodePack-Core.1.1.2\lib\Microsoft.WindowsAPICodePack.dll</HintPath>
     </Reference>
@@ -114,6 +115,9 @@
       <DependentUpon>App.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="InstallerScripts\ExternalProgramRunner.cs" />
+    <Compile Include="InstallerScripts\InstallerBase.cs" />
+    <Compile Include="InstallerScripts\UminekoQuestionInstaller.cs" />
     <Compile Include="Logger.cs" />
     <Compile Include="PatcherPOCO.cs" />
     <Compile Include="MainWindow.xaml.cs">

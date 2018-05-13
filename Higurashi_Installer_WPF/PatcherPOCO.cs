@@ -1,4 +1,5 @@
 ﻿using System;
+using System.IO;
 
 namespace Higurashi_Installer_WPF
 {
@@ -41,5 +42,15 @@ namespace Higurashi_Installer_WPF
         public Boolean IsInstallTatarigoroshi { get; set; }
         public Boolean IsInstallHimatsubushi { get; set; }
         public Boolean IsInstallMeakashi { get; set; }
+
+        // Variables used for c# installer
+        public String GamePath { get; set; } // This is the GameRoot (the root of the game directory)
+
+        //helper functions. Not sure if should make them auto getters, as it may be more confusing
+        public string DownloadFolderPath { get => Path.Combine(GamePath, DataFolder, "Downloads"); }
+
+        //These two functions will vary depending on linux/windows/mac - how to deal with this?
+        public string SevenZipPath { get => Path.Combine(InstallPath, "7za.exe"); }
+        public string Aria2cPath { get => Path.Combine(InstallPath, "aria2c.exe"); }
     }
 }
