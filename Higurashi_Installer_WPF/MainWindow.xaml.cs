@@ -129,12 +129,12 @@ namespace Higurashi_Installer_WPF
             Utils.ResetPath(this, true);
 
             EpisodeImage.Visibility = Visibility.Visible;
-            EpisodeImage.Source = new BitmapImage(new Uri("/Resources/console.png", UriKind.Relative));
+            EpisodeImage.Source = new BitmapImage(new Uri(@"/Resources/header_umineko_question.jpg", UriKind.Relative));
 
             patcher.ChapterName = "Umineko Question";
             patcher.DataFolder = "UminekoQuestion_Data";
             patcher.ExeName = "arc.nsa";
-            patcher.ImagePath = "/Resources/console.png";
+            patcher.ImagePath = "/Resources/header_umineko_question.jpg";
             patcher.InstallerScript = new UminekoQuestionInstaller();
         }
 
@@ -241,7 +241,7 @@ namespace Higurashi_Installer_WPF
         private void UminekoQuestion_MouseEnter(object sender, MouseEventArgs e)
         {
             EpisodeImage.Visibility = Visibility.Visible;
-            EpisodeImage.Source = new BitmapImage(new Uri("/Resources/console.png", UriKind.Relative));
+            EpisodeImage.Source = new BitmapImage(new Uri("/Resources/header_umineko_question.jpg", UriKind.Relative));
         }
 
         private void MouseLeaveEpisode(object sender, MouseEventArgs e)
