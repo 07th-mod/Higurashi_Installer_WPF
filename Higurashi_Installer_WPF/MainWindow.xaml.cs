@@ -114,6 +114,36 @@ namespace Higurashi_Installer_WPF
             patcher.ImagePath = "/Resources/console.png";
         }
 
+        private void BtnUminekoQuestion_Click(object sender, RoutedEventArgs e)
+        {
+            _log.Info("Clicked Umineko Question");
+            Utils.ResizeWindow(this);
+            Utils.ResetPath(this, true);
+
+            EpisodeImage.Visibility = Visibility.Visible;
+            EpisodeImage.Source = new BitmapImage(new Uri(@"/Resources/header_umineko_question.jpg", UriKind.Relative));
+
+            patcher.ChapterName = "Umineko Question";
+            patcher.DataFolder = "UminekoQuestion_Data";
+            patcher.ExeName = "umineko1to4"; //search for the linux .exe, as install may trash the windows .exe
+            patcher.ImagePath = "/Resources/header_umineko_question.jpg";
+        }
+
+        private void BtnUminekoAnswer_Click(object sender, RoutedEventArgs e)
+        {
+            _log.Info("Clicked Umineko Answer");
+            Utils.ResizeWindow(this);
+            Utils.ResetPath(this, true);
+
+            EpisodeImage.Visibility = Visibility.Visible;
+            EpisodeImage.Source = new BitmapImage(new Uri(@"/Resources/header_umineko_answer.jpg", UriKind.Relative));
+
+            patcher.ChapterName = "Umineko Answer";
+            patcher.DataFolder = "UminekoAnswer_Data";
+            patcher.ExeName = "umineko5to8"; //search for the linux .exe, as install may trash the windows .exe
+            patcher.ImagePath = "/Resources/header_umineko_answer.jpg";
+        }
+
         private void InstallCombo_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             Utils.InstallComboChoose(this, patcher);
@@ -204,6 +234,18 @@ namespace Higurashi_Installer_WPF
         {
             EpisodeImage.Visibility = Visibility.Visible;
             EpisodeImage.Source = new BitmapImage(new Uri("/Resources/console.png", UriKind.Relative));
+        }
+
+        private void UminekoQuestion_MouseEnter(object sender, MouseEventArgs e)
+        {
+            EpisodeImage.Visibility = Visibility.Visible;
+            EpisodeImage.Source = new BitmapImage(new Uri("/Resources/header_umineko_question.jpg", UriKind.Relative));
+        }
+
+        private void UminekoAnswer_MouseEnter(object sender, MouseEventArgs e)
+        {
+            EpisodeImage.Visibility = Visibility.Visible;
+            EpisodeImage.Source = new BitmapImage(new Uri("/Resources/header_umineko_answer.jpg", UriKind.Relative));
         }
 
         private void MouseLeaveEpisode(object sender, MouseEventArgs e)
