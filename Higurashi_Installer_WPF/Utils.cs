@@ -242,16 +242,14 @@ namespace Higurashi_Installer_WPF
         }
 
         //downloads and extracts the resources of the temp folder
-        public static async Task<bool> DownloadResources(PatcherPOCO patcher, bool downloadBatchFile = true)
+        public static async Task<bool> DownloadResources(PatcherPOCO patcher)
         {
             _log.Info("Downloading install bat and creating temp folder");
             using (var client = new WebClient())
             {
-                if (downloadBatchFile)
-                {
-                    _log.Info("Downloading install.bat");
-                    await client.DownloadFileTaskAsync("https://raw.githubusercontent.com/07th-mod/resources/master/" + patcher.ChapterName + "/install.bat", patcher.InstallPath + "\\install.bat");
-                }
+                _log.Info("Downloading install.bat");
+                await client.DownloadFileTaskAsync("https://raw.githubusercontent.com/07th-mod/resources/master/" + patcher.ChapterName + "/install.bat", patcher.InstallPath + "\\install.bat");
+
                 _log.Info("Downloading resources.zip");
                 await client.DownloadFileTaskAsync("https://github.com/07th-mod/resources/raw/master/dependencies.zip", patcher.InstallPath + "\\resources.zip");
             }
