@@ -1,5 +1,6 @@
 ﻿using log4net;
 using System;
+using System.IO;
 using System.Reflection;
 using System.Windows;
 using System.Windows.Controls;
@@ -123,8 +124,8 @@ namespace Higurashi_Installer_WPF
             EpisodeImage.Visibility = Visibility.Visible;
             EpisodeImage.Source = new BitmapImage(new Uri(@"/Resources/header_umineko_question.jpg", UriKind.Relative));
 
-            patcher.ChapterName = "Umineko Question";
-            patcher.DataFolder = "UminekoQuestion_Data";
+            patcher.ChapterName = "umineko-question";
+            patcher.DataFolder = ".";        //umineko doesn't have a data folder, just put 'temp' in game directory
             patcher.ExeName = "umineko1to4"; //search for the linux .exe, as install may trash the windows .exe
             patcher.ImagePath = "/Resources/header_umineko_question.jpg";
         }
@@ -138,8 +139,8 @@ namespace Higurashi_Installer_WPF
             EpisodeImage.Visibility = Visibility.Visible;
             EpisodeImage.Source = new BitmapImage(new Uri(@"/Resources/header_umineko_answer.jpg", UriKind.Relative));
 
-            patcher.ChapterName = "Umineko Answer";
-            patcher.DataFolder = "UminekoAnswer_Data";
+            patcher.ChapterName = "umineko-answer";
+            patcher.DataFolder = ".";        //umineko doesn't have a data folder, just put 'temp' in game directory
             patcher.ExeName = "umineko5to8"; //search for the linux .exe, as install may trash the windows .exe
             patcher.ImagePath = "/Resources/header_umineko_answer.jpg";
         }
@@ -188,7 +189,14 @@ namespace Higurashi_Installer_WPF
                 Utils.DelayAction(5000, new Action(() =>
                 {
                     //Initiates installation process
-                    Utils.runInstaller(this, "install.bat", patcher.InstallPath);
+                    if(patcher.ChapterName == "umineko-question" || patcher.ChapterName == "umineko-answer")
+                    {
+                        Utils.runInstaller(this, "install.bat", Path.Combine(patcher.InstallPath, "../"));
+                    }
+                    else
+                    {
+                        Utils.runInstaller(this, "install.bat", patcher.InstallPath);
+                    }
 
                 }));
             }
