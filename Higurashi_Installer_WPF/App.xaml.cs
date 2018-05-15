@@ -13,5 +13,9 @@ namespace Higurashi_Installer_WPF
     /// </summary>
     public partial class App : Application
     {
+        private void OnApplicationExit(object sender, ExitEventArgs e)
+        {
+            Utils.KillBatchFile();
+        }
     }
 }
