@@ -40,7 +40,7 @@
                 <ComboBoxItem x:Name="VoiceInstall" Content="Voice only"/>
             </ComboBox>
             <Button x:Name="BtnInstall" Content="Install/Update" HorizontalAlignment="Left" Margin="184,411,0,0" VerticalAlignment="Top" Width="126" Click="BtnInstall_Click"/>
-           <!-- <Button x:Name="BtnUninstall" Content="Uninstall" HorizontalAlignment="Left" Margin="184,467,0,0" VerticalAlignment="Top" Width="126"/> -->
+            <!-- <Button x:Name="BtnUninstall" Content="Uninstall" HorizontalAlignment="Left" Margin="184,467,0,0" VerticalAlignment="Top" Width="126"/> -->
             <CheckBox x:Name="ChkBackup" Content="Backup Files" HorizontalAlignment="Left" Margin="10,521,0,0" VerticalAlignment="Top" Width="101" IsEnabled="False"/>
             <TextBox x:Name="PathText" HorizontalAlignment="Center" Height="23" Margin="37,76,70,0"  Text="Insert install folder for the chapter" VerticalAlignment="Top" Width="387" IsEnabled="False"/>
             <TextBlock x:Name="TextWarningPath" HorizontalAlignment="Center" Margin="50,179,22,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="422" IsEnabled="False" FontWeight="Bold" Foreground="#DDFFFFFF" Visibility="Collapsed"/>
@@ -102,12 +102,13 @@
                     <ImageBrush ImageSource="Resources\07th_icons\ico\console.ico"/>
                 </Ellipse.Fill>
             </Ellipse>
-            <Ellipse Margin="17,245,358,226" Stroke="White" StrokeThickness="1">
+            <Rectangle HorizontalAlignment="Stretch" Fill="Gray" Margin="10,245,16,303"/>
+            <Ellipse Margin="16,252,359,219" Stroke="White" StrokeThickness="1">
                 <Ellipse.Fill>
                     <ImageBrush ImageSource="Resources\07th_icons\ico\Umineko PS3 Voice and Graphics Installer_0000.ico"/>
                 </Ellipse.Fill>
             </Ellipse>
-            <Ellipse Margin="100,245,275,226" Stroke="White" StrokeThickness="1">
+            <Ellipse Margin="100,252,275,219" Stroke="White" StrokeThickness="1">
                 <Ellipse.Fill>
                     <ImageBrush ImageSource="Resources/07th_icons/ico/Umineko Chiru PS3 Voice and Graphics Installer_0000.ico"/>
                 </Ellipse.Fill>
@@ -118,9 +119,9 @@
             <Button x:Name="BtnHimatsubushi" Content="Button" HorizontalAlignment="Left" Margin="265,77,0,0" VerticalAlignment="Top" Width="75" Height="79" Opacity="0" Click="BtnHimatsubushi_Click" MouseEnter="MouseEnterHima" MouseLeave="MouseLeaveEpisode"/>
             <Button x:Name="BtnMeakashi" Content="Button" HorizontalAlignment="Left" Margin="350,77,0,0" VerticalAlignment="Top" Width="75" Height="79" Opacity="0" Click="BtnMeakashi_Click" MouseEnter="MouseEnterMea" MouseLeave="MouseLeaveEpisode"/>
             <Button x:Name="BtnConsole" Content="Button" HorizontalAlignment="Left" Margin="17,161,0,0" VerticalAlignment="Top" Width="75" Height="79" Opacity="0" MouseEnter="MouseEnterConsole" MouseLeave="MouseLeaveEpisode" Click="BtnConsole_Click"/>
-            <Button x:Name="BtnUminekoQuestion"  Content="Button" HorizontalAlignment="Left" Margin="16,245,0,0" VerticalAlignment="Top" Width="75" Height="79" Opacity="0" Click="BtnUminekoQuestion_Click" MouseEnter="UminekoQuestion_MouseEnter" MouseLeave="MouseLeaveEpisode"/>
+            <Button x:Name="BtnUminekoQuestion"  Content="Button" HorizontalAlignment="Left" Margin="16,252,0,0" VerticalAlignment="Top" Width="75" Height="79" Opacity="0" Click="BtnUminekoQuestion_Click" MouseEnter="UminekoQuestion_MouseEnter" MouseLeave="MouseLeaveEpisode"/>
             <TextBlock HorizontalAlignment="Left" Margin="153,38,0,0" TextWrapping="Wrap" Text="Select Chapter" VerticalAlignment="Top" Width="131" FontSize="20"/>
-            <Button x:Name="BtnUminekoAnswer"  Content="Button" HorizontalAlignment="Left" Margin="100,245,0,0" VerticalAlignment="Top" Width="75" Height="79" Opacity="0" Click="BtnUminekoAnswer_Click" MouseEnter="UminekoAnswer_MouseEnter" MouseLeave="MouseLeaveEpisode"/>
+            <Button x:Name="BtnUminekoAnswer"  Content="Button" HorizontalAlignment="Left" Margin="100,252,0,0" VerticalAlignment="Top" Width="75" Height="79" Opacity="0" Click="BtnUminekoAnswer_Click" MouseEnter="UminekoAnswer_MouseEnter" MouseLeave="MouseLeaveEpisode"/>
         </Grid>
 
         <!-- The main installer grid -->
