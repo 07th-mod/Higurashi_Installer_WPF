@@ -224,6 +224,15 @@
     <Resource Include="Resources\header_umineko_answer.jpg" />
     <Resource Include="Resources\header_umineko_question.jpg" />
   </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\header6.jpg" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\07th_icons\ico\HigurashiEp06_0000.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\07th_icons\png orig\HigurashiEp06_0000.png" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Import Project="..\packages\Fody.3.0.3\build\Fody.targets" Condition="Exists('..\packages\Fody.3.0.3\build\Fody.targets')" />
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">

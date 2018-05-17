@@ -103,6 +103,22 @@ namespace Higurashi_Installer_WPF
             patcher.ImagePath = "/Resources/header5.jpg";
         }
 
+        private void BtnTsumihoroboshi_Click(object sender, RoutedEventArgs e)
+        {
+            _log.Info("Clicked Tsumihoroboshi");
+
+            Utils.ResizeWindow(this);
+            Utils.ResetPath(this, true);
+
+            EpisodeImage.Visibility = Visibility.Visible;
+            EpisodeImage.Source = new BitmapImage(new Uri("/Resources/header6.jpg", UriKind.Relative));
+
+            patcher.ChapterName = "tsumihoroboshi";
+            patcher.DataFolder = "HigurashiEp06_Data";
+            patcher.ExeName = "HigurashiEp06.exe";
+            patcher.ImagePath = "/Resources/header6.jpg";
+        }
+
         private void BtnConsole_Click(object sender, RoutedEventArgs e)
         {
             _log.Info("Clicked Console Arcs");
@@ -241,6 +257,12 @@ namespace Higurashi_Installer_WPF
             EpisodeImage.Source = new BitmapImage(new Uri("/Resources/header5.jpg", UriKind.Relative));
         }
 
+        private void BtnTsumihoroboshi_MouseEnter(object sender, MouseEventArgs e)
+        {
+            EpisodeImage.Visibility = Visibility.Visible;
+            EpisodeImage.Source = new BitmapImage(new Uri("/Resources/header6.jpg", UriKind.Relative));
+        }
+
         private void MouseEnterConsole(object sender, MouseEventArgs e)
         {
             EpisodeImage.Visibility = Visibility.Visible;
@@ -269,6 +291,7 @@ namespace Higurashi_Installer_WPF
                 EpisodeImage.Source = new BitmapImage(new Uri(patcher.ImagePath, UriKind.Relative));
             }
         }
+
     }
 
     // The following two classes are required to ensure only one expander is expanded at any time

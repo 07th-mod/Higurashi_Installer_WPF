@@ -135,6 +135,16 @@
                                 <Button Width="100" Height="100" Style="{StaticResource MaterialDesignFloatingActionMiniDarkButton}" Background="#00000000" BorderBrush="#00000000" Click="BtnConsole_Click" MouseEnter="MouseEnterConsole" MouseLeave="MouseLeaveEpisode">
                                 </Button>
                             </Grid>
+                            <Grid Grid.Row="1" Grid.Column="1" Margin="0,10,0,0"  Width="100" Height="100">
+                                <Ellipse Stroke="White" StrokeThickness="1">
+                                    <Ellipse.Fill>
+                                        <ImageBrush x:Name="BtnImageEp6" ImageSource="Resources\07th_icons\ico\HigurashiEp06_0000.ico"/>
+                                    </Ellipse.Fill>
+                                </Ellipse>
+                                <!-- To restore this button, change "Background" to #00000000 and delete IsHitTestVisible="False" -->
+                                <Button Width="100" Height="100" Style="{StaticResource MaterialDesignFloatingActionMiniDarkButton}" IsHitTestVisible="False" Background="#7F838383" BorderBrush="#00000000" Click="BtnTsumihoroboshi_Click" MouseEnter="BtnTsumihoroboshi_MouseEnter" MouseLeave="MouseLeaveEpisode">
+                                </Button>
+                            </Grid>
                             <!-- Insert additional Higurashi buttons here 
                             Button Styles are listed at bottom of this page: https://github.com/ButchersBoy/MaterialDesignInXamlToolkit/blob/master/MaterialDesignThemes.Wpf/Themes/MaterialDesignTheme.Button.xaml  -->
                             <Grid.ColumnDefinitions>
