@@ -79,9 +79,9 @@
                     <local:ExpanderToBooleanConverter x:Key="ExpanderToBooleanConverter" />
                 </StackPanel.Resources>
                 <Expander HorizontalAlignment="Stretch" Header="Higurashi Installers" IsExpanded="{Binding SelectedExpander, Mode=TwoWay, Converter={StaticResource ExpanderToBooleanConverter}, ConverterParameter=1}" Margin="0,0,10,0">
-                    <StackPanel Orientation="Vertical" TextBlock.Foreground="{DynamicResource MaterialDesignBody}" Margin="0,0,0,0">
+                    <StackPanel Orientation="Vertical" TextBlock.Foreground="{DynamicResource MaterialDesignBody}" Margin="3,0,0,0">
                         <Grid Margin="0,0,0,0">
-                            <Grid Grid.Row="0" Grid.Column="0" Margin="0,10,0,0"  Width="100" Height="100">
+                            <Grid Grid.Row="0" Grid.Column="0" Margin="0,0,0,0"  Width="100" Height="100">
                                 <Ellipse Stroke="White" StrokeThickness="1">
                                     <Ellipse.Fill>
                                         <ImageBrush x:Name="BtnImageEp1" ImageSource="Resources\07th_icons\ico\HigurashiEp01_0000.ico"/>
@@ -90,7 +90,7 @@
                                 <Button Width="100" Height="100" Style="{StaticResource MaterialDesignFloatingActionMiniDarkButton}" Background="#00000000" BorderBrush="#00000000" Click="BtnOnikakushi_Click" MouseEnter="MouseEnterOni" MouseLeave="MouseLeaveEpisode">
                                 </Button>
                             </Grid>
-                            <Grid Grid.Row="0" Grid.Column="1" Margin="0,10,0,0"  Width="100" Height="100">
+                            <Grid Grid.Row="0" Grid.Column="1" Margin="0,0,0,0"  Width="100" Height="100">
                                 <Ellipse Stroke="White" StrokeThickness="1">
                                     <Ellipse.Fill>
                                         <ImageBrush x:Name="BtnImageEp2" ImageSource="Resources\07th_icons\ico\HigurashiEp02_0000.ico"/>
@@ -99,7 +99,7 @@
                                 <Button Width="100" Height="100" Style="{StaticResource MaterialDesignFloatingActionMiniDarkButton}" Background="#00000000" BorderBrush="#00000000" Click="BtnWatanagashi_Click" MouseEnter="MouseEnterWata" MouseLeave="MouseLeaveEpisode">
                                 </Button>
                             </Grid>
-                            <Grid Grid.Row="0" Grid.Column="2" Margin="0,10,0,0"  Width="100" Height="100">
+                            <Grid Grid.Row="0" Grid.Column="2" Margin="0,0,0,0"  Width="100" Height="100">
                                 <Ellipse Stroke="White" StrokeThickness="1">
                                     <Ellipse.Fill>
                                         <ImageBrush x:Name="BtnImageEp3" ImageSource="Resources\07th_icons\ico\HigurashiEp03_0000.ico"/>
@@ -108,7 +108,7 @@
                                 <Button Width="100" Height="100" Style="{StaticResource MaterialDesignFloatingActionMiniDarkButton}" Background="#00000000" BorderBrush="#00000000" Click="BtnTatarigoroshi_Click" MouseEnter="MouseEnterTata" MouseLeave="MouseLeaveEpisode">
                                 </Button>
                             </Grid>
-                            <Grid Grid.Row="0" Grid.Column="3" Margin="0,10,0,0"  Width="100" Height="100">
+                            <Grid Grid.Row="0" Grid.Column="3" Margin="0,0,0,0"  Width="100" Height="100">
                                 <Ellipse Stroke="White" StrokeThickness="1">
                                     <Ellipse.Fill>
                                         <ImageBrush x:Name="BtnImageEp4" ImageSource="Resources\07th_icons\ico\HigurashiEp04_0000.ico"/>
@@ -161,9 +161,9 @@
                     </StackPanel>
                 </Expander>
                 <Expander HorizontalAlignment="Stretch" Header="Umineko Installers" IsExpanded="{Binding SelectedExpander, Mode=TwoWay, Converter={StaticResource ExpanderToBooleanConverter}, ConverterParameter=2}" Margin="0,0,10,0">
-                    <StackPanel Orientation="Vertical" TextBlock.Foreground="{DynamicResource MaterialDesignBody}" Margin="0,0,0,0">
+                    <StackPanel Orientation="Vertical" TextBlock.Foreground="{DynamicResource MaterialDesignBody}" Margin="3,0,0,0">
                         <Grid Margin="0,0,0,0">
-                            <Grid Grid.Row="0" Grid.Column="0" Margin="0,10,0,0"  Width="100" Height="100">
+                            <Grid Grid.Row="0" Grid.Column="0" Margin="0,0,0,0"  Width="100" Height="100">
                                 <Ellipse Stroke="White" StrokeThickness="1">
                                     <Ellipse.Fill>
                                         <ImageBrush x:Name="BtnImageUminekoQuestion" ImageSource="Resources\07th_icons\ico\Umineko PS3 Voice and Graphics Installer_0000.ico"/>
@@ -172,7 +172,7 @@
                                 <Button Width="100" Height="100" Style="{StaticResource MaterialDesignFloatingActionMiniDarkButton}" Background="#00000000" BorderBrush="#00000000" Click="BtnUminekoQuestion_Click" MouseEnter="UminekoQuestion_MouseEnter" MouseLeave="MouseLeaveEpisode">
                                 </Button>
                             </Grid>
-                            <Grid Grid.Row="0" Grid.Column="1" Margin="0,10,0,0"  Width="100" Height="100">
+                            <Grid Grid.Row="0" Grid.Column="1" Margin="0,0,0,0"  Width="100" Height="100">
                                 <Ellipse Stroke="White" StrokeThickness="1">
                                     <Ellipse.Fill>
                                         <ImageBrush x:Name="BtnImageUminekoAnswer" ImageSource="Resources\07th_icons\ico\Umineko Chiru PS3 Voice and Graphics Installer_0000.ico"/>
