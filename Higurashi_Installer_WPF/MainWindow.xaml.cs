@@ -1,9 +1,11 @@
 ﻿using log4net;
 using System;
+using System.Globalization;
 using System.IO;
 using System.Reflection;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Data;
 using System.Windows.Input;
 using System.Windows.Media.Imaging;
 
@@ -21,6 +23,7 @@ namespace Higurashi_Installer_WPF
         public MainWindow()
         {
             InitializeComponent();
+            GameTypeStackPanel.DataContext = new ExpanderListViewModel(); //Required so that only one expander expands at a time.
             Logger.Setup();
             patcher.IsFull = true;
         }
@@ -267,4 +270,26 @@ namespace Higurashi_Installer_WPF
             }
         }
     }
+
+    // The following two classes are required to ensure only one expander is expanded at any time
+    // See https://stackoverflow.com/questions/4449000/multiple-expander-have-to-collapse-if-one-is-expanded
+    public class ExpanderToBooleanConverter : IValueConverter
+    {
+        public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
+        {
+            return (value == parameter);
+        }
+
+        public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
+        {
+            if (System.Convert.ToBoolean(value)) return parameter;
+            return null;
+        }
+    }
+
+    public class ExpanderListViewModel
+    {
+        public Object SelectedExpander { get; set; }
+    }
+
 }

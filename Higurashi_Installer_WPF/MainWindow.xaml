@@ -71,57 +71,89 @@
         </Grid>
 
         <!-- Makes a separated grid for the icons, making it easier to control their behaviors -->
-        <Grid x:Name="IconGrid" Height="550" VerticalAlignment="Bottom" HorizontalAlignment="Left" Width="450" Margin="0,0,-6,0" >
-            <Ellipse Margin="16,77,358,394" Stroke="White" StrokeThickness="1">
-                <Ellipse.Fill>
-                    <ImageBrush x:Name="MainImage1" ImageSource="Resources\07th_icons\ico\HigurashiEp01_0000.ico"/>
-                </Ellipse.Fill>
-            </Ellipse>
-            <Ellipse Margin="100,77,275,394"  Stroke="White" StrokeThickness="1">
-                <Ellipse.Fill>
-                    <ImageBrush ImageSource="Resources\07th_icons\ico\HigurashiEp02_0000.ico"/>
-                </Ellipse.Fill>
-            </Ellipse>
-            <Ellipse Margin="181,77,192,394" Stroke="White" StrokeThickness="1">
-                <Ellipse.Fill>
-                    <ImageBrush ImageSource="Resources\07th_icons\ico\HigurashiEp03_0000.ico"/>
-                </Ellipse.Fill>
-            </Ellipse>
-            <Ellipse Margin="265,77,110,394" Stroke="White" StrokeThickness="1">
-                <Ellipse.Fill>
-                    <ImageBrush ImageSource="Resources\07th_icons\ico\HigurashiEp04_0000.ico"/>
-                </Ellipse.Fill>
-            </Ellipse>
-            <Ellipse Margin="350,77,25,394" Stroke="White" StrokeThickness="1">
-                <Ellipse.Fill>
-                    <ImageBrush ImageSource="Resources\07th_icons\ico\HigurashiEp05_00002.ico"/>
-                </Ellipse.Fill>
-            </Ellipse>
-            <Ellipse Margin="16,161,359,310" Stroke="White" StrokeThickness="1">
-                <Ellipse.Fill>
-                    <ImageBrush ImageSource="Resources\07th_icons\ico\console.ico"/>
-                </Ellipse.Fill>
-            </Ellipse>
-            <Rectangle HorizontalAlignment="Stretch" Fill="Gray" Margin="10,245,16,303"/>
-            <Ellipse Margin="16,252,359,219" Stroke="White" StrokeThickness="1">
-                <Ellipse.Fill>
-                    <ImageBrush ImageSource="Resources\07th_icons\ico\Umineko PS3 Voice and Graphics Installer_0000.ico"/>
-                </Ellipse.Fill>
-            </Ellipse>
-            <Ellipse Margin="100,252,275,219" Stroke="White" StrokeThickness="1">
-                <Ellipse.Fill>
-                    <ImageBrush ImageSource="Resources/07th_icons/ico/Umineko Chiru PS3 Voice and Graphics Installer_0000.ico"/>
-                </Ellipse.Fill>
-            </Ellipse>
-            <Button x:Name="BtnWatanagashi" Content="Button" HorizontalAlignment="Left" Margin="100,77,0,0" VerticalAlignment="Top" Width="75" Height="79" Opacity="0" Click="BtnWatanagashi_Click" MouseEnter="MouseEnterWata" MouseLeave="MouseLeaveEpisode"/>
-            <Button x:Name="BtnOnikakushi"  Content="Button" HorizontalAlignment="Left" Margin="17,77,0,0" VerticalAlignment="Top" Width="75" Height="79" Opacity="0" Click="BtnOnikakushi_Click" MouseEnter="MouseEnterOni" MouseLeave="MouseLeaveEpisode"/>
-            <Button x:Name="BtnTatarigoroshi" Content="Button" HorizontalAlignment="Left" Margin="183,77,0,0" VerticalAlignment="Top" Width="75" Height="79" Opacity="0" Click="BtnTatarigoroshi_Click" MouseEnter="MouseEnterTata" MouseLeave="MouseLeaveEpisode"/>
-            <Button x:Name="BtnHimatsubushi" Content="Button" HorizontalAlignment="Left" Margin="265,77,0,0" VerticalAlignment="Top" Width="75" Height="79" Opacity="0" Click="BtnHimatsubushi_Click" MouseEnter="MouseEnterHima" MouseLeave="MouseLeaveEpisode"/>
-            <Button x:Name="BtnMeakashi" Content="Button" HorizontalAlignment="Left" Margin="350,77,0,0" VerticalAlignment="Top" Width="75" Height="79" Opacity="0" Click="BtnMeakashi_Click" MouseEnter="MouseEnterMea" MouseLeave="MouseLeaveEpisode"/>
-            <Button x:Name="BtnConsole" Content="Button" HorizontalAlignment="Left" Margin="17,161,0,0" VerticalAlignment="Top" Width="75" Height="79" Opacity="0" MouseEnter="MouseEnterConsole" MouseLeave="MouseLeaveEpisode" Click="BtnConsole_Click"/>
-            <Button x:Name="BtnUminekoQuestion"  Content="Button" HorizontalAlignment="Left" Margin="16,252,0,0" VerticalAlignment="Top" Width="75" Height="79" Opacity="0" Click="BtnUminekoQuestion_Click" MouseEnter="UminekoQuestion_MouseEnter" MouseLeave="MouseLeaveEpisode"/>
-            <TextBlock HorizontalAlignment="Left" Margin="153,38,0,0" TextWrapping="Wrap" Text="Select Chapter" VerticalAlignment="Top" Width="131" FontSize="20"/>
-            <Button x:Name="BtnUminekoAnswer"  Content="Button" HorizontalAlignment="Left" Margin="100,252,0,0" VerticalAlignment="Top" Width="75" Height="79" Opacity="0" Click="BtnUminekoAnswer_Click" MouseEnter="UminekoAnswer_MouseEnter" MouseLeave="MouseLeaveEpisode"/>
+        <Grid x:Name="IconGrid" Height="519" VerticalAlignment="Bottom" HorizontalAlignment="Left" Width="450" >
+
+            <!-- Notes on the 'ExpanderToBooleanConverter' (only allow one expander at any one time) https://stackoverflow.com/questions/4449000/multiple-expander-have-to-collapse-if-one-is-expanded-->
+            <StackPanel Name="GameTypeStackPanel">
+                <StackPanel.Resources>
+                    <local:ExpanderToBooleanConverter x:Key="ExpanderToBooleanConverter" />
+                </StackPanel.Resources>
+                <Expander HorizontalAlignment="Stretch" Header="Higurashi Installers" IsExpanded="{Binding SelectedExpander, Mode=TwoWay, Converter={StaticResource ExpanderToBooleanConverter}, ConverterParameter=1}" Margin="0,0,10,0">
+                    <StackPanel Orientation="Vertical" TextBlock.Foreground="{DynamicResource MaterialDesignBody}" Margin="0,0,0,0">
+                        <Grid Margin="0,0,0,0">
+                            <Ellipse Margin="0,0,0,0" Width="100" Height="100" Stroke="White" StrokeThickness="1" Grid.Row="0" Grid.Column="0" MouseUp="BtnOnikakushi_Click" MouseEnter="MouseEnterOni" MouseLeave="MouseLeaveEpisode">
+                                <Ellipse.Fill>
+                                    <ImageBrush x:Name="MainImage1" ImageSource="Resources\07th_icons\ico\HigurashiEp01_0000.ico"/>
+                                </Ellipse.Fill>
+                            </Ellipse>
+                            <Ellipse Margin="0,0,0,0" Width="100" Height="100" Stroke="White" StrokeThickness="1" Grid.Row="0" Grid.Column="1" MouseUp="BtnWatanagashi_Click" MouseEnter="MouseEnterWata" MouseLeave="MouseLeaveEpisode">
+                                <Ellipse.Fill>
+                                    <ImageBrush x:Name="MainImage2" ImageSource="Resources\07th_icons\ico\HigurashiEp02_0000.ico"/>
+                                </Ellipse.Fill>
+                            </Ellipse>
+                            <Ellipse Margin="0,0,0,0" Width="100" Height="100" Stroke="White" StrokeThickness="1" Grid.Row="0" Grid.Column="2" MouseUp="BtnTatarigoroshi_Click" MouseEnter="MouseEnterTata" MouseLeave="MouseLeaveEpisode">
+                                <Ellipse.Fill>
+                                    <ImageBrush x:Name="MainImage3" ImageSource="Resources\07th_icons\ico\HigurashiEp03_0000.ico"/>
+                                </Ellipse.Fill>
+                            </Ellipse>
+                            <Ellipse Margin="0,0,0,0" Width="100" Height="100" Stroke="White" StrokeThickness="1" Grid.Row="0" Grid.Column="3" MouseUp="BtnHimatsubushi_Click" MouseEnter="MouseEnterHima" MouseLeave="MouseLeaveEpisode">
+                                <Ellipse.Fill>
+                                    <ImageBrush x:Name="MainImage4" ImageSource="Resources\07th_icons\ico\HigurashiEp04_0000.ico"/>
+                                </Ellipse.Fill>
+                            </Ellipse>
+                            <Ellipse Margin="0,10,0,0" Width="100" Height="100" Stroke="White" StrokeThickness="1" Grid.Row="1" Grid.Column="0" MouseUp="BtnMeakashi_Click" MouseEnter="MouseEnterMea" MouseLeave="MouseLeaveEpisode">
+                                <Ellipse.Fill>
+                                    <ImageBrush x:Name="MainImage5" ImageSource="Resources\07th_icons\ico\HigurashiEp05_00002.ico"/>
+                                </Ellipse.Fill>
+                            </Ellipse>
+                            <Ellipse Margin="0,10,0,0" Width="100" Height="100" Stroke="White" StrokeThickness="1" Grid.Row="1" Grid.Column="3" MouseUp="BtnConsole_Click" MouseEnter="MouseEnterConsole" MouseLeave="MouseLeaveEpisode">
+                                <Ellipse.Fill>
+                                    <ImageBrush x:Name="MainImage6" ImageSource="Resources\07th_icons\ico\console.ico"/>
+                                </Ellipse.Fill>
+                            </Ellipse>
+                            <!-- Insert additional Higurashi buttons here-->
+
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition />
+                                <ColumnDefinition />
+                                <ColumnDefinition />
+                                <ColumnDefinition />
+                            </Grid.ColumnDefinitions>
+                            <Grid.RowDefinitions>
+                                <RowDefinition />
+                                <RowDefinition />
+                            </Grid.RowDefinitions>
+                        </Grid>
+                    </StackPanel>
+                </Expander>
+                <Expander HorizontalAlignment="Stretch" Header="Umineko Installers" IsExpanded="{Binding SelectedExpander, Mode=TwoWay, Converter={StaticResource ExpanderToBooleanConverter}, ConverterParameter=2}" Margin="0,0,10,0">
+                    <StackPanel Orientation="Vertical" TextBlock.Foreground="{DynamicResource MaterialDesignBody}" Margin="0,0,0,0">
+                        <Grid Margin="0,0,0,0">
+                            <Ellipse Margin="0,0,0,0" Width="100" Height="100" Stroke="White" StrokeThickness="1" Grid.Row="0" Grid.Column="0" MouseUp="BtnUminekoQuestion_Click" MouseEnter="UminekoQuestion_MouseEnter" MouseLeave="MouseLeaveEpisode">
+                                <Ellipse.Fill>
+                                    <ImageBrush x:Name="UminekoImage1" ImageSource="Resources\07th_icons\ico\Umineko PS3 Voice and Graphics Installer_0000.ico"/>
+                                </Ellipse.Fill>
+                            </Ellipse>
+
+                            <Ellipse Margin="0,0,0,0" Width="100" Height="100" Stroke="White" StrokeThickness="1" Grid.Row="0" Grid.Column="1" MouseUp="BtnUminekoAnswer_Click" MouseEnter="UminekoAnswer_MouseEnter" MouseLeave="MouseLeaveEpisode">
+                                <Ellipse.Fill>
+                                    <ImageBrush x:Name="UminekoImage2" ImageSource="Resources/07th_icons/ico/Umineko Chiru PS3 Voice and Graphics Installer_0000.ico"/>
+                                </Ellipse.Fill>
+                            </Ellipse>
+
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition/>
+                                <ColumnDefinition/>
+                                <ColumnDefinition/>
+                                <ColumnDefinition/>
+                            </Grid.ColumnDefinitions>
+                            <Grid.RowDefinitions>
+                                <RowDefinition />
+                            </Grid.RowDefinitions>
+                        </Grid>
+                    </StackPanel>
+                </Expander>
+            </StackPanel>
         </Grid>
 
         <!-- The main installer grid -->
