@@ -1,8 +1,11 @@
 ﻿using log4net;
 using System;
+using System.Globalization;
+using System.IO;
 using System.Reflection;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Data;
 using System.Windows.Input;
 using System.Windows.Media.Imaging;
 
@@ -20,6 +23,7 @@ namespace Higurashi_Installer_WPF
         public MainWindow()
         {
             InitializeComponent();
+            GameTypeStackPanel.DataContext = new ExpanderListViewModel(); //Required so that only one expander expands at a time.
             Logger.Setup();
             patcher.IsFull = true;
         }
@@ -99,6 +103,22 @@ namespace Higurashi_Installer_WPF
             patcher.ImagePath = "/Resources/header5.jpg";
         }
 
+        private void BtnTsumihoroboshi_Click(object sender, RoutedEventArgs e)
+        {
+            _log.Info("Clicked Tsumihoroboshi");
+
+            Utils.ResizeWindow(this);
+            Utils.ResetPath(this, true);
+
+            EpisodeImage.Visibility = Visibility.Visible;
+            EpisodeImage.Source = new BitmapImage(new Uri("/Resources/header6.jpg", UriKind.Relative));
+
+            patcher.ChapterName = "tsumihoroboshi";
+            patcher.DataFolder = "HigurashiEp06_Data";
+            patcher.ExeName = "HigurashiEp06.exe";
+            patcher.ImagePath = "/Resources/header6.jpg";
+        }
+
         private void BtnConsole_Click(object sender, RoutedEventArgs e)
         {
             _log.Info("Clicked Console Arcs");
@@ -112,6 +132,36 @@ namespace Higurashi_Installer_WPF
             patcher.DataFolder = "HigurashiEp04_Data";
             patcher.ExeName = "HigurashiEp04.exe";
             patcher.ImagePath = "/Resources/console.png";
+        }
+
+        private void BtnUminekoQuestion_Click(object sender, RoutedEventArgs e)
+        {
+            _log.Info("Clicked Umineko Question");
+            Utils.ResizeWindow(this);
+            Utils.ResetPath(this, true);
+
+            EpisodeImage.Visibility = Visibility.Visible;
+            EpisodeImage.Source = new BitmapImage(new Uri(@"/Resources/header_umineko_question.jpg", UriKind.Relative));
+
+            patcher.ChapterName = "umineko-question";
+            patcher.DataFolder = ".";        //umineko doesn't have a data folder, just put 'temp' in game directory
+            patcher.ExeName = "umineko1to4"; //search for the linux .exe, as install may trash the windows .exe
+            patcher.ImagePath = "/Resources/header_umineko_question.jpg";
+        }
+
+        private void BtnUminekoAnswer_Click(object sender, RoutedEventArgs e)
+        {
+            _log.Info("Clicked Umineko Answer");
+            Utils.ResizeWindow(this);
+            Utils.ResetPath(this, true);
+
+            EpisodeImage.Visibility = Visibility.Visible;
+            EpisodeImage.Source = new BitmapImage(new Uri(@"/Resources/header_umineko_answer.jpg", UriKind.Relative));
+
+            patcher.ChapterName = "umineko-answer";
+            patcher.DataFolder = ".";        //umineko doesn't have a data folder, just put 'temp' in game directory
+            patcher.ExeName = "umineko5to8"; //search for the linux .exe, as install may trash the windows .exe
+            patcher.ImagePath = "/Resources/header_umineko_answer.jpg";
         }
 
         private void InstallCombo_SelectionChanged(object sender, SelectionChangedEventArgs e)
@@ -158,7 +208,14 @@ namespace Higurashi_Installer_WPF
                 Utils.DelayAction(5000, new Action(() =>
                 {
                     //Initiates installation process
-                    Utils.runInstaller(this, "install.bat", patcher.InstallPath);
+                    if(patcher.ChapterName == "umineko-question" || patcher.ChapterName == "umineko-answer")
+                    {
+                        Utils.runInstaller(this, "install.bat", Path.Combine(patcher.InstallPath, "../"));
+                    }
+                    else
+                    {
+                        Utils.runInstaller(this, "install.bat", patcher.InstallPath);
+                    }
 
                 }));
             }
@@ -200,10 +257,28 @@ namespace Higurashi_Installer_WPF
             EpisodeImage.Source = new BitmapImage(new Uri("/Resources/header5.jpg", UriKind.Relative));
         }
 
+        private void BtnTsumihoroboshi_MouseEnter(object sender, MouseEventArgs e)
+        {
+            EpisodeImage.Visibility = Visibility.Visible;
+            EpisodeImage.Source = new BitmapImage(new Uri("/Resources/header6.jpg", UriKind.Relative));
+        }
+
         private void MouseEnterConsole(object sender, MouseEventArgs e)
         {
             EpisodeImage.Visibility = Visibility.Visible;
             EpisodeImage.Source = new BitmapImage(new Uri("/Resources/console.png", UriKind.Relative));
+        }
+
+        private void UminekoQuestion_MouseEnter(object sender, MouseEventArgs e)
+        {
+            EpisodeImage.Visibility = Visibility.Visible;
+            EpisodeImage.Source = new BitmapImage(new Uri("/Resources/header_umineko_question.jpg", UriKind.Relative));
+        }
+
+        private void UminekoAnswer_MouseEnter(object sender, MouseEventArgs e)
+        {
+            EpisodeImage.Visibility = Visibility.Visible;
+            EpisodeImage.Source = new BitmapImage(new Uri("/Resources/header_umineko_answer.jpg", UriKind.Relative));
         }
 
         private void MouseLeaveEpisode(object sender, MouseEventArgs e)
@@ -216,5 +291,28 @@ namespace Higurashi_Installer_WPF
                 EpisodeImage.Source = new BitmapImage(new Uri(patcher.ImagePath, UriKind.Relative));
             }
         }
+
     }
+
+    // The following two classes are required to ensure only one expander is expanded at any time
+    // See https://stackoverflow.com/questions/4449000/multiple-expander-have-to-collapse-if-one-is-expanded
+    public class ExpanderToBooleanConverter : IValueConverter
+    {
+        public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
+        {
+            return (value == parameter);
+        }
+
+        public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
+        {
+            if (System.Convert.ToBoolean(value)) return parameter;
+            return null;
+        }
+    }
+
+    public class ExpanderListViewModel
+    {
+        public Object SelectedExpander { get; set; }
+    }
+
 }

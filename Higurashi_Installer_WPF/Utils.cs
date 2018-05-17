@@ -14,6 +14,7 @@ using SharpCompress.Readers;
 using SharpCompress.Archives.Zip;
 using SharpCompress.Archives;
 using System.Threading.Tasks;
+using System.Management;
 
 //Util class for all methods related to the grid, installation and general flow of the layout
 
@@ -21,6 +22,9 @@ namespace Higurashi_Installer_WPF
 {
     static class Utils
     {
+        public static Process process;
+        public static DataReceivedEventHandler processEventHandler;
+
         private static readonly ILog _log = LogManager.GetLogger(MethodBase.GetCurrentMethod().DeclaringType);
 
         //Reset the path in case the user changes chapters
@@ -242,16 +246,14 @@ namespace Higurashi_Installer_WPF
         }
 
         //downloads and extracts the resources of the temp folder
-        public static async Task<bool> DownloadResources(PatcherPOCO patcher, bool downloadBatchFile = true)
+        public static async Task<bool> DownloadResources(PatcherPOCO patcher)
         {
             _log.Info("Downloading install bat and creating temp folder");
             using (var client = new WebClient())
             {
-                if (downloadBatchFile)
-                {
-                    _log.Info("Downloading install.bat");
-                    await client.DownloadFileTaskAsync("https://raw.githubusercontent.com/07th-mod/resources/master/" + patcher.ChapterName + "/install.bat", patcher.InstallPath + "\\install.bat");
-                }
+                _log.Info("Downloading install.bat");
+                await client.DownloadFileTaskAsync("https://raw.githubusercontent.com/07th-mod/resources/master/" + patcher.ChapterName + "/install.bat", patcher.InstallPath + "\\install.bat");
+
                 _log.Info("Downloading resources.zip");
                 await client.DownloadFileTaskAsync("https://github.com/07th-mod/resources/raw/master/dependencies.zip", patcher.InstallPath + "\\resources.zip");
             }
@@ -269,14 +271,17 @@ namespace Higurashi_Installer_WPF
         public static void runInstaller(MainWindow window, string bat, string dir) {
 
             _log.Info("Initializing cmd process");
-            Process process = new Process();
+            //need to keep a reference to the process so we can terminate it (see KillBatchFile function)
+            process = new Process();
             Directory.SetCurrentDirectory(dir);
             process.StartInfo.CreateNoWindow = true;
             process.StartInfo.FileName = bat;          
             process.StartInfo.UseShellExecute = false;
             process.StartInfo.RedirectStandardOutput = true;
 
-            process.OutputDataReceived += (sender, args) => HandleData(process, args, window);
+            //need to keep a reference to the event handler so we can remove it (see KillBatchFile function)
+            processEventHandler = (sender, args) => HandleData(process, args, window);
+            process.OutputDataReceived += processEventHandler;
 
             process.Start();
             process.BeginOutputReadLine();
@@ -461,6 +466,49 @@ namespace Higurashi_Installer_WPF
             window.InstallLabelPatch1.Content = "Downloading graphics patch...";
             window.InstallLabelPatch2.Content = "Downloading voice patch...";
             window.InstallLabelPatch3.Content = "Downloading patch...";
+        }
+
+        //Kills the installer process, otherwise it remains running in the background
+        public static void KillBatchFile()
+        {
+            if (process != null)
+            {
+                //if the event handler is not removed and the process is killed, an exception occurs.
+                if (processEventHandler != null)
+                {
+                    process.OutputDataReceived -= processEventHandler;
+                }
+
+                KillProcessAndChildren(process.Id);
+            }
+        }
+
+        //Code snippet from https://stackoverflow.com/questions/5901679/kill-process-tree-programmatically-in-c-sharp
+        private static void KillProcessAndChildren(int pid)
+        {
+            // Cannot close 'system idle process'.
+            if (pid == 0)
+            {
+                return;
+            }
+
+            ManagementObjectSearcher searcher = new ManagementObjectSearcher("Select * From Win32_Process Where ParentProcessID=" + pid);
+            ManagementObjectCollection moc = searcher.Get();
+
+            foreach (ManagementObject mo in moc)
+            {
+                KillProcessAndChildren(Convert.ToInt32(mo["ProcessID"]));
+            }
+
+            try
+            {
+                Process proc = Process.GetProcessById(pid);
+                proc.Kill();
+            }
+            catch (ArgumentException)
+            {
+                // Process already exited.
+            }
         }
     }
 
