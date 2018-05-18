@@ -294,6 +294,7 @@ namespace Higurashi_Installer_WPF
         public static void HandleData(Process sendingProcess, DataReceivedEventArgs outLine, MainWindow window)
         {
             string e = outLine.Data;
+            _log.Info(e);
 
             //Main part with the download speed, ETA, etc
             if (e != null && e.StartsWith("["))
@@ -311,7 +312,7 @@ namespace Higurashi_Installer_WPF
                         InstallerProgressBar(window, filesize, downloadSpeed, timeRemaining, progressValue);
 
                     });
-                  //  _log.Info(e);
+                    
                 }
                 else if (!e.Contains("ETA"))
                 {
