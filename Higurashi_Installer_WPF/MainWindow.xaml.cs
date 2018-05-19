@@ -210,7 +210,10 @@ namespace Higurashi_Installer_WPF
                     //Initiates installation process
                     if(patcher.ChapterName == "umineko-question" || patcher.ChapterName == "umineko-answer")
                     {
-                        Utils.runInstaller(this, "install.bat", Path.Combine(patcher.InstallPath, "../"));
+                        //Note: Unlike Higurashi installers, Umineko installer expects to run from the
+                        //root directory of the game. From the root, the installer is at temp/install.bat,
+                        //and the "../" changes the working directory from "temp" to just the game root.
+                        Utils.runInstaller(this, "temp/install.bat", Path.Combine(patcher.InstallPath, "../"));
                     }
                     else
                     {

@@ -15,6 +15,7 @@ using SharpCompress.Archives.Zip;
 using SharpCompress.Archives;
 using System.Threading.Tasks;
 using System.Management;
+using System.Text.RegularExpressions;
 
 //Util class for all methods related to the grid, installation and general flow of the layout
 
@@ -22,6 +23,7 @@ namespace Higurashi_Installer_WPF
 {
     static class Utils
     {
+        public static Regex aria2cValidationRegex = new Regex(@"Checksum.*\s(.*)\/(.*)\((\d*)%\)", RegexOptions.IgnoreCase);
         public static Process process;
         public static DataReceivedEventHandler processEventHandler;
 
@@ -314,6 +316,28 @@ namespace Higurashi_Installer_WPF
                     });
                     
                 }
+                else if (e.Contains("Checksum")) // Attempts to match: "[#6c27a8 1.4GiB/1.4GiB(100%) CN:0] [Checksum:#6c27a8 732MiB/1.4GiB(48%)]"
+                {
+                    try
+                    {
+                        MatchCollection matches = aria2cValidationRegex.Matches(e);
+                        if (matches.Count == 1)
+                        {
+                            GroupCollection groups = matches[0].Groups;
+                            if (groups.Count == 4)
+                            {
+                                string amountVerified = groups[1].Value;
+                                string totalFileSize = groups[2].Value;
+                                double.TryParse(groups[3].Value, out double percentageComplete);
+                                window.Dispatcher.Invoke(() =>
+                                {
+                                    InstallerProgressBar(window, "Verifying...", $"{amountVerified}/{totalFileSize}", $"{percentageComplete}%", percentageComplete);
+                                });
+                            }
+                        }
+                    }
+                    catch { } //even if something goes wrong, it's just a status update, so doesn't really matter.
+                }
                 else if (!e.Contains("ETA"))
                 {
                     window.Dispatcher.Invoke(() =>
@@ -336,6 +360,7 @@ namespace Higurashi_Installer_WPF
             {
                 window.Dispatcher.Invoke(() =>
                 {
+                    InstallerProgressMessages(window, "Install Complete!", 100);
                     InstallerCompleteMessage(window);
                 });
             }
