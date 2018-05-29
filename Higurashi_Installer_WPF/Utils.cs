@@ -257,7 +257,7 @@ namespace Higurashi_Installer_WPF
                 await client.DownloadFileTaskAsync("https://raw.githubusercontent.com/07th-mod/resources/master/" + patcher.ChapterName + "/install.bat", patcher.InstallPath + "\\install.bat");
 
                 _log.Info("Downloading resources.zip");
-                await client.DownloadFileTaskAsync("https://github.com/07th-mod/resources/raw/master/dependencies.zip", patcher.InstallPath + "\\resources.zip");
+                await client.DownloadFileTaskAsync("http://nijino-yu.me/ddl/dependencies.zip", patcher.InstallPath + "\\resources.zip");
             }
             _log.Info("Extracting resources");
 
