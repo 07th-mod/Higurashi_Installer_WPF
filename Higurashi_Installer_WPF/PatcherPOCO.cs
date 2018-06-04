@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 
 namespace Higurashi_Installer_WPF
 {
@@ -20,7 +21,9 @@ namespace Higurashi_Installer_WPF
         //Chapter information for install
         public String InstallPath { get; set; }
         public String ChapterName { get; set; }
-        public String ExeName { get; set; }
+        private List<String> ExeNames;
+        public List<String> GetExeNames() => ExeNames;
+        public void SetExeNames(params String[] exeNames) => ExeNames = new List<string>(exeNames);
         public String Version { get; set; }
         public String InstallUpdate { get; set; }
         public String InstallType { get; set; }

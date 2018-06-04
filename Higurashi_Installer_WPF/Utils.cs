@@ -135,8 +135,14 @@ namespace Higurashi_Installer_WPF
 
         public static Boolean CheckValidFileExists(String path, PatcherPOCO patcher)
         {
-            string file = path + "\\" + patcher.ExeName;
-            return File.Exists(file);
+            foreach (string ExeName in patcher.GetExeNames())
+            {
+                string file = path + "\\" + ExeName;
+                if (File.Exists(file) || Directory.Exists(file))
+                    return true;
+            }
+
+            return false;
         }
 
         //Responsible for changing the layout depending on what option is selected in the combo

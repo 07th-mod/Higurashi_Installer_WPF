@@ -39,7 +39,7 @@ namespace Higurashi_Installer_WPF
 
             patcher.ChapterName = "onikakushi";
             patcher.DataFolder = "HigurashiEp01_Data";
-            patcher.ExeName = "HigurashiEp01.exe";
+            patcher.SetExeNames("HigurashiEp01.exe");
             patcher.ImagePath = "/Resources/header1.jpg";
         }
 
@@ -54,7 +54,7 @@ namespace Higurashi_Installer_WPF
 
             patcher.ChapterName = "watanagashi";
             patcher.DataFolder = "HigurashiEp02_Data";
-            patcher.ExeName = "HigurashiEp02.exe";
+            patcher.SetExeNames("HigurashiEp02.exe");
             patcher.ImagePath = "/Resources/header2.jpg";
         }
 
@@ -69,7 +69,7 @@ namespace Higurashi_Installer_WPF
 
             patcher.ChapterName = "tatarigoroshi";
             patcher.DataFolder = "HigurashiEp03_Data";
-            patcher.ExeName = "HigurashiEp03.exe";
+            patcher.SetExeNames("HigurashiEp03.exe");
             patcher.ImagePath = "/Resources/header3.jpg";
         }
 
@@ -84,7 +84,7 @@ namespace Higurashi_Installer_WPF
 
             patcher.ChapterName = "himatsubushi";
             patcher.DataFolder = "HigurashiEp04_Data";
-            patcher.ExeName = "HigurashiEp04.exe";
+            patcher.SetExeNames("HigurashiEp04.exe");
             patcher.ImagePath = "/Resources/header4.jpg";
         }
 
@@ -99,7 +99,7 @@ namespace Higurashi_Installer_WPF
 
             patcher.ChapterName = "meakashi";
             patcher.DataFolder = "HigurashiEp05_Data";
-            patcher.ExeName = "HigurashiEp05.exe";
+            patcher.SetExeNames("HigurashiEp05.exe");
             patcher.ImagePath = "/Resources/header5.jpg";
         }
 
@@ -115,7 +115,7 @@ namespace Higurashi_Installer_WPF
 
             patcher.ChapterName = "tsumihoroboshi";
             patcher.DataFolder = "HigurashiEp06_Data";
-            patcher.ExeName = "HigurashiEp06.exe";
+            patcher.SetExeNames("HigurashiEp06.exe");
             patcher.ImagePath = "/Resources/header6.jpg";
         }
 
@@ -130,7 +130,7 @@ namespace Higurashi_Installer_WPF
 
             patcher.ChapterName = "console0arcs";
             patcher.DataFolder = "HigurashiEp04_Data";
-            patcher.ExeName = "HigurashiEp04.exe";
+            patcher.SetExeNames("HigurashiEp04.exe");
             patcher.ImagePath = "/Resources/console.png";
         }
 
@@ -145,7 +145,7 @@ namespace Higurashi_Installer_WPF
 
             patcher.ChapterName = "umineko-question";
             patcher.DataFolder = ".";        //umineko doesn't have a data folder, just put 'temp' in game directory
-            patcher.ExeName = "umineko1to4"; //search for the linux .exe, as install may trash the windows .exe
+            patcher.SetExeNames("Umineko1to4.exe", "Umineko1to4", "Umineko1to4.app");
             patcher.ImagePath = "/Resources/header_umineko_question.jpg";
         }
 
@@ -160,7 +160,7 @@ namespace Higurashi_Installer_WPF
 
             patcher.ChapterName = "umineko-answer";
             patcher.DataFolder = ".";        //umineko doesn't have a data folder, just put 'temp' in game directory
-            patcher.ExeName = "umineko5to8"; //search for the linux .exe, as install may trash the windows .exe
+            patcher.SetExeNames("Umineko5to8.exe", "umineko5to8", "Umineko5to8.app");
             patcher.ImagePath = "/Resources/header_umineko_answer.jpg";
         }
 
