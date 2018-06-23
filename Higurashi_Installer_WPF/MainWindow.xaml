@@ -217,6 +217,7 @@
             <Label x:Name="InstallLabelPatch1" Content="Downloading graphics patch..." HorizontalAlignment="Left" Margin="52,279,0,0" VerticalAlignment="Top" Width="391" Visibility="Collapsed"/>
             <Label x:Name="InstallLabelPatch2" Content="Downloading voice patch..." HorizontalAlignment="Left" Margin="52,334,0,0" VerticalAlignment="Top" Width="391" Visibility="Collapsed"/>
             <Label x:Name="InstallLabelPatch3" Content="Downloading patch..." HorizontalAlignment="Left" Margin="52,390,0,0" VerticalAlignment="Top" Width="391" Visibility="Collapsed"/>
+            <Button x:Name="ShowDetailedProgressButton" Content="Show Detailed Progress" HorizontalAlignment="Left" Margin="180,505,0,0" VerticalAlignment="Top" Width="300" Click="BtnToggleConsole" Visibility="Visible"/>
         </Grid>
 
     </Grid>

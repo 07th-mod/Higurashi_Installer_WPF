@@ -304,6 +304,12 @@ namespace Higurashi_Installer_WPF
             string e = outLine.Data;
             _log.Info(e);
 
+            //Output the batch file output to the console window.
+            window.Dispatcher.Invoke(() =>
+            {
+                window.consoleWindow.Println(e);
+            });
+
             //Main part with the download speed, ETA, etc
             if (e != null && e.StartsWith("["))
             {

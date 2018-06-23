@@ -18,7 +18,10 @@ namespace Higurashi_Installer_WPF
         /* The patcher is the main object that will be used to store
          * all the information necessary for the installer to operate, making it easier to add new chapters
          * since you just need to populate it and the rest will be automatic. */
-        PatcherPOCO patcher = new PatcherPOCO();  
+        PatcherPOCO patcher = new PatcherPOCO();
+
+        //Console window for displaying raw text output of installer.
+        public DebugConsole consoleWindow = new DebugConsole();
 
         public MainWindow()
         {
@@ -295,6 +298,22 @@ namespace Higurashi_Installer_WPF
             }
         }
 
+        private void BtnToggleConsole(object sender, RoutedEventArgs e)
+        {
+            if (consoleWindow.Visibility == Visibility.Visible)
+            {
+                consoleWindow.Hide();
+                ShowDetailedProgressButton.Content = "Show Detailed Progress";
+            }
+            else
+            {
+                // Owner needs to be set so that the console window closes automataically
+                // when the main installer window closes
+                consoleWindow.Owner = this;
+                consoleWindow.Show();
+                ShowDetailedProgressButton.Content = "Hide Detailed Progress";
+            }
+        }
     }
 
     // The following two classes are required to ensure only one expander is expanded at any time
