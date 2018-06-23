@@ -205,7 +205,7 @@ namespace Higurashi_Installer_WPF
                 InstallerGrid.Visibility = Visibility.Visible;
 
                 //get the latest .bat from github
-                await Utils.DownloadResources(patcher);
+                await Utils.DownloadResources(this, patcher);
 
                 // If you don't do this, the InstallerGrid won't be visible
                 Utils.DelayAction(5000, new Action(() =>

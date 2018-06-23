@@ -254,15 +254,33 @@ namespace Higurashi_Installer_WPF
         }
 
         //downloads and extracts the resources of the temp folder
-        public static async Task<bool> DownloadResources(PatcherPOCO patcher)
+        public static async Task<bool> DownloadResources(MainWindow window, PatcherPOCO patcher)
         {
+            //Note: this function captures the 'window' variable from outer scope.
+            void DownloadResourcesProgressCallback(object sender, DownloadProgressChangedEventArgs e, String descriptiveFileName)
+            {
+                window.Dispatcher.Invoke(() =>
+                {
+                    InstallerProgressBar(window,
+                        $"Downloading {descriptiveFileName}...",
+                        $"{e.BytesReceived / 1e6:F2}/{e.TotalBytesToReceive / 1e6:F2}MB",
+                        $"{e.ProgressPercentage}%", e.ProgressPercentage / 100.0);
+                });
+            }
+
+            void InstallBatCallback(object sender, DownloadProgressChangedEventArgs e) => DownloadResourcesProgressCallback(sender, e, "install.bat");
+            void ResourcesZipCallback(object sender, DownloadProgressChangedEventArgs e) => DownloadResourcesProgressCallback(sender, e, "resources.zip");
+
             _log.Info("Downloading install bat and creating temp folder");
             using (var client = new WebClient())
             {
+                client.DownloadProgressChanged += InstallBatCallback;
                 _log.Info("Downloading install.bat");
                 await client.DownloadFileTaskAsync("https://raw.githubusercontent.com/07th-mod/resources/master/" + patcher.ChapterName + "/install.bat", patcher.InstallPath + "\\install.bat");
 
                 _log.Info("Downloading resources.zip");
+                client.DownloadProgressChanged -= InstallBatCallback;
+                client.DownloadProgressChanged += ResourcesZipCallback;
                 await client.DownloadFileTaskAsync("http://nijino-yu.me/ddl/dependencies.zip", patcher.InstallPath + "\\resources.zip");
             }
             _log.Info("Extracting resources");
@@ -278,10 +296,17 @@ namespace Higurashi_Installer_WPF
          */
         public static void runInstaller(MainWindow window, string bat, string dir) {
 
+            Directory.SetCurrentDirectory(dir);
+
+            //Force the batch file to CRLF format before executing it
+            //https://stackoverflow.com/questions/841396/what-is-a-quick-way-to-force-crlf-in-c-sharp-net
+            string entireBatchFile = File.ReadAllText(bat);
+            string fixedBatchFile = entireBatchFile.Replace("\r\n", "\n").Replace("\r", "\n").Replace("\n", "\r\n");
+            File.WriteAllText(bat, fixedBatchFile);
+
             _log.Info("Initializing cmd process");
             //need to keep a reference to the process so we can terminate it (see KillBatchFile function)
             process = new Process();
-            Directory.SetCurrentDirectory(dir);
             process.StartInfo.CreateNoWindow = true;
             process.StartInfo.FileName = bat;          
             process.StartInfo.UseShellExecute = false;
