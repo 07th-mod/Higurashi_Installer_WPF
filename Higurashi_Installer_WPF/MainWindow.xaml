@@ -13,7 +13,8 @@
         TextOptions.TextRenderingMode="Auto"        
         Background="{DynamicResource MaterialDesignPaper}"
         FontFamily="{DynamicResource MaterialDesignFont}"
-        Title="Higurashi Patcher"  Height="550" Width="450" ResizeMode="NoResize" WindowStartupLocation="CenterScreen"
+        Title="Higurashi Patcher v1.11"
+        Height="550" Width="450" ResizeMode="NoResize" WindowStartupLocation="CenterScreen"
         RenderOptions.BitmapScalingMode="HighQuality"
         ContentRendered="Window_ContentRendered">
 
