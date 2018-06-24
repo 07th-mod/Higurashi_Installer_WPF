@@ -14,7 +14,8 @@
         Background="{DynamicResource MaterialDesignPaper}"
         FontFamily="{DynamicResource MaterialDesignFont}"
         Title="Higurashi Patcher"  Height="550" Width="450" ResizeMode="NoResize" WindowStartupLocation="CenterScreen"
-        RenderOptions.BitmapScalingMode="HighQuality">
+        RenderOptions.BitmapScalingMode="HighQuality"
+        ContentRendered="Window_ContentRendered">
 
 
     <Grid x:Name="MainGrid" Height="550" VerticalAlignment="Bottom" HorizontalAlignment="Left" Width="450" Margin="0,0,-6,0" >

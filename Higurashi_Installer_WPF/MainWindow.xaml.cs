@@ -21,7 +21,7 @@ namespace Higurashi_Installer_WPF
         PatcherPOCO patcher = new PatcherPOCO();
 
         //Console window for displaying raw text output of installer.
-        public DebugConsole consoleWindow = new DebugConsole();
+        public DebugConsole consoleWindow;
 
         public MainWindow()
         {
@@ -313,6 +313,11 @@ namespace Higurashi_Installer_WPF
                 consoleWindow.Show();
                 ShowDetailedProgressButton.Content = "Hide Detailed Progress";
             }
+        }
+
+        private void Window_ContentRendered(object sender, EventArgs e)
+        {
+            consoleWindow = new DebugConsole { Owner = this };
         }
     }
 
