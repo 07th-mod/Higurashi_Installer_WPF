@@ -29,6 +29,8 @@ namespace Higurashi_Installer_WPF
 
         private static readonly ILog _log = LogManager.GetLogger(MethodBase.GetCurrentMethod().DeclaringType);
 
+        public static JobManagement.Job job = new JobManagement.Job();
+
         //Reset the path in case the user changes chapters
         public static void ResetPath(MainWindow window, Boolean ChangedChapter)
         {
@@ -319,8 +321,13 @@ namespace Higurashi_Installer_WPF
             process.Start();
             process.BeginOutputReadLine();
 
+            //This ensures that the .batch file process will be killed if this installer closes
+            //If the installer unexpectedly closes, aria2C etc. will download in the background and the
+            //only way to close it is to find the rogue .batch file and kill it in task manager, along with aria2C.
+            job.AddProcess(process.Id);
+
             //This makes the installer stop, if you can find a way to make it work, be my guest
-           // process.WaitForExit();
+            // process.WaitForExit();
         }
 
         //Main method for filtering the Aria2c log and populating the main window
