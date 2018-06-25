@@ -8,12 +8,36 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows;
 
 namespace Higurashi_Installer_WPF
 {
+    public class GUIDebugConsoleAppender : AppenderSkeleton
+    {
+        DebugConsole debugConsole;
+
+        public void SetDebugConsole(DebugConsole debugConsole) //TODO: remove this and use an event system to fire off callbacks
+        {
+            this.debugConsole = debugConsole;
+        }
+
+        protected override void Append(LoggingEvent loggingEvent)
+        {
+            if (debugConsole == null)
+                return;
+
+            Application.Current.Dispatcher.Invoke(() =>
+            {
+                debugConsole.DisplayLoggingEvent(loggingEvent);
+            });
+        }
+    }
+
     public class Logger
     {
-        public static void Setup()
+        public static GUIDebugConsoleAppender guiDebugConsoleAppender;
+
+        public static void Setup() 
         {
             Hierarchy hierarchy = (Hierarchy)LogManager.GetRepository();
 
@@ -40,6 +64,10 @@ namespace Higurashi_Installer_WPF
             MemoryAppender memory = new MemoryAppender();
             memory.ActivateOptions();
             hierarchy.Root.AddAppender(memory);
+
+            guiDebugConsoleAppender = new GUIDebugConsoleAppender();
+            guiDebugConsoleAppender.ActivateOptions();
+            hierarchy.Root.AddAppender(guiDebugConsoleAppender);
 
             hierarchy.Root.Level = Level.Info;
             hierarchy.Configured = true;

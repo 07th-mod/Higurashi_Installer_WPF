@@ -198,37 +198,52 @@ namespace Higurashi_Installer_WPF
         //Main install logic starts here after the confirmation button is clicked
         private async void Confirm_Click(object sender, RoutedEventArgs e)
         {
+            _log.Info("Starting the installer");
+            ConfirmationGrid.Visibility = Visibility.Collapsed;
+            InstallerGrid.Visibility = Visibility.Visible;
+
+            //Download the latest install.bat and .zip. If this fails, stop the installer. 
+            if(!await Utils.DownloadResources(this, patcher))
+            {
+                string errormsg = "An error has occured while downloading the resources. The installation has been stopped.";
+                _log.Error(errormsg);
+                MessageBox.Show(errormsg);
+                return;
+            }
+            
             try
             {
-                _log.Info("Starting the installer");
-                ConfirmationGrid.Visibility = Visibility.Collapsed;
-                InstallerGrid.Visibility = Visibility.Visible;
-
-                //get the latest .bat from github
-                await Utils.DownloadResources(this, patcher);
-
                 // If you don't do this, the InstallerGrid won't be visible
+                _log.Info("Launching install.bat in 5 seconds...");
                 Utils.DelayAction(5000, new Action(() =>
                 {
                     //Initiates installation process
-                    if(patcher.ChapterName == "umineko-question" || patcher.ChapterName == "umineko-answer")
+                    try
                     {
-                        //Note: Unlike Higurashi installers, Umineko installer expects to run from the
-                        //root directory of the game. From the root, the installer is at temp/install.bat,
-                        //and the "../" changes the working directory from "temp" to just the game root.
-                        Utils.runInstaller(this, "temp/install.bat", Path.Combine(patcher.InstallPath, "../"));
+                        if (patcher.ChapterName == "umineko-question" || patcher.ChapterName == "umineko-answer")
+                        {
+                            //Note: Unlike Higurashi installers, Umineko installer expects to run from the
+                            //root directory of the game. From the root, the installer is at temp/install.bat,
+                            //and the "../" changes the working directory from "temp" to just the game root.
+                            Utils.runInstaller(this, "temp/install.bat", Path.Combine(patcher.InstallPath, "../"));
+                        }
+                        else
+                        {
+                            Utils.runInstaller(this, "install.bat", patcher.InstallPath);
+                        }
                     }
-                    else
+                    catch(Exception error)
                     {
-                        Utils.runInstaller(this, "install.bat", patcher.InstallPath);
+                        string errormsg = "(DelayAction) An error has occured while executing the install.bat: " + error;
+                        _log.Error(errormsg);
                     }
-
                 }));
             }
             catch (Exception error)
             {
-                _log.Info(error);
-                Environment.Exit(1);
+                string errormsg = "(Confirm_Click) An error has occured while executing the install.bat: " + error;
+                _log.Error(errormsg);
+                MessageBox.Show(errormsg);
             } 
         }
 
@@ -318,6 +333,7 @@ namespace Higurashi_Installer_WPF
         private void Window_ContentRendered(object sender, EventArgs e)
         {
             consoleWindow = new DebugConsole { Owner = this };
+            Logger.guiDebugConsoleAppender.SetDebugConsole(consoleWindow);
         }
     }
 

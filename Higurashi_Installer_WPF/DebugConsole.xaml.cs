@@ -1,4 +1,5 @@
-﻿using System;
+﻿using log4net.Core;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -37,32 +38,36 @@ namespace Higurashi_Installer_WPF
 
         //Match a line consisting of ONLY 40 or more spaces. Treat it as a aria2c blank line
         Regex Aria2CBlankLineRegex = new Regex(@"^ {40,}$",
-        RegexOptions.Compiled | RegexOptions.IgnoreCase);        
+        RegexOptions.Compiled | RegexOptions.IgnoreCase);
+
+        bool currentLineIsTemporary;
 
         public DebugConsole()
         {
             InitializeComponent();
         }
 
-        public void Println(string nextLine)
+        //Call this function to display a logging event on the DebugConsole.
+        //semi-duplicate 'update' lines from Aria2C will be handled automatically.
+        public void DisplayLoggingEvent(LoggingEvent loggingEvent)
         {
             //ignore blank lines (TODO: only strip lines which are all spaces)
-            if (Aria2CBlankLineRegex.IsMatch(nextLine))
+            if (Aria2CBlankLineRegex.IsMatch(loggingEvent.RenderedMessage))
                 return;
 
             //append current line to previous lines under the following two cases: 
             // - the current line is not a temporary aria2c line
             // - OR the next line is not a temporary aria2c line (this ensures 
             //   at least one temporary update is added to previous lines buffer)
-            if (!Aria2CTempOutputRegex.IsMatch(DebugConsoleCurrentLine.Text) ||
-                !Aria2CTempOutputRegex.IsMatch(nextLine))
+            if (!currentLineIsTemporary || !Aria2CTempOutputRegex.IsMatch(loggingEvent.RenderedMessage))
             {
                 DebugConsolePreviousLines.AppendText(DebugConsoleCurrentLine.Text);
                 DebugConsolePreviousLines.AppendText(Environment.NewLine);
             }
             
-            //set the current line
-            DebugConsoleCurrentLine.Text = nextLine;
+            //set the 'current line' logging textbox, and mark the current line's temporary status
+            DebugConsoleCurrentLine.Text = $"{loggingEvent.TimeStamp} [{loggingEvent.Level.Name}]: {loggingEvent.RenderedMessage}";
+            currentLineIsTemporary = Aria2CTempOutputRegex.IsMatch(loggingEvent.RenderedMessage);
         }
 
         //If the user clicks the 'X' to close the window, just hide the window instead of closing it.

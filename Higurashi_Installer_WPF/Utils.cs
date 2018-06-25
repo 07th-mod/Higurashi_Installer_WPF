@@ -31,6 +31,8 @@ namespace Higurashi_Installer_WPF
 
         public static JobManagement.Job job = new JobManagement.Job();
 
+        public static uint HandleDataErrorCount = 0; //This variable is used to rate limit the amount of errors that are recorded from the HandleDataError function
+
         //Reset the path in case the user changes chapters
         public static void ResetPath(MainWindow window, Boolean ChangedChapter)
         {
@@ -266,29 +268,59 @@ namespace Higurashi_Installer_WPF
                     InstallerProgressBar(window,
                         $"Downloading {descriptiveFileName}...",
                         $"{e.BytesReceived / 1e6:F2}/{e.TotalBytesToReceive / 1e6:F2}MB",
-                        $"{e.ProgressPercentage}%", e.ProgressPercentage / 100.0);
+                        $"{e.ProgressPercentage}%", e.ProgressPercentage);
                 });
             }
 
             void InstallBatCallback(object sender, DownloadProgressChangedEventArgs e) => DownloadResourcesProgressCallback(sender, e, "install.bat");
             void ResourcesZipCallback(object sender, DownloadProgressChangedEventArgs e) => DownloadResourcesProgressCallback(sender, e, "resources.zip");
 
-            _log.Info("Downloading install bat and creating temp folder");
-            using (var client = new WebClient())
+            try
             {
-                client.DownloadProgressChanged += InstallBatCallback;
-                _log.Info("Downloading install.bat");
-                await client.DownloadFileTaskAsync("https://raw.githubusercontent.com/07th-mod/resources/master/" + patcher.ChapterName + "/install.bat", patcher.InstallPath + "\\install.bat");
+                _log.Info("Downloading install bat and creating temp folder");
+                using (var client = new WebClient())
+                {
+                    _log.Info("Downloading install.bat");
+                    client.DownloadProgressChanged += InstallBatCallback;
+                    await client.DownloadFileTaskAsync("https://raw.githubusercontent.com/07th-mod/resources/master/" + patcher.ChapterName + "/install.bat", patcher.InstallPath + "\\install.bat");
 
-                _log.Info("Downloading resources.zip");
-                client.DownloadProgressChanged -= InstallBatCallback;
-                client.DownloadProgressChanged += ResourcesZipCallback;
-                await client.DownloadFileTaskAsync("http://nijino-yu.me/ddl/dependencies.zip", patcher.InstallPath + "\\resources.zip");
+                    _log.Info("Downloading resources.zip");
+                    client.DownloadProgressChanged -= InstallBatCallback;
+                    client.DownloadProgressChanged += ResourcesZipCallback;
+                    await client.DownloadFileTaskAsync("http://nijino-yu.me/ddl/dependencies.zip", patcher.InstallPath + "\\resources.zip");
+                }
             }
+            catch(Exception error)
+            {
+                string errormsg = "Couldn't download resources for installer: " + error;
+                MessageBox.Show(errormsg);
+                _log.Error(errormsg);
+                return false;
+            }
+
+
+            //extracting can fail if the files are still in use or if the zip file is corrupted
             _log.Info("Extracting resources");
+            try
+            {
+                ExtractZipArchive(Path.Combine(patcher.InstallPath, "resources.zip"), patcher.InstallPath);
+            }
+            catch (System.IO.IOException error)
+            {
+                string errormsg = "Couldn't extract files - probably temp/aria2c.exe or temp/7zip.exe are in use: " + error;
+                MessageBox.Show(errormsg);
+                _log.Error(errormsg);
+                return false;
+            }
+            catch (Exception error)
+            {
+                string errormsg = "An unexpected exception occured while extracting the zip file: " + error;
+                MessageBox.Show(errormsg);
+                _log.Error(errormsg);
+                return false;
+            }
 
-            ExtractZipArchive(Path.Combine(patcher.InstallPath, "resources.zip"), patcher.InstallPath);
-
+            _log.Info("Downloaded and extracted resources successfully");
             return true;
         }
 
@@ -296,10 +328,10 @@ namespace Higurashi_Installer_WPF
          https://msdn.microsoft.com/en-us/library/system.diagnostics.processstartinfo.redirectstandardoutput.aspx
          https://stackoverflow.com            
          */
-        public static void runInstaller(MainWindow window, string bat, string dir) {
-
+        public static void runInstaller(MainWindow window, string bat, string dir)
+        {
             Directory.SetCurrentDirectory(dir);
-
+            
             //Force the batch file to CRLF format before executing it
             //https://stackoverflow.com/questions/841396/what-is-a-quick-way-to-force-crlf-in-c-sharp-net
             string entireBatchFile = File.ReadAllText(bat);
@@ -310,10 +342,11 @@ namespace Higurashi_Installer_WPF
             //need to keep a reference to the process so we can terminate it (see KillBatchFile function)
             process = new Process();
             process.StartInfo.CreateNoWindow = true;
-            process.StartInfo.FileName = bat;          
+            process.StartInfo.FileName = bat;
             process.StartInfo.UseShellExecute = false;
             process.StartInfo.RedirectStandardOutput = true;
 
+            _log.Info($">> Running [{process.StartInfo.FileName} {process.StartInfo.Arguments}]");
             //need to keep a reference to the event handler so we can remove it (see KillBatchFile function)
             processEventHandler = (sender, args) => HandleData(process, args, window);
             process.OutputDataReceived += processEventHandler;
@@ -333,106 +366,114 @@ namespace Higurashi_Installer_WPF
         //Main method for filtering the Aria2c log and populating the main window
         public static void HandleData(Process sendingProcess, DataReceivedEventArgs outLine, MainWindow window)
         {
-            string e = outLine.Data;
-            _log.Info(e);
-
-            //Output the batch file output to the console window.
-            window.Dispatcher.Invoke(() =>
+            //add general try-catch here as we don't want the program to crash just because we couldn't update the progress bar!
+            try
             {
-                window.consoleWindow.Println(e);
-            });
+                string e = outLine.Data;
+                _log.Info(e);
 
-            //Main part with the download speed, ETA, etc
-            if (e != null && e.StartsWith("["))
-            {
-                if (!e.Contains("0B/0B") && e.Contains("ETA"))
+                //Main part with the download speed, ETA, etc
+                if (e != null && e.StartsWith("["))
                 {
-                    string filesize = e.Split(new string[] { " " }, StringSplitOptions.None).GetValue(1).ToString();
-                    string downloadSpeed = e.Split(new string[] { " " }, StringSplitOptions.None).GetValue(3).ToString().Replace("DL:", "");
-                    string timeRemaining = e.Split(new string[] { " " }, StringSplitOptions.None).Last().Replace("ETA:", "Time Remaining:").Replace("]", "");
-
-                    string progress = filesize.Split(new string[] { "(" }, StringSplitOptions.None).Last();
-                    double progressValue = Convert.ToDouble(progress.Split(new string[] { "%" }, StringSplitOptions.None).First());
-                    window.Dispatcher.Invoke(() =>
+                    if (!e.Contains("0B/0B") && e.Contains("ETA"))
                     {
-                        InstallerProgressBar(window, filesize, downloadSpeed, timeRemaining, progressValue);
+                        string filesize = e.Split(new string[] { " " }, StringSplitOptions.None).GetValue(1).ToString();
+                        string downloadSpeed = e.Split(new string[] { " " }, StringSplitOptions.None).GetValue(3).ToString().Replace("DL:", "");
+                        string timeRemaining = e.Split(new string[] { " " }, StringSplitOptions.None).Last().Replace("ETA:", "Time Remaining:").Replace("]", "");
 
-                    });
-                    
-                }
-                else if (e.Contains("Checksum")) // Attempts to match: "[#6c27a8 1.4GiB/1.4GiB(100%) CN:0] [Checksum:#6c27a8 732MiB/1.4GiB(48%)]"
-                {
-                    try
-                    {
-                        MatchCollection matches = aria2cValidationRegex.Matches(e);
-                        if (matches.Count == 1)
+                        string progress = filesize.Split(new string[] { "(" }, StringSplitOptions.None).Last();
+                        double progressValue = Convert.ToDouble(progress.Split(new string[] { "%" }, StringSplitOptions.None).First());
+                        window.Dispatcher.Invoke(() =>
                         {
-                            GroupCollection groups = matches[0].Groups;
-                            if (groups.Count == 4)
+                            InstallerProgressBar(window, filesize, downloadSpeed, timeRemaining, progressValue);
+
+                        });
+
+                    }
+                    else if (e.Contains("Checksum")) // Attempts to match: "[#6c27a8 1.4GiB/1.4GiB(100%) CN:0] [Checksum:#6c27a8 732MiB/1.4GiB(48%)]"
+                    {
+                        try
+                        {
+                            MatchCollection matches = aria2cValidationRegex.Matches(e);
+                            if (matches.Count == 1)
                             {
-                                string amountVerified = groups[1].Value;
-                                string totalFileSize = groups[2].Value;
-                                double.TryParse(groups[3].Value, out double percentageComplete);
-                                window.Dispatcher.Invoke(() =>
+                                GroupCollection groups = matches[0].Groups;
+                                if (groups.Count == 4)
                                 {
-                                    InstallerProgressBar(window, "Verifying...", $"{amountVerified}/{totalFileSize}", $"{percentageComplete}%", percentageComplete);
-                                });
+                                    string amountVerified = groups[1].Value;
+                                    string totalFileSize = groups[2].Value;
+                                    double.TryParse(groups[3].Value, out double percentageComplete);
+                                    window.Dispatcher.Invoke(() =>
+                                    {
+                                        InstallerProgressBar(window, "Verifying...", $"{amountVerified}/{totalFileSize}", $"{percentageComplete}%", percentageComplete);
+                                    });
+                                }
                             }
                         }
+                        catch { } //even if something goes wrong, it's just a status update, so doesn't really matter.
                     }
-                    catch { } //even if something goes wrong, it's just a status update, so doesn't really matter.
+                    else if (!e.Contains("ETA"))
+                    {
+                        window.Dispatcher.Invoke(() =>
+                        {
+                            InstallerProgressMessages(window, "Finishing downloading File...", 100);
+                        });
+                    }
                 }
-                else if (!e.Contains("ETA"))
+
+                //Especific filterings for the other parts of the installer
+                if (e != null && e.StartsWith("Downloading"))
                 {
                     window.Dispatcher.Invoke(() =>
-                    {                      
-                        InstallerProgressMessages(window, "Finishing downloading File...", 100);
+                    {
+                        InstallerPatchMessage(window, e);
+                    });
+                }
+
+                if (e != null && e.Contains("All done, finishing in three seconds"))
+                {
+                    window.Dispatcher.Invoke(() =>
+                    {
+                        InstallerProgressMessages(window, "Install Complete!", 100);
+                        InstallerCompleteMessage(window);
+                    });
+                }
+
+                if (e != null && e.Contains("Extracting files"))
+                {
+                    window.Dispatcher.Invoke(() =>
+                    {
+                        InstallerProgressMessages(window, "Extracting and installing files..", 100);
+                    });
+                }
+
+                if (e != null && e.Contains("Extracting archive:"))
+                {
+                    window.Dispatcher.Invoke(() =>
+                    {
+                        ExtractingMessages(window, e);
+                    });
+                }
+
+                if (e != null && e.Contains("Moving folders"))
+                {
+                    window.Dispatcher.Invoke(() =>
+                    {
+                        ExtractingMessages(window, e);
                     });
                 }
             }
-
-            //Especific filterings for the other parts of the installer
-            if (e != null && e.StartsWith("Downloading"))
+            catch(Exception e)
             {
-                window.Dispatcher.Invoke(() =>
+                if (HandleDataErrorCount++ < 10)
                 {
-                    InstallerPatchMessage(window, e);
-                });
-            }
-
-            if (e != null && e.Contains("All done, finishing in three seconds"))
-            {
-                window.Dispatcher.Invoke(() =>
+                    _log.Error("(HandleData) Error while processing install.bat output: " + e.ToString());
+                }
+                else
                 {
-                    InstallerProgressMessages(window, "Install Complete!", 100);
-                    InstallerCompleteMessage(window);
-                });
+                    _log.Error($"(HandleData) Error while processing install.bat output: ({HandleDataErrorCount} errors)");
+                }
             }
-
-            if (e != null && e.Contains("Extracting files"))
-            {
-                window.Dispatcher.Invoke(() =>
-                {
-                    InstallerProgressMessages(window, "Extracting and installing files..", 100);
-                });
-            }
-
-            if (e != null && e.Contains("Extracting archive:"))
-            {
-                window.Dispatcher.Invoke(() =>
-                {
-                    ExtractingMessages(window, e);
-                });
-            }
-
-            if (e != null && e.Contains("Moving folders"))
-            {
-                window.Dispatcher.Invoke(() =>
-                {
-                    ExtractingMessages(window, e);
-                });
-            }
-
         }
         public static void InstallerProgressBar(MainWindow window, String filesize, String speed, String time, double progress)
         {
