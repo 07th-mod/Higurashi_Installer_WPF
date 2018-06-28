@@ -1,5 +1,6 @@
 ﻿using log4net;
 using System;
+using System.Diagnostics;
 using System.Globalization;
 using System.IO;
 using System.Reflection;
@@ -11,20 +12,34 @@ using System.Windows.Media.Imaging;
 
 namespace Higurashi_Installer_WPF
 {
+
     public partial class MainWindow : Window
     {
         private static readonly ILog _log = LogManager.GetLogger(MethodBase.GetCurrentMethod().DeclaringType);
 
+        public ExecutionModeComboViewModel ExecutionModeComboViewModel { get; set; } = new ExecutionModeComboViewModel();
+
         /* The patcher is the main object that will be used to store
          * all the information necessary for the installer to operate, making it easier to add new chapters
          * since you just need to populate it and the rest will be automatic. */
-        PatcherPOCO patcher = new PatcherPOCO();
+        public PatcherPOCO patcher;
 
         //Console window for displaying raw text output of installer.
         public DebugConsole consoleWindow;
 
         public MainWindow()
         {
+            patcher = new PatcherPOCO(ExecutionModeComboViewModel);
+
+            // Set the default installation method according to windows version
+            // (see https://stackoverflow.com/questions/2819934/detect-windows-version-in-net for versions)
+            if (System.Environment.OSVersion.Version.Major < 10)
+            {
+                ExecutionModeComboViewModel.BatchFileExecutionMode = PatcherPOCO.BatchFileExecutionModeEnum.ShellExecuteWithLogging;
+            }
+
+            DataContext = this;
+
             InitializeComponent();
             GameTypeStackPanel.DataContext = new ExpanderListViewModel(); //Required so that only one expander expands at a time.
             Logger.Setup();
@@ -213,31 +228,29 @@ namespace Higurashi_Installer_WPF
             
             try
             {
-                // If you don't do this, the InstallerGrid won't be visible
-                _log.Info("Launching install.bat in 5 seconds...");
-                Utils.DelayAction(5000, new Action(() =>
+                if (patcher.BatchFileExecutionMode == PatcherPOCO.BatchFileExecutionModeEnum.Manual)
                 {
-                    //Initiates installation process
-                    try
+                    Process.Start(patcher.InstallPath);
+                    MessageBox.Show("Please manually run 'install.bat' in the folder that just opened.");
+                }
+                else
+                {
+                    // If you don't do this, the InstallerGrid won't be visible
+                    _log.Info("Launching install.bat in 3 seconds...");
+                    Utils.DelayAction(3000, new Action(() =>
                     {
-                        if (patcher.ChapterName == "umineko-question" || patcher.ChapterName == "umineko-answer")
-                        {
-                            //Note: Unlike Higurashi installers, Umineko installer expects to run from the
-                            //root directory of the game. From the root, the installer is at temp/install.bat,
-                            //and the "../" changes the working directory from "temp" to just the game root.
-                            Utils.runInstaller(this, "temp/install.bat", Path.Combine(patcher.InstallPath, "../"));
-                        }
-                        else
+                        //Initiates installation process
+                        try
                         {
                             Utils.runInstaller(this, "install.bat", patcher.InstallPath);
                         }
-                    }
-                    catch(Exception error)
-                    {
-                        string errormsg = "(DelayAction) An error has occured while executing the install.bat: " + error;
-                        _log.Error(errormsg);
-                    }
-                }));
+                        catch (Exception error)
+                        {
+                            string errormsg = "(DelayAction) An error has occured while executing the install.bat: " + error;
+                            _log.Error(errormsg);
+                        }
+                    }));
+                }
             }
             catch (Exception error)
             {

@@ -16,6 +16,8 @@ using SharpCompress.Archives;
 using System.Threading.Tasks;
 using System.Management;
 using System.Text.RegularExpressions;
+using System.Threading;
+using System.Text;
 
 //Util class for all methods related to the grid, installation and general flow of the layout
 
@@ -324,6 +326,86 @@ namespace Higurashi_Installer_WPF
             return true;
         }
 
+        //continously read lines from the stream until it appears empty
+        private static void ReadlinesFromStreamUntilEmpty(StreamReader sr, MainWindow window)
+        {
+            while (true)
+            {
+                string line = sr.ReadLine();
+
+                if (line == null)
+                {
+                    return;
+                }
+
+                HandleData_LowLevel(line, window);
+            }
+        }
+
+        //if all lines appear read, wait 2 seconds before trying again
+        private static void ReadlinesFromStreamUntilProcessExits(StreamReader sr, MainWindow window)
+        {
+            bool shouldExit = false;
+            //keep trying to read from the stream until process terminates
+            while (!shouldExit)
+            {
+                ReadlinesFromStreamUntilEmpty(sr, window);
+
+                //quit once process exits
+                shouldExit = process != null && process.HasExited;
+
+                Thread.Sleep(2000);
+            }
+
+            //do one final read incase the process exited but the data wasn't yet written
+            //this will occur 2 seconds after the process exits
+            ReadlinesFromStreamUntilEmpty(sr, window);
+
+        }
+
+        //When executing the installer in 'shellExecute' mode, this function is used to filter the Aria2c log and populate the main window
+        //Poll the file for new lines
+        //C#'s stream reader makes this easy - if a new line is not ready/partially written
+        //it will return null. Also, since the thread never returns, the position in the file 
+        //is maintained automatically.
+        private static void TryWatch(string changedFilePath, MainWindow window)
+        {
+            Thread fileWatcherThread = new Thread(() =>
+            {
+                bool fileOpened = false;
+
+                //keep trying to open the file (incase it hasn't been created yet)
+                while (!fileOpened)
+                {
+                    try
+                    {
+                        using (var fs = new FileStream(changedFilePath, FileMode.Open, FileAccess.Read, FileShare.ReadWrite))
+                        using (var sr = new StreamReader(fs, Encoding.UTF8))
+                        {
+                            fileOpened = true;
+
+                            ReadlinesFromStreamUntilProcessExits(sr, window);
+                        }
+                    }
+                    catch (Exception e)
+                    {
+                        _log.Warn($"Trying to open {changedFilePath} in order to observe install.bat output...");
+                    }
+
+                    Thread.Sleep(5000);
+                }
+            });
+
+            fileWatcherThread.IsBackground = true; //required so that thread exits if child exits
+            fileWatcherThread.Start();
+        }
+
+        //Run once the install.bat has fully finished.
+        public static void OnProcessExitedCallback(object sender, System.EventArgs e)
+        {
+            _log.Info($"Process has Finished with exit code {process.ExitCode}!");
+        }
+
         /*It's dangerous to go alone, take this 
          https://msdn.microsoft.com/en-us/library/system.diagnostics.processstartinfo.redirectstandardoutput.aspx
          https://stackoverflow.com            
@@ -336,40 +418,84 @@ namespace Higurashi_Installer_WPF
             //https://stackoverflow.com/questions/841396/what-is-a-quick-way-to-force-crlf-in-c-sharp-net
             string entireBatchFile = File.ReadAllText(bat);
             string fixedBatchFile = entireBatchFile.Replace("\r\n", "\n").Replace("\r", "\n").Replace("\n", "\r\n");
-            File.WriteAllText(bat, fixedBatchFile);
+            if(entireBatchFile != fixedBatchFile)
+            {
+                _log.Warn("Batch file does not have windows line endings! Installation will continue - will try to fix automatically...");
+                File.WriteAllText(bat, fixedBatchFile);
+            }
 
-            _log.Info("Initializing cmd process");
-            //need to keep a reference to the process so we can terminate it (see KillBatchFile function)
             process = new Process();
-            process.StartInfo.CreateNoWindow = true;
-            process.StartInfo.FileName = bat;
-            process.StartInfo.UseShellExecute = false;
-            process.StartInfo.RedirectStandardOutput = true;
+            process.EnableRaisingEvents = true; //you must set this true for any events to be raised \ -_- /
+            process.Exited += new EventHandler(OnProcessExitedCallback);
 
-            _log.Info($">> Running [{process.StartInfo.FileName} {process.StartInfo.Arguments}]");
-            //need to keep a reference to the event handler so we can remove it (see KillBatchFile function)
-            processEventHandler = (sender, args) => HandleData(process, args, window);
-            process.OutputDataReceived += processEventHandler;
+            switch (window.patcher.BatchFileExecutionMode)
+            {
+                case PatcherPOCO.BatchFileExecutionModeEnum.NormalWithLogging:
+                    _log.Info("Initializing cmd process");
+                    //need to keep a reference to the process so we can terminate it (see KillBatchFile function)
+                    process.StartInfo.CreateNoWindow = true;
+                    process.StartInfo.FileName = bat;
+                    process.StartInfo.UseShellExecute = false;
+                    process.StartInfo.RedirectStandardOutput = true;
 
-            process.Start();
-            process.BeginOutputReadLine();
+                    _log.Info($">> Running [{process.StartInfo.FileName} {process.StartInfo.Arguments}]");
+                    //need to keep a reference to the event handler so we can remove it (see KillBatchFile function)
+                    processEventHandler = (sender, args) => HandleData(process, args, window);
+                    process.OutputDataReceived += processEventHandler;                    
+
+                    process.Start();
+                    process.BeginOutputReadLine();
+                    break;
+
+                case PatcherPOCO.BatchFileExecutionModeEnum.ShellExecuteWithLogging:
+                    string install_bat_log_filepath = "seventh_mod_batch_file_log.txt";
+
+                    _log.Info("Initializing cmd process");
+                    process.StartInfo.FileName = "cmd.exe";
+                    process.StartInfo.Arguments = $@"/C {bat} > {install_bat_log_filepath}"; //stdout of batch file redirected to log file
+                    process.StartInfo.UseShellExecute = true;
+                    process.StartInfo.WindowStyle = ProcessWindowStyle.Hidden; //Hide the cmd window. Can't use "CreateNoWindow" as it is ignored when running with shellExecute.
+
+                    _log.Info($">> Running [{process.StartInfo.FileName} {process.StartInfo.Arguments}]");
+                    _log.Info($">> Install.bat log file will be placed in [{Path.Combine(dir, install_bat_log_filepath)}]");
+
+                    //delete old log file if it already exists
+                    try
+                    {
+                        if(File.Exists(install_bat_log_filepath))
+                            File.Delete(install_bat_log_filepath);
+                    }
+                    catch (Exception e)
+                    {
+                        _log.Warn("Couldn't delete old log file when using shell execute!" + e.ToString());
+                    }
+
+                    process.Start();
+                    TryWatch(install_bat_log_filepath, window);
+                    break;
+
+                default:
+                    _log.Error("Error - unhandled batch file execution mode - installation aborted");
+                    return;
+            }
 
             //This ensures that the .batch file process will be killed if this installer closes
             //If the installer unexpectedly closes, aria2C etc. will download in the background and the
             //only way to close it is to find the rogue .batch file and kill it in task manager, along with aria2C.
             job.AddProcess(process.Id);
-
-            //This makes the installer stop, if you can find a way to make it work, be my guest
-            // process.WaitForExit();
         }
 
-        //Main method for filtering the Aria2c log and populating the main window
+        //When executing the installer in 'normal' mode, this function is used to filter the Aria2c log and populate the main window
         public static void HandleData(Process sendingProcess, DataReceivedEventArgs outLine, MainWindow window)
+        {
+            HandleData_LowLevel(outLine.Data, window);
+        }
+
+        private static void HandleData_LowLevel(string e, MainWindow window)
         {
             //add general try-catch here as we don't want the program to crash just because we couldn't update the progress bar!
             try
             {
-                string e = outLine.Data;
                 _log.Info(e);
 
                 //Main part with the download speed, ETA, etc
@@ -463,11 +589,11 @@ namespace Higurashi_Installer_WPF
                     });
                 }
             }
-            catch(Exception e)
+            catch (Exception exception)
             {
                 if (HandleDataErrorCount++ < 10)
                 {
-                    _log.Error("(HandleData) Error while processing install.bat output: " + e.ToString());
+                    _log.Error("(HandleData) Error while processing install.bat output: " + exception.ToString());
                 }
                 else
                 {
@@ -475,6 +601,7 @@ namespace Higurashi_Installer_WPF
                 }
             }
         }
+
         public static void InstallerProgressBar(MainWindow window, String filesize, String speed, String time, double progress)
         {
             window.InstallLabel.Content = filesize + " - " + speed + " - " + time;

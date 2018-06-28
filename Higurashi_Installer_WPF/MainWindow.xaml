@@ -13,7 +13,7 @@
         TextOptions.TextRenderingMode="Auto"        
         Background="{DynamicResource MaterialDesignPaper}"
         FontFamily="{DynamicResource MaterialDesignFont}"
-        Title="Higurashi Patcher v1.12"
+        Title="Higurashi Patcher v1.13"
         Height="550" Width="450" ResizeMode="NoResize" WindowStartupLocation="CenterScreen"
         RenderOptions.BitmapScalingMode="HighQuality"
         ContentRendered="Window_ContentRendered">
@@ -41,6 +41,15 @@
                 <ComboBoxItem x:Name="CustomInstall" Content="Custom"/>
                 <ComboBoxItem x:Name="VoiceInstall" Content="Voice only"/>
             </ComboBox>
+
+            <!-- Label and Combobox for user to choose how to run the batch file. Databinding is set to the MainWindow in the MainWindow constructor -->
+            <Label Content="Installation Method" HorizontalAlignment="Left" Margin="50,370,0,0" VerticalAlignment="Top" Width="126"></Label>
+            <ComboBox   HorizontalAlignment="Left" Margin="184,370,0,0" VerticalAlignment="Top" Width="150"
+                        ItemsSource="{Binding ExecutionModeComboViewModel.CombobBoxExecutionModes}"
+                        DisplayMemberPath="Description"
+                        SelectedValuePath="ExecutionMode"
+                        SelectedValue="{Binding ExecutionModeComboViewModel.BatchFileExecutionMode}" />
+
             <Button x:Name="BtnInstall" Content="Install/Update" HorizontalAlignment="Left" Margin="184,411,0,0" VerticalAlignment="Top" Width="126" Click="BtnInstall_Click"/>
             <!-- <Button x:Name="BtnUninstall" Content="Uninstall" HorizontalAlignment="Left" Margin="184,467,0,0" VerticalAlignment="Top" Width="126"/> -->
             <CheckBox x:Name="ChkBackup" Content="Backup Files" HorizontalAlignment="Left" Margin="10,521,0,0" VerticalAlignment="Top" Width="101" IsEnabled="False"/>

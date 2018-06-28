@@ -2,9 +2,30 @@
 using System.Collections.Generic;
 
 namespace Higurashi_Installer_WPF
-{
+{   
     public class PatcherPOCO
     {
+        public enum BatchFileExecutionModeEnum
+        {
+            NormalWithLogging,              //for windows 10. batch file is run with non-shell execute, output is redirected to this installer program
+            ShellExecuteWithLogging,        //for windows 7. batch file is run with shell execute, output is redirected to file. File is monitored for changes. 
+            Manual,                         //only downloads and extracts the resources - the user has to run the install.bat themselves
+        }
+
+        public PatcherPOCO(ExecutionModeComboViewModel executionModeComboToBind)
+        {
+            //Keeping a reference allows the combo box value to sync with the BatchFileExecutionMode property on this PatcherPOCO
+            ExecutionModeComboViewModel = executionModeComboToBind;
+        }
+
+        private ExecutionModeComboViewModel ExecutionModeComboViewModel;
+
+        //wrapper/binding function for ExecutionModeComboViewModel's BatchFileExecutionMode() function. Defines how the the install.bat should be run
+        public BatchFileExecutionModeEnum BatchFileExecutionMode {
+            get { return ExecutionModeComboViewModel.BatchFileExecutionMode; }
+            set { ExecutionModeComboViewModel.BatchFileExecutionMode = value; }
+        }
+
         //Checkboxes for custom
         public Boolean IsPS3 { get; set; }
         public Boolean IsPatch { get; set; }
