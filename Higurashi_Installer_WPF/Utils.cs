@@ -455,8 +455,9 @@ namespace Higurashi_Installer_WPF
                     process.StartInfo.Arguments = $@"/C {bat} > {install_bat_log_filepath}"; //stdout of batch file redirected to log file
                     process.StartInfo.UseShellExecute = true;
                     process.StartInfo.WindowStyle = ProcessWindowStyle.Hidden; //Hide the cmd window. Can't use "CreateNoWindow" as it is ignored when running with shellExecute.
-
+                    process.StartInfo.WorkingDirectory = dir;
                     _log.Info($">> Running [{process.StartInfo.FileName} {process.StartInfo.Arguments}]");
+                    _log.Info($">> Working Directory is [{process.StartInfo.WorkingDirectory}]");
                     _log.Info($">> Install.bat log file will be placed in [{Path.Combine(dir, install_bat_log_filepath)}]");
 
                     //delete old log file if it already exists

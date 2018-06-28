@@ -18,7 +18,7 @@ namespace Higurashi_Installer_WPF
         private static readonly ILog _log = LogManager.GetLogger(MethodBase.GetCurrentMethod().DeclaringType);
 
         public ExecutionModeComboViewModel ExecutionModeComboViewModel { get; set; } = new ExecutionModeComboViewModel();
-
+        public ExpanderListViewModel ExpanderListViewModel { get; set; } = new ExpanderListViewModel();
         /* The patcher is the main object that will be used to store
          * all the information necessary for the installer to operate, making it easier to add new chapters
          * since you just need to populate it and the rest will be automatic. */
@@ -41,7 +41,6 @@ namespace Higurashi_Installer_WPF
             DataContext = this;
 
             InitializeComponent();
-            GameTypeStackPanel.DataContext = new ExpanderListViewModel(); //Required so that only one expander expands at a time.
             Logger.Setup();
             patcher.IsFull = true;
         }
