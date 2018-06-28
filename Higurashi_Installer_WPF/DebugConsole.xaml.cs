@@ -36,10 +36,6 @@ namespace Higurashi_Installer_WPF
         Regex Aria2CTempOutputRegex = new Regex(@"^\[#[\w]+ ",
         RegexOptions.Compiled | RegexOptions.IgnoreCase);
 
-        //Match a line consisting of ONLY 40 or more spaces. Treat it as a aria2c blank line
-        Regex Aria2CBlankLineRegex = new Regex(@"^ {40,}$",
-        RegexOptions.Compiled | RegexOptions.IgnoreCase);
-
         bool currentLineIsTemporary;
 
         public DebugConsole()
@@ -51,9 +47,12 @@ namespace Higurashi_Installer_WPF
         //semi-duplicate 'update' lines from Aria2C will be handled automatically.
         public void DisplayLoggingEvent(LoggingEvent loggingEvent)
         {
-            //ignore blank lines (TODO: only strip lines which are all spaces)
-            if (Aria2CBlankLineRegex.IsMatch(loggingEvent.RenderedMessage))
+            // Discard all whitespace only lines, unless the line is "\r\n"
+            // This is purely because aria2C sometimes outputs 80 spaces followed by a new line, which we want to ignore.
+            if(loggingEvent.RenderedMessage != "\r\n" && loggingEvent.RenderedMessage.Trim() == "")
+            {
                 return;
+            }
 
             //append current line to previous lines under the following two cases: 
             // - the current line is not a temporary aria2c line
