@@ -21,7 +21,7 @@ namespace Higurashi_Installer_WPF
             new ComboBoxBatchFileExecutionMode()
             {
                 ExecutionMode = PatcherPOCO.BatchFileExecutionModeEnum.NormalWithLogging,
-                Description = "Normal (for Win 10)"
+                Description = "Default" //For windows 10
             },
 
             new ComboBoxBatchFileExecutionMode()
