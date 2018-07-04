@@ -51,6 +51,7 @@ namespace Higurashi_Installer_WPF
         public Boolean isDRM { get; set; }
         public String DataFolder { get; set; }
         public String ImagePath { get; set; }
+        public String BatName { get; set; }
 
         //Install path of each chapter
         public String PathWatanagashi { get; set; }

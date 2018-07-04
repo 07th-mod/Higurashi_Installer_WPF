@@ -58,6 +58,7 @@ namespace Higurashi_Installer_WPF
             patcher.DataFolder = "HigurashiEp01_Data";
             patcher.SetExeNames("HigurashiEp01.exe");
             patcher.ImagePath = "/Resources/header1.jpg";
+            InstallCombo.IsEnabled = true;
         }
 
         private void BtnWatanagashi_Click(object sender, RoutedEventArgs e)
@@ -73,6 +74,7 @@ namespace Higurashi_Installer_WPF
             patcher.DataFolder = "HigurashiEp02_Data";
             patcher.SetExeNames("HigurashiEp02.exe");
             patcher.ImagePath = "/Resources/header2.jpg";
+            InstallCombo.IsEnabled = true;
         }
 
         private void BtnTatarigoroshi_Click(object sender, RoutedEventArgs e)
@@ -88,6 +90,7 @@ namespace Higurashi_Installer_WPF
             patcher.DataFolder = "HigurashiEp03_Data";
             patcher.SetExeNames("HigurashiEp03.exe");
             patcher.ImagePath = "/Resources/header3.jpg";
+            InstallCombo.IsEnabled = true;
         }
 
         private void BtnHimatsubushi_Click(object sender, RoutedEventArgs e)
@@ -103,6 +106,7 @@ namespace Higurashi_Installer_WPF
             patcher.DataFolder = "HigurashiEp04_Data";
             patcher.SetExeNames("HigurashiEp04.exe");
             patcher.ImagePath = "/Resources/header4.jpg";
+            InstallCombo.IsEnabled = true;
         }
 
         private void BtnMeakashi_Click(object sender, RoutedEventArgs e)
@@ -118,6 +122,7 @@ namespace Higurashi_Installer_WPF
             patcher.DataFolder = "HigurashiEp05_Data";
             patcher.SetExeNames("HigurashiEp05.exe");
             patcher.ImagePath = "/Resources/header5.jpg";
+            InstallCombo.IsEnabled = true;
         }
 
         private void BtnTsumihoroboshi_Click(object sender, RoutedEventArgs e)
@@ -134,6 +139,7 @@ namespace Higurashi_Installer_WPF
             patcher.DataFolder = "HigurashiEp06_Data";
             patcher.SetExeNames("HigurashiEp06.exe");
             patcher.ImagePath = "/Resources/header6.jpg";
+            InstallCombo.IsEnabled = true;
         }
 
         private void BtnConsole_Click(object sender, RoutedEventArgs e)
@@ -149,6 +155,7 @@ namespace Higurashi_Installer_WPF
             patcher.DataFolder = "HigurashiEp04_Data";
             patcher.SetExeNames("HigurashiEp04.exe");
             patcher.ImagePath = "/Resources/console.png";
+            InstallCombo.IsEnabled = true;
         }
 
         private void BtnUminekoQuestion_Click(object sender, RoutedEventArgs e)
@@ -164,6 +171,8 @@ namespace Higurashi_Installer_WPF
             patcher.DataFolder = ".";        //umineko doesn't have a data folder, just put 'temp' in game directory
             patcher.SetExeNames("Umineko1to4.exe", "Umineko1to4", "Umineko1to4.app");
             patcher.ImagePath = "/Resources/header_umineko_question.jpg";
+            //Since Umineko dosn't have the voice patch only option, the user can't select it.
+            InstallCombo.IsEnabled = false;
         }
 
         private void BtnUminekoAnswer_Click(object sender, RoutedEventArgs e)
@@ -179,6 +188,8 @@ namespace Higurashi_Installer_WPF
             patcher.DataFolder = ".";        //umineko doesn't have a data folder, just put 'temp' in game directory
             patcher.SetExeNames("Umineko5to8.exe", "umineko5to8", "Umineko5to8.app");
             patcher.ImagePath = "/Resources/header_umineko_answer.jpg";
+            //Since Umineko dosn't have the voice patchonly option, the user can't select it.
+            InstallCombo.IsEnabled = false;
         }
 
         private void InstallCombo_SelectionChanged(object sender, SelectionChangedEventArgs e)
@@ -207,6 +218,19 @@ namespace Higurashi_Installer_WPF
         {
             MainImage.Source = null;
             Utils.FinishInstallation(this);
+            patcher.BatName = "higurashi-delete.bat";
+            /* Higurashi now has a separate bat file to clean the Temp folder to avoid errors in the script */
+            if (patcher.DataFolder.Contains("Higurashi")) {               
+                try
+                 {
+                    Utils.runInstaller(this, "higurashi-delete.bat", patcher.InstallPath);
+                   }
+                catch (Exception error)
+                  {
+                    string errormsg = "(DelayAction) An error has occured while executing the" + patcher.BatName + ": " + error;
+                    _log.Error(errormsg);
+                  }               
+            }
         }
 
         //Main install logic starts here after the confirmation button is clicked
@@ -216,7 +240,7 @@ namespace Higurashi_Installer_WPF
             ConfirmationGrid.Visibility = Visibility.Collapsed;
             InstallerGrid.Visibility = Visibility.Visible;
 
-            //Download the latest install.bat and .zip. If this fails, stop the installer. 
+            //Download the latest install.bat/voice.bat and .zip. If this fails, stop the installer. 
             if(!await Utils.DownloadResources(this, patcher))
             {
                 string errormsg = "An error has occured while downloading the resources. The installation has been stopped.";
@@ -230,22 +254,22 @@ namespace Higurashi_Installer_WPF
                 if (patcher.BatchFileExecutionMode == PatcherPOCO.BatchFileExecutionModeEnum.Manual)
                 {
                     Process.Start(patcher.InstallPath);
-                    MessageBox.Show("Please manually run 'install.bat' in the folder that just opened.");
+                    MessageBox.Show("Please manually run '" + patcher.BatName + "' in the folder that just opened.");
                 }
                 else
                 {
                     // If you don't do this, the InstallerGrid won't be visible
-                    _log.Info("Launching install.bat in 3 seconds...");
+                    _log.Info("Launching " + patcher.BatName + " in 3 seconds...");
                     Utils.DelayAction(3000, new Action(() =>
                     {
                         //Initiates installation process
                         try
                         {
-                            Utils.runInstaller(this, "install.bat", patcher.InstallPath);
+                            Utils.runInstaller(this, patcher.BatName, patcher.InstallPath);
                         }
                         catch (Exception error)
                         {
-                            string errormsg = "(DelayAction) An error has occured while executing the install.bat: " + error;
+                            string errormsg = "(DelayAction) An error has occured while executing the" + patcher.BatName + ": " + error;
                             _log.Error(errormsg);
                         }
                     }));
@@ -253,7 +277,7 @@ namespace Higurashi_Installer_WPF
             }
             catch (Exception error)
             {
-                string errormsg = "(Confirm_Click) An error has occured while executing the install.bat: " + error;
+                string errormsg = "(Confirm_Click) An error has occured while executing the" + patcher.BatName + ": " + error;
                 _log.Error(errormsg);
                 MessageBox.Show(errormsg);
             } 

@@ -13,7 +13,7 @@
         TextOptions.TextRenderingMode="Auto"        
         Background="{DynamicResource MaterialDesignPaper}"
         FontFamily="{DynamicResource MaterialDesignFont}"
-        Title="Higurashi Patcher v1.13"
+        Title="07th Mod Patcher v1.14"
         Height="550" Width="450" ResizeMode="NoResize" WindowStartupLocation="CenterScreen"
         RenderOptions.BitmapScalingMode="HighQuality"
         ContentRendered="Window_ContentRendered">
@@ -36,9 +36,9 @@
             <CheckBox x:Name="ChkVoices" Content="Voices (Required)" HorizontalAlignment="Left" Margin="180,327,0,0" VerticalAlignment="Top" Width="130" IsChecked="True" IsEnabled="False" Opacity="0.7" Visibility="Collapsed"/>
             <CheckBox x:Name="ChkPatch" Content="Patch (Required)" HorizontalAlignment="Left" Margin="180,291,0,0" VerticalAlignment="Top" Width="130" IsChecked="True" IsEnabled="False" Opacity="0.7" Visibility="Collapsed"/>
             <CheckBox x:Name="ChkUI" Content="UI Mod" HorizontalAlignment="Left" Margin="180,363,0,0" VerticalAlignment="Top" Width="130" Visibility="Collapsed"/>
-            <ComboBox x:Name="InstallCombo" HorizontalAlignment="Left" Margin="184,258,0,0" VerticalAlignment="Top" Width="120" SelectionChanged="InstallCombo_SelectionChanged" SelectedIndex="0" IsEnabled="False">
+            <ComboBox x:Name="InstallCombo" HorizontalAlignment="Left" Margin="184,258,0,0" VerticalAlignment="Top" Width="120" SelectionChanged="InstallCombo_SelectionChanged" SelectedIndex="0" IsEnabled="True">
                 <ComboBoxItem x:Name="FullInstall" Content="Full"/>
-                <ComboBoxItem x:Name="CustomInstall" Content="Custom"/>
+                <!--    <ComboBoxItem x:Name="CustomInstall" Content="Custom"/> Not implemented yet -->
                 <ComboBoxItem x:Name="VoiceInstall" Content="Voice only"/>
             </ComboBox>
 

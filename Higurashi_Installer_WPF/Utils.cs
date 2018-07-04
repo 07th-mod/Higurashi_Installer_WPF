@@ -214,16 +214,19 @@ namespace Higurashi_Installer_WPF
             {
                 patcher.InstallType = "Custom";
                 window.List4.Content = "Installation Type: Custom";
+                patcher.BatName = "custom.bat";
             }
             else if (patcher.IsFull)
             {
                 patcher.InstallType = "Full";
                 window.List4.Content = "Installation Type: Full";
+                patcher.BatName = "install.bat";
             }
             else
             {
                 patcher.InstallType = "Voice Only";
                 window.List4.Content = "Installation Type: Voice Only";
+                patcher.BatName = "voice.bat";
             }
 
             //For the log
@@ -274,7 +277,7 @@ namespace Higurashi_Installer_WPF
                 });
             }
 
-            void InstallBatCallback(object sender, DownloadProgressChangedEventArgs e) => DownloadResourcesProgressCallback(sender, e, "install.bat");
+            void InstallBatCallback(object sender, DownloadProgressChangedEventArgs e) => DownloadResourcesProgressCallback(sender, e, patcher.BatName);
             void ResourcesZipCallback(object sender, DownloadProgressChangedEventArgs e) => DownloadResourcesProgressCallback(sender, e, "resources.zip");
 
             try
@@ -282,9 +285,9 @@ namespace Higurashi_Installer_WPF
                 _log.Info("Downloading install bat and creating temp folder");
                 using (var client = new WebClient())
                 {
-                    _log.Info("Downloading install.bat");
+                    _log.Info("Downloading " + patcher.BatName);
                     client.DownloadProgressChanged += InstallBatCallback;
-                    await client.DownloadFileTaskAsync("https://raw.githubusercontent.com/07th-mod/resources/master/" + patcher.ChapterName + "/install.bat", patcher.InstallPath + "\\install.bat");
+                    await client.DownloadFileTaskAsync("https://raw.githubusercontent.com/07th-mod/resources/master/" + patcher.ChapterName + "/" + patcher.BatName, patcher.InstallPath + "\\" + patcher.BatName);
 
                     _log.Info("Downloading resources.zip");
                     client.DownloadProgressChanged -= InstallBatCallback;
@@ -389,7 +392,7 @@ namespace Higurashi_Installer_WPF
                     }
                     catch (Exception e)
                     {
-                        _log.Warn($"Trying to open {changedFilePath} in order to observe install.bat output...");
+                        _log.Warn($"Trying to open {changedFilePath} in order to observe the bat output...");
                     }
 
                     Thread.Sleep(5000);
@@ -400,7 +403,7 @@ namespace Higurashi_Installer_WPF
             fileWatcherThread.Start();
         }
 
-        //Run once the install.bat has fully finished.
+        //Run once the bat has fully finished.
         public static void OnProcessExitedCallback(object sender, System.EventArgs e)
         {
             _log.Info($"Process has Finished with exit code {process.ExitCode}!");
@@ -458,7 +461,7 @@ namespace Higurashi_Installer_WPF
                     process.StartInfo.WorkingDirectory = dir;
                     _log.Info($">> Running [{process.StartInfo.FileName} {process.StartInfo.Arguments}]");
                     _log.Info($">> Working Directory is [{process.StartInfo.WorkingDirectory}]");
-                    _log.Info($">> Install.bat log file will be placed in [{Path.Combine(dir, install_bat_log_filepath)}]");
+                    _log.Info($">> bat log file will be placed in [{Path.Combine(dir, install_bat_log_filepath)}]");
 
                     //delete old log file if it already exists
                     try
@@ -594,11 +597,11 @@ namespace Higurashi_Installer_WPF
             {
                 if (HandleDataErrorCount++ < 10)
                 {
-                    _log.Error("(HandleData) Error while processing install.bat output: " + exception.ToString());
+                    _log.Error("(HandleData) Error while processing bat output: " + exception.ToString());
                 }
                 else
                 {
-                    _log.Error($"(HandleData) Error while processing install.bat output: ({HandleDataErrorCount} errors)");
+                    _log.Error($"(HandleData) Error while processing bat output: ({HandleDataErrorCount} errors)");
                 }
             }
         }
