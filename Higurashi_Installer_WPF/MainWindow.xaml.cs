@@ -155,7 +155,7 @@ namespace Higurashi_Installer_WPF
             patcher.DataFolder = "HigurashiEp04_Data";
             patcher.SetExeNames("HigurashiEp04.exe");
             patcher.ImagePath = "/Resources/console.png";
-            InstallCombo.IsEnabled = true;
+            InstallCombo.IsEnabled = false;
         }
 
         private void BtnUminekoQuestion_Click(object sender, RoutedEventArgs e)
