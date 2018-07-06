@@ -153,7 +153,7 @@
                                     </Ellipse.Fill>
                                 </Ellipse>
                                 <!-- To restore this button, change "Background" to #00000000 and delete IsHitTestVisible="False" -->
-                                <Button Width="100" Height="100" Style="{StaticResource MaterialDesignFloatingActionMiniDarkButton}" IsHitTestVisible="False" Background="#7F838383" BorderBrush="#00000000" Click="BtnTsumihoroboshi_Click" MouseEnter="BtnTsumihoroboshi_MouseEnter" MouseLeave="MouseLeaveEpisode">
+                                <Button Width="100" Height="100" Style="{StaticResource MaterialDesignFloatingActionMiniDarkButton}" Background="#00000000" BorderBrush="#00000000" Click="BtnTsumihoroboshi_Click" MouseEnter="BtnTsumihoroboshi_MouseEnter" MouseLeave="MouseLeaveEpisode">
                                 </Button>
                             </Grid>
                             <!-- Insert additional Higurashi buttons here 
