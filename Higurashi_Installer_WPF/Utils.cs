@@ -31,9 +31,15 @@ namespace Higurashi_Installer_WPF
 
         private static readonly ILog _log = LogManager.GetLogger(MethodBase.GetCurrentMethod().DeclaringType);
 
-        public static JobManagement.Job job = new JobManagement.Job();
+        //Job Management object which ensures batch files are terminated when this program terminates - allowed to be NULL on computers with old .net versions
+        private static JobManagement.Job job;
 
         public static uint HandleDataErrorCount = 0; //This variable is used to rate limit the amount of errors that are recorded from the HandleDataError function
+
+        public static void InitJobManagement()
+        {
+            job = new JobManagement.Job();
+        }
 
         //Reset the path in case the user changes chapters
         public static void ResetPath(MainWindow window, Boolean ChangedChapter)
@@ -486,7 +492,8 @@ namespace Higurashi_Installer_WPF
             //This ensures that the .batch file process will be killed if this installer closes
             //If the installer unexpectedly closes, aria2C etc. will download in the background and the
             //only way to close it is to find the rogue .batch file and kill it in task manager, along with aria2C.
-            job.AddProcess(process.Id);
+            if (job != null)
+                job.AddProcess(process.Id);
         }
 
         //When executing the installer in 'normal' mode, this function is used to filter the Aria2c log and populate the main window

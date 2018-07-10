@@ -43,6 +43,29 @@ namespace Higurashi_Installer_WPF
             InitializeComponent();
             Logger.Setup();
             patcher.IsFull = true;
+
+            //Old .Net versions will crash when creating the JobManagement class - tell users to update .Net
+            //They are missing the function "System.Runtime.InteropServices.Marshal.StructureToPtr()"
+            try
+            {
+                Utils.InitJobManagement();
+            }
+            catch(Exception exception)
+            {
+                _log.Error(exception);
+                MessageBox.Show("You probably have a very old version of .Net. Although the installer should work anyway, upgrading is highly recommended");
+                if (MessageBox.Show("Do you want to open the .Net download Page?", "Question", MessageBoxButton.YesNo, MessageBoxImage.Warning) == MessageBoxResult.Yes)
+                {
+                    MessageBox.Show("Remember, click '.Net Framework [X.X.X] Runtime', NOT the SDK versions!");
+                    Process.Start("https://www.microsoft.com/net/download/windows");
+                    System.Threading.Thread.Sleep(2000);
+                    MessageBox.Show("Remember, click '.Net Framework [X.X.X] Runtime', NOT the SDK versions!");
+                }
+                else
+                {
+                    MessageBox.Show("The installer will try to run anyway, but if you have issues, please try to update your .net version!");
+                }
+            }
         }
        
         private void BtnOnikakushi_Click(object sender, RoutedEventArgs e)
