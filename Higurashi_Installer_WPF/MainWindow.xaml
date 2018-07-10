@@ -13,7 +13,7 @@
         TextOptions.TextRenderingMode="Auto"        
         Background="{DynamicResource MaterialDesignPaper}"
         FontFamily="{DynamicResource MaterialDesignFont}"
-        Title="07th Mod Patcher v1.14"
+        Title="07th Mod Patcher v1.16"
         Height="550" Width="450" ResizeMode="NoResize" WindowStartupLocation="CenterScreen"
         RenderOptions.BitmapScalingMode="HighQuality"
         ContentRendered="Window_ContentRendered">
@@ -211,7 +211,7 @@
         <!-- The main installer grid -->
         <Grid x:Name="InstallerGrid" HorizontalAlignment="Left" Height="550" Margin="446,3,-490,0" VerticalAlignment="Top" Width="494" Visibility="Collapsed">
             <materialDesign:Card Height="540" Margin="0,10,0,0">
-                <Button x:Name="BtnInstallerFinish" Content="Finish" HorizontalAlignment="Left" Margin="180,454,0,0" VerticalAlignment="Top" Width="114" Visibility="Collapsed" Click="BtnInstallerFinish_Click"/>
+                <Button x:Name="BtnInstallerFinish" Content="Finish" HorizontalAlignment="Left" Margin="180,430,0,0" VerticalAlignment="Top" Width="114" Visibility="Collapsed" Click="BtnInstallerFinish_Click"/>
             </materialDesign:Card>
             <materialDesign:Card Height="189" Margin="10,62,10,0">
             </materialDesign:Card>

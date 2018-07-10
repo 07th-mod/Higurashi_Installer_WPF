@@ -28,7 +28,7 @@ namespace Higurashi_Installer_WPF
         public DebugConsole consoleWindow;
 
         public MainWindow()
-        {
+        { 
             patcher = new PatcherPOCO(ExecutionModeComboViewModel);
 
             // Set the default installation method according to windows version
@@ -43,6 +43,29 @@ namespace Higurashi_Installer_WPF
             InitializeComponent();
             Logger.Setup();
             patcher.IsFull = true;
+
+            //Old .Net versions will crash when creating the JobManagement class - tell users to update .Net
+            //They are missing the function "System.Runtime.InteropServices.Marshal.StructureToPtr()"
+            try
+            {
+                Utils.InitJobManagement();
+            }
+            catch(Exception exception)
+            {
+                _log.Error(exception);
+                MessageBox.Show("You probably have a very old version of .Net. Although the installer should work anyway, upgrading is highly recommended");
+                if (MessageBox.Show("Do you want to open the .Net download Page?", "Question", MessageBoxButton.YesNo, MessageBoxImage.Warning) == MessageBoxResult.Yes)
+                {
+                    MessageBox.Show("Remember, click '.Net Framework [X.X.X] Runtime', NOT the SDK versions!");
+                    Process.Start("https://www.microsoft.com/net/download/windows");
+                    System.Threading.Thread.Sleep(2000);
+                    MessageBox.Show("Remember, click '.Net Framework [X.X.X] Runtime', NOT the SDK versions!");
+                }
+                else
+                {
+                    MessageBox.Show("The installer will try to run anyway, but if you have issues, please try to update your .net version!");
+                }
+            }
         }
        
         private void BtnOnikakushi_Click(object sender, RoutedEventArgs e)
@@ -126,21 +149,21 @@ namespace Higurashi_Installer_WPF
         }
 
         private void BtnTsumihoroboshi_Click(object sender, RoutedEventArgs e)
-        {
-            _log.Info("Clicked Tsumihoroboshi");
+            {
+                _log.Info("Clicked Tsumihoroboshi");
 
-            Utils.ResizeWindow(this);
-            Utils.ResetPath(this, true);
+                Utils.ResizeWindow(this);
+                Utils.ResetPath(this, true);
 
-            EpisodeImage.Visibility = Visibility.Visible;
-            EpisodeImage.Source = new BitmapImage(new Uri("/Resources/headerpartial.png", UriKind.Relative));
+                EpisodeImage.Visibility = Visibility.Visible;
+                EpisodeImage.Source = new BitmapImage(new Uri("/Resources/headerpartial.png", UriKind.Relative));
 
-            patcher.ChapterName = "tsumihoroboshi";
-            patcher.DataFolder = "HigurashiEp06_Data";
-            patcher.SetExeNames("HigurashiEp06.exe");
-            patcher.ImagePath = "/Resources/headerpartial.png";
-            InstallCombo.IsEnabled = true;
-        }
+                patcher.ChapterName = "tsumihoroboshi";
+                patcher.DataFolder = "HigurashiEp06_Data";
+                patcher.SetExeNames("HigurashiEp06.exe");
+                patcher.ImagePath = "/Resources/headerpartial.png";
+                InstallCombo.IsEnabled = true;
+            }
 
         private void BtnConsole_Click(object sender, RoutedEventArgs e)
         {
