@@ -53,7 +53,7 @@ namespace Higurashi_Installer_WPF
             window.TextWarningPath.Width = 422;
             window.TextWarningPath.Visibility = Visibility.Collapsed;
             window.BtnInstall.IsEnabled = true;
-         //   window.BtnUninstall.IsEnabled = true;
+            //   window.BtnUninstall.IsEnabled = true;
         }
 
         public static void ResetDropBox(PatcherPOCO patcher)
@@ -131,7 +131,7 @@ namespace Higurashi_Installer_WPF
                     window.TextWarningPath.Text = "Invalid path! Please select a folder with the " + patcher.ChapterName + " .exe file";
                     window.TextWarningPath.Visibility = Visibility.Visible;
                     window.BtnInstall.IsEnabled = false;
-                //    window.BtnUninstall.IsEnabled = false;
+                    //    window.BtnUninstall.IsEnabled = false;
                 }
                 else
                 {
@@ -139,7 +139,7 @@ namespace Higurashi_Installer_WPF
                     window.TextWarningPath.Text = patcher.ChapterName + " .exe file found!";
                     window.TextWarningPath.Visibility = Visibility.Visible;
                     window.BtnInstall.IsEnabled = true;
-                 //   window.BtnUninstall.IsEnabled = true;
+                    //   window.BtnUninstall.IsEnabled = true;
                     window.TextWarningPath.Width = 180;
                 }
             }
@@ -301,7 +301,7 @@ namespace Higurashi_Installer_WPF
                     await client.DownloadFileTaskAsync("http://nijino-yu.me/ddl/dependencies.zip", patcher.InstallPath + "\\resources.zip");
                 }
             }
-            catch(Exception error)
+            catch (Exception error)
             {
                 string errormsg = "Couldn't download resources for installer: " + error;
                 MessageBox.Show(errormsg);
@@ -422,12 +422,12 @@ namespace Higurashi_Installer_WPF
         public static void runInstaller(MainWindow window, string bat, string dir)
         {
             Directory.SetCurrentDirectory(dir);
-            
+
             //Force the batch file to CRLF format before executing it
             //https://stackoverflow.com/questions/841396/what-is-a-quick-way-to-force-crlf-in-c-sharp-net
             string entireBatchFile = File.ReadAllText(bat);
             string fixedBatchFile = entireBatchFile.Replace("\r\n", "\n").Replace("\r", "\n").Replace("\n", "\r\n");
-            if(entireBatchFile != fixedBatchFile)
+            if (entireBatchFile != fixedBatchFile)
             {
                 _log.Warn("Batch file does not have windows line endings! Installation will continue - will try to fix automatically...");
                 File.WriteAllText(bat, fixedBatchFile);
@@ -450,7 +450,7 @@ namespace Higurashi_Installer_WPF
                     _log.Info($">> Running [{process.StartInfo.FileName} {process.StartInfo.Arguments}]");
                     //need to keep a reference to the event handler so we can remove it (see KillBatchFile function)
                     processEventHandler = (sender, args) => HandleData(process, args, window);
-                    process.OutputDataReceived += processEventHandler;                    
+                    process.OutputDataReceived += processEventHandler;
 
                     process.Start();
                     process.BeginOutputReadLine();
@@ -472,7 +472,7 @@ namespace Higurashi_Installer_WPF
                     //delete old log file if it already exists
                     try
                     {
-                        if(File.Exists(install_bat_log_filepath))
+                        if (File.Exists(install_bat_log_filepath))
                             File.Delete(install_bat_log_filepath);
                     }
                     catch (Exception e)
@@ -651,7 +651,7 @@ namespace Higurashi_Installer_WPF
                 _log.Info("Started downloading patch");
                 window.InstallCard3.Visibility = Visibility.Visible;
                 window.InstallLabelPatch3.Visibility = Visibility.Visible;
-                window.InstallLabelPatch2.Content = "Downloading voice patch... (Done)";                
+                window.InstallLabelPatch2.Content = "Downloading voice patch... (Done)";
             }
         }
 

@@ -37,7 +37,7 @@ namespace Higurashi_Installer_WPF
     {
         public static GUIDebugConsoleAppender guiDebugConsoleAppender;
 
-        public static void Setup() 
+        public static void Setup()
         {
             Hierarchy hierarchy = (Hierarchy)LogManager.GetRepository();
 
@@ -47,9 +47,9 @@ namespace Higurashi_Installer_WPF
 
             RollingFileAppender roller = new RollingFileAppender();
             roller.AppendToFile = false;
-            roller.File = @"Logs\PatcherLog.txt";           
+            roller.File = @"Logs\PatcherLog.txt";
             roller.Layout = patternLayout;
-            roller.MaxSizeRollBackups = 5;            
+            roller.MaxSizeRollBackups = 5;
             roller.MaximumFileSize = "1GB";
             roller.RollingStyle = RollingFileAppender.RollingMode.Size;
             roller.StaticLogFileName = true;

@@ -38,7 +38,7 @@ namespace Higurashi_Installer_WPF
         };
 
         // Need a void constructor in order to use as an object element in the XAML.
-        public ExecutionModeComboViewModel() {}
+        public ExecutionModeComboViewModel() { }
 
         // Backing variable for BatchFileExecutionMode function
         private PatcherPOCO.BatchFileExecutionModeEnum _batchFileExecutionMode = PatcherPOCO.BatchFileExecutionModeEnum.NormalWithLogging;

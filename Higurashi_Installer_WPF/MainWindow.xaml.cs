@@ -50,7 +50,7 @@ namespace Higurashi_Installer_WPF
             {
                 Utils.InitJobManagement();
             }
-            catch(Exception exception)
+            catch (Exception exception)
             {
                 _log.Error(exception);
                 MessageBox.Show("You probably have a very old version of .Net. Although the installer should work anyway, upgrading is highly recommended");
@@ -67,7 +67,7 @@ namespace Higurashi_Installer_WPF
                 }
             }
         }
-       
+
         private void BtnOnikakushi_Click(object sender, RoutedEventArgs e)
         {
             _log.Info("clicked onikakushi");
@@ -243,16 +243,17 @@ namespace Higurashi_Installer_WPF
             Utils.FinishInstallation(this);
             patcher.BatName = "higurashi-delete.bat";
             /* Higurashi now has a separate bat file to clean the Temp folder to avoid errors in the script */
-            if (patcher.DataFolder.Contains("Higurashi")) {               
+            if (patcher.DataFolder.Contains("Higurashi"))
+            {
                 try
-                 {
+                {
                     Utils.runInstaller(this, "higurashi-delete.bat", patcher.InstallPath);
-                   }
+                }
                 catch (Exception error)
-                  {
+                {
                     string errormsg = "(DelayAction) An error has occured while executing the" + patcher.BatName + ": " + error;
                     _log.Error(errormsg);
-                  }               
+                }
             }
         }
 
@@ -264,14 +265,14 @@ namespace Higurashi_Installer_WPF
             InstallerGrid.Visibility = Visibility.Visible;
 
             //Download the latest install.bat/voice.bat and .zip. If this fails, stop the installer. 
-            if(!await Utils.DownloadResources(this, patcher))
+            if (!await Utils.DownloadResources(this, patcher))
             {
                 string errormsg = "An error has occured while downloading the resources. The installation has been stopped.";
                 _log.Error(errormsg);
                 MessageBox.Show(errormsg);
                 return;
             }
-            
+
             try
             {
                 if (patcher.BatchFileExecutionMode == PatcherPOCO.BatchFileExecutionModeEnum.Manual)
@@ -303,7 +304,7 @@ namespace Higurashi_Installer_WPF
                 string errormsg = "(Confirm_Click) An error has occured while executing the" + patcher.BatName + ": " + error;
                 _log.Error(errormsg);
                 MessageBox.Show(errormsg);
-            } 
+            }
         }
 
         //Listeners for mouse
@@ -366,7 +367,8 @@ namespace Higurashi_Installer_WPF
             if (ActualWidth < 950)
             {
                 EpisodeImage.Visibility = Visibility.Collapsed;
-            }else
+            }
+            else
             {
                 EpisodeImage.Source = new BitmapImage(new Uri(patcher.ImagePath, UriKind.Relative));
             }

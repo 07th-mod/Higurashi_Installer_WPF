@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 
 namespace Higurashi_Installer_WPF
-{   
+{
     public class PatcherPOCO
     {
         public enum BatchFileExecutionModeEnum
@@ -21,7 +21,8 @@ namespace Higurashi_Installer_WPF
         private ExecutionModeComboViewModel ExecutionModeComboViewModel;
 
         //wrapper/binding function for ExecutionModeComboViewModel's BatchFileExecutionMode() function. Defines how the the install.bat should be run
-        public BatchFileExecutionModeEnum BatchFileExecutionMode {
+        public BatchFileExecutionModeEnum BatchFileExecutionMode
+        {
             get { return ExecutionModeComboViewModel.BatchFileExecutionMode; }
             set { ExecutionModeComboViewModel.BatchFileExecutionMode = value; }
         }
