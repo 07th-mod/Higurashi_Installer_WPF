@@ -156,12 +156,12 @@ namespace Higurashi_Installer_WPF
             Utils.ResetPath(this, true);
 
             EpisodeImage.Visibility = Visibility.Visible;
-            EpisodeImage.Source = new BitmapImage(new Uri("/Resources/headerpartial.png", UriKind.Relative));
+            EpisodeImage.Source = new BitmapImage(new Uri("/Resources/header6.jpg", UriKind.Relative));
 
             patcher.ChapterName = "tsumihoroboshi";
             patcher.DataFolder = "HigurashiEp06_Data";
             patcher.SetExeNames("HigurashiEp06.exe");
-            patcher.ImagePath = "/Resources/headerpartial.png";
+            patcher.ImagePath = "/Resources/header6.jpg";
             InstallCombo.IsEnabled = true;
         }
 
@@ -341,7 +341,7 @@ namespace Higurashi_Installer_WPF
         private void BtnTsumihoroboshi_MouseEnter(object sender, MouseEventArgs e)
         {
             EpisodeImage.Visibility = Visibility.Visible;
-            EpisodeImage.Source = new BitmapImage(new Uri("/Resources/headerpartial.png", UriKind.Relative));
+            EpisodeImage.Source = new BitmapImage(new Uri("/Resources/header6.jpg", UriKind.Relative));
         }
 
         private void MouseEnterConsole(object sender, MouseEventArgs e)

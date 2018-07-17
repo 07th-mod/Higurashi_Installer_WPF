@@ -246,7 +246,7 @@
     <Resource Include="Resources\07th_icons\png orig\HigurashiEp06_0000.png" />
   </ItemGroup>
   <ItemGroup>
-    <Resource Include="Resources\headerpartial.png" />
+    <Resource Include="Resources\header6.jpg" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Import Project="..\packages\Fody.3.1.3\build\Fody.targets" Condition="Exists('..\packages\Fody.3.1.3\build\Fody.targets')" />
