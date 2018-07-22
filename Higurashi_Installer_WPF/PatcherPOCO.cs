@@ -50,7 +50,6 @@ namespace Higurashi_Installer_WPF
         public String InstallUpdate { get; set; }
         public String InstallType { get; set; }
         public Boolean isDRM { get; set; }
-        public String DataFolder { get; set; }
         public String ImagePath { get; set; }
         public String BatName { get; set; }
 

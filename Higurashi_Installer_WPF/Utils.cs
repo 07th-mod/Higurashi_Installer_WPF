@@ -205,7 +205,7 @@ namespace Higurashi_Installer_WPF
         public static void ConstructPatcher(MainWindow window, PatcherPOCO patcher)
         {
             _log.Info("Constructing the patcher");
-            string tempFolder = window.PathText.Text + "\\" + patcher.DataFolder + "\\temp";
+            string tempFolder = window.PathText.Text + "\\temp";
             Directory.CreateDirectory(tempFolder);
             patcher.InstallPath = tempFolder;
             patcher.IsBackup = (Boolean)window.ChkBackup.IsChecked;
@@ -298,7 +298,7 @@ namespace Higurashi_Installer_WPF
                     _log.Info("Downloading resources.zip");
                     client.DownloadProgressChanged -= InstallBatCallback;
                     client.DownloadProgressChanged += ResourcesZipCallback;
-                    await client.DownloadFileTaskAsync("http://nijino-yu.me/ddl/dependencies.zip", patcher.InstallPath + "\\resources.zip");
+                    await client.DownloadFileTaskAsync("http://07th-mod.com/dependencies.zip", patcher.InstallPath + "\\resources.zip");
                 }
             }
             catch (Exception error)

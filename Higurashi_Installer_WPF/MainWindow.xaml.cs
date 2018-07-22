@@ -77,8 +77,7 @@ namespace Higurashi_Installer_WPF
             EpisodeImage.Visibility = Visibility.Visible;
             EpisodeImage.Source = new BitmapImage(new Uri("/Resources/header1.jpg", UriKind.Relative));
 
-            patcher.ChapterName = "onikakushi";
-            patcher.DataFolder = "HigurashiEp01_Data";
+            patcher.ChapterName = "onikakushi";            
             patcher.SetExeNames("HigurashiEp01.exe");
             patcher.ImagePath = "/Resources/header1.jpg";
             InstallCombo.IsEnabled = true;
@@ -94,7 +93,6 @@ namespace Higurashi_Installer_WPF
             EpisodeImage.Source = new BitmapImage(new Uri("/Resources/header2.jpg", UriKind.Relative));
 
             patcher.ChapterName = "watanagashi";
-            patcher.DataFolder = "HigurashiEp02_Data";
             patcher.SetExeNames("HigurashiEp02.exe");
             patcher.ImagePath = "/Resources/header2.jpg";
             InstallCombo.IsEnabled = true;
@@ -110,7 +108,6 @@ namespace Higurashi_Installer_WPF
             EpisodeImage.Source = new BitmapImage(new Uri("/Resources/header3.jpg", UriKind.Relative));
 
             patcher.ChapterName = "tatarigoroshi";
-            patcher.DataFolder = "HigurashiEp03_Data";
             patcher.SetExeNames("HigurashiEp03.exe");
             patcher.ImagePath = "/Resources/header3.jpg";
             InstallCombo.IsEnabled = true;
@@ -126,7 +123,6 @@ namespace Higurashi_Installer_WPF
             EpisodeImage.Source = new BitmapImage(new Uri("/Resources/header4.jpg", UriKind.Relative));
 
             patcher.ChapterName = "himatsubushi";
-            patcher.DataFolder = "HigurashiEp04_Data";
             patcher.SetExeNames("HigurashiEp04.exe");
             patcher.ImagePath = "/Resources/header4.jpg";
             InstallCombo.IsEnabled = true;
@@ -142,7 +138,6 @@ namespace Higurashi_Installer_WPF
             EpisodeImage.Source = new BitmapImage(new Uri("/Resources/header5.jpg", UriKind.Relative));
 
             patcher.ChapterName = "meakashi";
-            patcher.DataFolder = "HigurashiEp05_Data";
             patcher.SetExeNames("HigurashiEp05.exe");
             patcher.ImagePath = "/Resources/header5.jpg";
             InstallCombo.IsEnabled = true;
@@ -159,7 +154,6 @@ namespace Higurashi_Installer_WPF
             EpisodeImage.Source = new BitmapImage(new Uri("/Resources/header6.jpg", UriKind.Relative));
 
             patcher.ChapterName = "tsumihoroboshi";
-            patcher.DataFolder = "HigurashiEp06_Data";
             patcher.SetExeNames("HigurashiEp06.exe");
             patcher.ImagePath = "/Resources/header6.jpg";
             InstallCombo.IsEnabled = true;
@@ -175,7 +169,6 @@ namespace Higurashi_Installer_WPF
             EpisodeImage.Source = new BitmapImage(new Uri("/Resources/console.png", UriKind.Relative));
 
             patcher.ChapterName = "console0arcs";
-            patcher.DataFolder = "HigurashiEp04_Data";
             patcher.SetExeNames("HigurashiEp04.exe");
             patcher.ImagePath = "/Resources/console.png";
             InstallCombo.IsEnabled = false;
@@ -191,7 +184,6 @@ namespace Higurashi_Installer_WPF
             EpisodeImage.Source = new BitmapImage(new Uri(@"/Resources/header_umineko_question.jpg", UriKind.Relative));
 
             patcher.ChapterName = "umineko-question";
-            patcher.DataFolder = ".";        //umineko doesn't have a data folder, just put 'temp' in game directory
             patcher.SetExeNames("Umineko1to4.exe", "Umineko1to4", "Umineko1to4.app");
             patcher.ImagePath = "/Resources/header_umineko_question.jpg";
             //Since Umineko dosn't have the voice patch only option, the user can't select it.
@@ -208,7 +200,6 @@ namespace Higurashi_Installer_WPF
             EpisodeImage.Source = new BitmapImage(new Uri(@"/Resources/header_umineko_answer.jpg", UriKind.Relative));
 
             patcher.ChapterName = "umineko-answer";
-            patcher.DataFolder = ".";        //umineko doesn't have a data folder, just put 'temp' in game directory
             patcher.SetExeNames("Umineko5to8.exe", "umineko5to8", "Umineko5to8.app");
             patcher.ImagePath = "/Resources/header_umineko_answer.jpg";
             //Since Umineko dosn't have the voice patchonly option, the user can't select it.
@@ -243,7 +234,7 @@ namespace Higurashi_Installer_WPF
             Utils.FinishInstallation(this);
             patcher.BatName = "higurashi-delete.bat";
             /* Higurashi now has a separate bat file to clean the Temp folder to avoid errors in the script */
-            if (patcher.DataFolder.Contains("Higurashi"))
+            if (patcher.InstallPath.Contains("Higurashi"))
             {
                 try
                 {
