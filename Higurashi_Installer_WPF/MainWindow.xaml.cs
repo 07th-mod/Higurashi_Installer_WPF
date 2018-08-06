@@ -29,6 +29,8 @@ namespace Higurashi_Installer_WPF
 
         public MainWindow()
         {
+            GlobalExceptionHandler.Setup();
+
             patcher = new PatcherPOCO(ExecutionModeComboViewModel);
 
             // Set the default installation method according to windows version

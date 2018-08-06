@@ -5,6 +5,7 @@ using log4net.Layout;
 using log4net.Repository.Hierarchy;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -36,6 +37,7 @@ namespace Higurashi_Installer_WPF
     public class Logger
     {
         public static GUIDebugConsoleAppender guiDebugConsoleAppender;
+        public static readonly string logFilePath = @"Logs\PatcherLog.txt";
 
         public static void Setup()
         {
@@ -47,7 +49,7 @@ namespace Higurashi_Installer_WPF
 
             RollingFileAppender roller = new RollingFileAppender();
             roller.AppendToFile = false;
-            roller.File = @"Logs\PatcherLog.txt";
+            roller.File = logFilePath;
             roller.Layout = patternLayout;
             roller.MaxSizeRollBackups = 5;
             roller.MaximumFileSize = "1GB";
@@ -71,6 +73,11 @@ namespace Higurashi_Installer_WPF
 
             hierarchy.Root.Level = Level.Info;
             hierarchy.Configured = true;
+        }
+
+        public static string GetFullLogFilePath()
+        {
+            return Path.GetFullPath(logFilePath);
         }
     }
 }

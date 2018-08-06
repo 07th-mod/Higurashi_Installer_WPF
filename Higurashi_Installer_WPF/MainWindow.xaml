@@ -13,7 +13,7 @@
         TextOptions.TextRenderingMode="Auto"        
         Background="{DynamicResource MaterialDesignPaper}"
         FontFamily="{DynamicResource MaterialDesignFont}"
-        Title="07th Mod Patcher v1.17"
+        Title="07th Mod Patcher v1.19"
         Height="550" Width="450" ResizeMode="NoResize" WindowStartupLocation="CenterScreen"
         RenderOptions.BitmapScalingMode="HighQuality"
         ContentRendered="Window_ContentRendered">
