@@ -46,6 +46,9 @@ namespace Higurashi_Installer_WPF
             Logger.Setup();
             patcher.IsFull = true;
 
+            //Set title window
+            this.Title = $"07th Mod Patcher v1.19  |  LogFile: [{Logger.GetFullLogFilePath()}]";
+
             //Old .Net versions will crash when creating the JobManagement class - tell users to update .Net
             //They are missing the function "System.Runtime.InteropServices.Marshal.StructureToPtr()"
             try

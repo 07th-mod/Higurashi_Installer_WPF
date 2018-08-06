@@ -1,6 +1,7 @@
 ﻿using log4net.Core;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
@@ -74,6 +75,18 @@ namespace Higurashi_Installer_WPF
         {
             e.Cancel = true;
             this.Hide();
+        }
+
+        private void OpenLog_Click(object sender, RoutedEventArgs e)
+        {
+            try
+            {
+                Process.Start(Logger.GetFullLogFilePath());
+            }
+            catch
+            {
+                MessageBox.Show("Couldn't open log file!");
+            }
         }
     }
 }

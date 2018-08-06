@@ -18,6 +18,7 @@ using System.Management;
 using System.Text.RegularExpressions;
 using System.Threading;
 using System.Text;
+using System.Windows.Media;
 
 //Util class for all methods related to the grid, installation and general flow of the layout
 
@@ -659,6 +660,7 @@ namespace Higurashi_Installer_WPF
         {
             _log.Info("Finishing installation");
             window.InstallerText.Text = "Installation Complete";
+            window.InstallerText.Foreground = Brushes.Lime;
             window.InstallLabel.Content = "";
             window.ExtractLabel.Content = "";
             window.BtnInstallerFinish.Visibility = Visibility.Visible;
