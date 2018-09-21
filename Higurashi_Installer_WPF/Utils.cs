@@ -136,6 +136,16 @@ namespace Higurashi_Installer_WPF
                 }
                 else
                 {
+                    //installer won't run properly if install location is on a different drive to the installer.
+                    //Just warn the user to move the install file to the same drive.
+                    string currentDrive = Path.GetPathRoot(Environment.CurrentDirectory);
+                    string selectedPathDrive = Path.GetPathRoot(dialog.FileName);
+                    if (currentDrive != selectedPathDrive)
+                    {
+                        MessageBox.Show($"Warning!! The installer is on a different drive to the game location!\n\n" +
+                            $"Please move the installer to the {selectedPathDrive} drive, and start the installer again!");
+                    }
+
                     _log.Info("Correct path selected");
                     window.TextWarningPath.Text = patcher.ChapterName + " .exe file found!";
                     window.TextWarningPath.Visibility = Visibility.Visible;
