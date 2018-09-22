@@ -104,7 +104,7 @@ namespace Higurashi_Installer_WPF
                 _log.Info("Confirmation grid");
                 window.InstallGrid.Visibility = Visibility.Collapsed;
                 window.ConfirmationGrid.Visibility = Visibility.Visible;
-                window.IconGrid.IsEnabled = false;
+                window.LockIconGrid();
                 ConstructPatcher(window, patcher);
             }
             else
@@ -702,7 +702,7 @@ namespace Higurashi_Installer_WPF
         {
             _log.Info("Reseting window back to original position");
             window.AnimateWindowSize(window.ActualWidth - 500);
-            window.IconGrid.IsEnabled = true;
+            window.UnlockIcongrid();
             window.EpisodeImage.Visibility = Visibility.Collapsed;
             ResetInstallerGrid(window);
         }

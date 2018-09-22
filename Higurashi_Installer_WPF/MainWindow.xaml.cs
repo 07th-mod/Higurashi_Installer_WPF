@@ -48,7 +48,7 @@ namespace Higurashi_Installer_WPF
             patcher.IsFull = true;
 
             //Set title window
-            this.Title = $"07th Mod Patcher v1.19  |  LogFile: [{Logger.GetFullLogFilePath()}]";
+            this.Title = $"07th Mod Patcher v1.20  |  LogFile: [{Logger.GetFullLogFilePath()}]";
 
             //Old .Net versions will crash when creating the JobManagement class - tell users to update .Net
             //They are missing the function "System.Runtime.InteropServices.Marshal.StructureToPtr()"
@@ -76,6 +76,20 @@ namespace Higurashi_Installer_WPF
             //Programmatically make window smaller to hide right hand side panel
             //Not done in xaml so that xaml can still be edited
             Application.Current.MainWindow.Width = 450;
+        }
+
+        //stops user using any of the expander/icon grid items, except Troubleshooting
+        public void LockIconGrid()
+        {
+            UminekoExpander.IsEnabled = false;
+            HigurashiExpander.IsEnabled = false;
+        }
+
+        //allows the user to use the expander/icon grid items
+        public void UnlockIcongrid()
+        {
+            UminekoExpander.IsEnabled = true;
+            HigurashiExpander.IsEnabled = true;
         }
 
         private void BtnOnikakushi_Click(object sender, RoutedEventArgs e)
@@ -230,7 +244,7 @@ namespace Higurashi_Installer_WPF
         {
             ConfirmationGrid.Visibility = Visibility.Collapsed;
             InstallGrid.Visibility = Visibility.Visible;
-            IconGrid.IsEnabled = true;
+            UnlockIcongrid();
         }
 
         private void BtnPath_Click(object sender, RoutedEventArgs e)

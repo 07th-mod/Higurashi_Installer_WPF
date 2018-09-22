@@ -35,7 +35,7 @@
                         <StackPanel.Resources>
                             <local:ExpanderToBooleanConverter x:Key="ExpanderToBooleanConverter" />
                         </StackPanel.Resources>
-                        <Expander HorizontalAlignment="Stretch" Header="Higurashi Installers" IsExpanded="{Binding ExpanderListViewModel.SelectedExpander, Mode=TwoWay, Converter={StaticResource ExpanderToBooleanConverter}, ConverterParameter=1}" Margin="0,0,10,0">
+                        <Expander x:Name="HigurashiExpander" HorizontalAlignment="Stretch" Header="Higurashi Installers" IsExpanded="{Binding ExpanderListViewModel.SelectedExpander, Mode=TwoWay, Converter={StaticResource ExpanderToBooleanConverter}, ConverterParameter=1}" Margin="0,0,10,0">
                             <StackPanel Orientation="Vertical" TextBlock.Foreground="{DynamicResource MaterialDesignBody}" Margin="3,0,0,0">
                                 <Grid Margin="0,0,0,0">
                                     <Grid Grid.Row="0" Grid.Column="0" Margin="0,0,0,0"  Width="100" Height="100">
@@ -117,7 +117,7 @@
                                 </Grid>
                             </StackPanel>
                         </Expander>
-                        <Expander HorizontalAlignment="Stretch" Header="Umineko Installers" IsExpanded="{Binding ExpanderListViewModel.SelectedExpander, Mode=TwoWay, Converter={StaticResource ExpanderToBooleanConverter}, ConverterParameter=2}" Margin="0,0,10,0">
+                        <Expander x:Name="UminekoExpander" HorizontalAlignment="Stretch" Header="Umineko Installers" IsExpanded="{Binding ExpanderListViewModel.SelectedExpander, Mode=TwoWay, Converter={StaticResource ExpanderToBooleanConverter}, ConverterParameter=2}" Margin="0,0,10,0">
                             <StackPanel Orientation="Vertical" TextBlock.Foreground="{DynamicResource MaterialDesignBody}" Margin="3,0,0,0">
                                 <Grid Margin="0,0,0,0">
                                     <Grid Grid.Row="0" Grid.Column="0" Margin="0,0,0,0"  Width="100" Height="100">
@@ -151,7 +151,7 @@
                                 </Grid>
                             </StackPanel>
                         </Expander>
-                        <Expander HorizontalAlignment="Stretch" Header="Troubleshooting" IsExpanded="{Binding ExpanderListViewModel.SelectedExpander, Mode=TwoWay, Converter={StaticResource ExpanderToBooleanConverter}, ConverterParameter=3}" Margin="0,0,10,0">
+                        <Expander x:Name="TroubleShootingExpander" HorizontalAlignment="Stretch" Header="Troubleshooting" IsExpanded="{Binding ExpanderListViewModel.SelectedExpander, Mode=TwoWay, Converter={StaticResource ExpanderToBooleanConverter}, ConverterParameter=3}" Margin="0,0,10,0">
                             <StackPanel Orientation="Vertical" TextBlock.Foreground="{DynamicResource MaterialDesignBody}" Margin="3,0,0,0">
                                 <Grid Margin="0,0,0,0">
                                     <Grid Grid.Row="0" Grid.Column="0" Margin="0,0,0,0"  Height="40">
