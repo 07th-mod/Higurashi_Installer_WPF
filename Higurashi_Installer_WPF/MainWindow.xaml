@@ -14,18 +14,177 @@
         Background="{DynamicResource MaterialDesignPaper}"
         FontFamily="{DynamicResource MaterialDesignFont}"
         Title="07th Mod Patcher"
-        Height="550" Width="450" ResizeMode="NoResize" WindowStartupLocation="CenterScreen"
+        Height="600" Width="950" ResizeMode="NoResize" WindowStartupLocation="CenterScreen"
         RenderOptions.BitmapScalingMode="HighQuality"
         ContentRendered="Window_ContentRendered">
 
 
-    <Grid x:Name="MainGrid" Height="550" VerticalAlignment="Bottom" HorizontalAlignment="Left" Width="450" Margin="0,0,-6,0" >
-        <materialDesign:Card Margin="1,175,0,-2" VerticalAlignment="Stretch" RenderTransformOrigin="0.511,0.166" HorizontalAlignment="Left" Width="440"  >
-            <Image x:Name="MainImage" Source="Resources\logo.png" HorizontalAlignment="Left" Height="266" Margin="-17,-41,-84,-21" VerticalAlignment="Top" Width="540"/>
-        </materialDesign:Card>
-        <Image x:Name="EpisodeImage" HorizontalAlignment="Left" Height="217" Margin="0,352,0,-19" VerticalAlignment="Top" Width="440" Visibility="Collapsed"/>
-        <Grid x:Name="InstallGrid" HorizontalAlignment="Left" Height="550" Margin="446,3,-490,0" VerticalAlignment="Top" Width="494">
-            <materialDesign:Card Height="550">
+    <Grid x:Name="MainGrid" Height="570" VerticalAlignment="Top" HorizontalAlignment="Left" Width="440" >
+
+        <!-- Left hand panel of the installer (initially visible) -->
+        <Grid x:Name="LeftInstallerPanel" Margin="0,0,0,0">
+            <!-- This section contains the icons to select each higurashi/umineko chapter -->
+            <Grid Grid.Row="0" Grid.Column="0" Margin="0,0,0,0">
+                <!-- This section contains the logo for each chapter when icons are mouse'd over -->
+                <Image x:Name="EpisodeImage" VerticalAlignment="Bottom" Source="Resources\logo.png" HorizontalAlignment="Left" Margin="0,0,0,0"/>
+                <!-- Makes a separated grid for the icons, making it easier to control their behaviors -->
+                <Grid x:Name="IconGrid" Height="519" VerticalAlignment="Top" HorizontalAlignment="Left" Width="450" >
+
+                    <!-- Notes on the 'ExpanderToBooleanConverter' (only allow one expander at any one time) https://stackoverflow.com/questions/4449000/multiple-expander-have-to-collapse-if-one-is-expanded-->
+                    <StackPanel Name="GameTypeStackPanel">
+                        <StackPanel.Resources>
+                            <local:ExpanderToBooleanConverter x:Key="ExpanderToBooleanConverter" />
+                        </StackPanel.Resources>
+                        <Expander HorizontalAlignment="Stretch" Header="Higurashi Installers" IsExpanded="{Binding ExpanderListViewModel.SelectedExpander, Mode=TwoWay, Converter={StaticResource ExpanderToBooleanConverter}, ConverterParameter=1}" Margin="0,0,10,0">
+                            <StackPanel Orientation="Vertical" TextBlock.Foreground="{DynamicResource MaterialDesignBody}" Margin="3,0,0,0">
+                                <Grid Margin="0,0,0,0">
+                                    <Grid Grid.Row="0" Grid.Column="0" Margin="0,0,0,0"  Width="100" Height="100">
+                                        <Ellipse Stroke="White" StrokeThickness="1">
+                                            <Ellipse.Fill>
+                                                <ImageBrush x:Name="BtnImageEp1" ImageSource="Resources\07th_icons\ico\HigurashiEp01_0000.ico"/>
+                                            </Ellipse.Fill>
+                                        </Ellipse>
+                                        <Button Width="100" Height="100" Style="{StaticResource MaterialDesignFloatingActionMiniDarkButton}" Background="#00000000" BorderBrush="#00000000" Click="BtnOnikakushi_Click" MouseEnter="MouseEnterOni" MouseLeave="MouseLeaveEpisode">
+                                        </Button>
+                                    </Grid>
+                                    <Grid Grid.Row="0" Grid.Column="1" Margin="0,0,0,0"  Width="100" Height="100">
+                                        <Ellipse Stroke="White" StrokeThickness="1">
+                                            <Ellipse.Fill>
+                                                <ImageBrush x:Name="BtnImageEp2" ImageSource="Resources\07th_icons\ico\HigurashiEp02_0000.ico"/>
+                                            </Ellipse.Fill>
+                                        </Ellipse>
+                                        <Button Width="100" Height="100" Style="{StaticResource MaterialDesignFloatingActionMiniDarkButton}" Background="#00000000" BorderBrush="#00000000" Click="BtnWatanagashi_Click" MouseEnter="MouseEnterWata" MouseLeave="MouseLeaveEpisode">
+                                        </Button>
+                                    </Grid>
+                                    <Grid Grid.Row="0" Grid.Column="2" Margin="0,0,0,0"  Width="100" Height="100">
+                                        <Ellipse Stroke="White" StrokeThickness="1">
+                                            <Ellipse.Fill>
+                                                <ImageBrush x:Name="BtnImageEp3" ImageSource="Resources\07th_icons\ico\HigurashiEp03_0000.ico"/>
+                                            </Ellipse.Fill>
+                                        </Ellipse>
+                                        <Button Width="100" Height="100" Style="{StaticResource MaterialDesignFloatingActionMiniDarkButton}" Background="#00000000" BorderBrush="#00000000" Click="BtnTatarigoroshi_Click" MouseEnter="MouseEnterTata" MouseLeave="MouseLeaveEpisode">
+                                        </Button>
+                                    </Grid>
+                                    <Grid Grid.Row="0" Grid.Column="3" Margin="0,0,0,0"  Width="100" Height="100">
+                                        <Ellipse Stroke="White" StrokeThickness="1">
+                                            <Ellipse.Fill>
+                                                <ImageBrush x:Name="BtnImageEp4" ImageSource="Resources\07th_icons\ico\HigurashiEp04_0000.ico"/>
+                                            </Ellipse.Fill>
+                                        </Ellipse>
+                                        <Button Width="100" Height="100" Style="{StaticResource MaterialDesignFloatingActionMiniDarkButton}" Background="#00000000" BorderBrush="#00000000" Click="BtnHimatsubushi_Click" MouseEnter="MouseEnterHima" MouseLeave="MouseLeaveEpisode">
+                                        </Button>
+                                    </Grid>
+                                    <Grid Grid.Row="1" Grid.Column="0" Margin="0,10,0,0"  Width="100" Height="100">
+                                        <Ellipse Stroke="White" StrokeThickness="1">
+                                            <Ellipse.Fill>
+                                                <ImageBrush x:Name="BtnImageEp5" ImageSource="Resources\07th_icons\ico\HigurashiEp05_00002.ico"/>
+                                            </Ellipse.Fill>
+                                        </Ellipse>
+                                        <Button Width="100" Height="100" Style="{StaticResource MaterialDesignFloatingActionMiniDarkButton}" Background="#00000000" BorderBrush="#00000000" Click="BtnMeakashi_Click" MouseEnter="MouseEnterMea" MouseLeave="MouseLeaveEpisode">
+                                        </Button>
+                                    </Grid>
+                                    <Grid Grid.Row="1" Grid.Column="3" Margin="0,10,0,0"  Width="100" Height="100">
+                                        <Ellipse Stroke="White" StrokeThickness="1">
+                                            <Ellipse.Fill>
+                                                <ImageBrush x:Name="BtnImageConsole" ImageSource="Resources\07th_icons\ico\console.ico"/>
+                                            </Ellipse.Fill>
+                                        </Ellipse>
+                                        <Button Width="100" Height="100" Style="{StaticResource MaterialDesignFloatingActionMiniDarkButton}" Background="#00000000" BorderBrush="#00000000" Click="BtnConsole_Click" MouseEnter="MouseEnterConsole" MouseLeave="MouseLeaveEpisode">
+                                        </Button>
+                                    </Grid>
+                                    <Grid Grid.Row="1" Grid.Column="1" Margin="0,10,0,0"  Width="100" Height="100">
+                                        <Ellipse Stroke="White" StrokeThickness="1">
+                                            <Ellipse.Fill>
+                                                <ImageBrush x:Name="BtnImageEp6" ImageSource="Resources\07th_icons\ico\HigurashiEp06_0000.ico"/>
+                                            </Ellipse.Fill>
+                                        </Ellipse>
+                                        <!-- To restore this button, change "Background" to #00000000 and delete IsHitTestVisible="False" -->
+                                        <Button Width="100" Height="100" Style="{StaticResource MaterialDesignFloatingActionMiniDarkButton}" Background="#00000000" BorderBrush="#00000000" Click="BtnTsumihoroboshi_Click" MouseEnter="BtnTsumihoroboshi_MouseEnter" MouseLeave="MouseLeaveEpisode">
+                                        </Button>
+                                    </Grid>
+                                    <!-- Insert additional Higurashi buttons here
+                            Button Styles are listed at bottom of this page: https://github.com/ButchersBoy/MaterialDesignInXamlToolkit/blob/master/MaterialDesignThemes.Wpf/Themes/MaterialDesignTheme.Button.xaml  -->
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition />
+                                        <ColumnDefinition />
+                                        <ColumnDefinition />
+                                        <ColumnDefinition />
+                                    </Grid.ColumnDefinitions>
+                                    <Grid.RowDefinitions>
+                                        <RowDefinition />
+                                        <RowDefinition />
+                                    </Grid.RowDefinitions>
+                                </Grid>
+                            </StackPanel>
+                        </Expander>
+                        <Expander HorizontalAlignment="Stretch" Header="Umineko Installers" IsExpanded="{Binding ExpanderListViewModel.SelectedExpander, Mode=TwoWay, Converter={StaticResource ExpanderToBooleanConverter}, ConverterParameter=2}" Margin="0,0,10,0">
+                            <StackPanel Orientation="Vertical" TextBlock.Foreground="{DynamicResource MaterialDesignBody}" Margin="3,0,0,0">
+                                <Grid Margin="0,0,0,0">
+                                    <Grid Grid.Row="0" Grid.Column="0" Margin="0,0,0,0"  Width="100" Height="100">
+                                        <Ellipse Stroke="White" StrokeThickness="1">
+                                            <Ellipse.Fill>
+                                                <ImageBrush x:Name="BtnImageUminekoQuestion" ImageSource="Resources\07th_icons\ico\Umineko PS3 Voice and Graphics Installer_0000.ico"/>
+                                            </Ellipse.Fill>
+                                        </Ellipse>
+                                        <Button Width="100" Height="100" Style="{StaticResource MaterialDesignFloatingActionMiniDarkButton}" Background="#00000000" BorderBrush="#00000000" Click="BtnUminekoQuestion_Click" MouseEnter="UminekoQuestion_MouseEnter" MouseLeave="MouseLeaveEpisode">
+                                        </Button>
+                                    </Grid>
+                                    <Grid Grid.Row="0" Grid.Column="1" Margin="0,0,0,0"  Width="100" Height="100">
+                                        <Ellipse Stroke="White" StrokeThickness="1">
+                                            <Ellipse.Fill>
+                                                <ImageBrush x:Name="BtnImageUminekoAnswer" ImageSource="Resources\07th_icons\ico\Umineko Chiru PS3 Voice and Graphics Installer_0000.ico"/>
+                                            </Ellipse.Fill>
+                                        </Ellipse>
+                                        <Button Width="100" Height="100" Style="{StaticResource MaterialDesignFloatingActionMiniDarkButton}" Background="#00000000" BorderBrush="#00000000" Click="BtnUminekoAnswer_Click" MouseEnter="UminekoAnswer_MouseEnter" MouseLeave="MouseLeaveEpisode">
+                                        </Button>
+                                    </Grid>
+
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition/>
+                                        <ColumnDefinition/>
+                                        <ColumnDefinition/>
+                                        <ColumnDefinition/>
+                                    </Grid.ColumnDefinitions>
+                                    <Grid.RowDefinitions>
+                                        <RowDefinition />
+                                    </Grid.RowDefinitions>
+                                </Grid>
+                            </StackPanel>
+                        </Expander>
+                        <Expander HorizontalAlignment="Stretch" Header="Troubleshooting" IsExpanded="{Binding ExpanderListViewModel.SelectedExpander, Mode=TwoWay, Converter={StaticResource ExpanderToBooleanConverter}, ConverterParameter=3}" Margin="0,0,10,0">
+                            <StackPanel Orientation="Vertical" TextBlock.Foreground="{DynamicResource MaterialDesignBody}" Margin="3,0,0,0">
+                                <Grid Margin="0,0,0,0">
+                                    <Grid Grid.Row="0" Grid.Column="0" Margin="0,0,0,0"  Height="40">
+                                        <Button Content="Show Installer Logs" HorizontalAlignment="Center" VerticalAlignment="Center" Click="Button_ShowInstallerLogs"/>
+                                    </Grid>
+                                    <Grid Grid.Row="0" Grid.Column="1" Margin="0,0,0,0"  Height="40">
+                                        <Button Content="Show Game Log" HorizontalAlignment="Center" VerticalAlignment="Center" Click="Button_ShowGameLog"/>
+                                    </Grid>
+
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition/>
+                                        <ColumnDefinition/>
+                                    </Grid.ColumnDefinitions>
+                                    <Grid.RowDefinitions>
+                                        <RowDefinition />
+                                    </Grid.RowDefinitions>
+                                </Grid>
+                            </StackPanel>
+                        </Expander>
+                    </StackPanel>
+                </Grid>
+            </Grid>
+
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition/>
+            </Grid.ColumnDefinitions>
+            <Grid.RowDefinitions>
+                <RowDefinition />
+            </Grid.RowDefinitions>
+        </Grid>
+
+        <Grid x:Name="InstallGrid" HorizontalAlignment="Left" Height="565" Margin="446,3,-490,0" VerticalAlignment="Top" Width="494">
+            <materialDesign:Card Height="565">
                 <materialDesign:Card Height="201" Margin="10,22,10,0">
                 </materialDesign:Card>
             </materialDesign:Card>
@@ -43,14 +202,15 @@
             </ComboBox>
 
             <!-- Label and Combobox for user to choose how to run the batch file. Databinding is set to the MainWindow in the MainWindow constructor -->
-            <Label Content="Installation Method" HorizontalAlignment="Left" Margin="50,370,0,0" VerticalAlignment="Top" Width="126"></Label>
+            <Label HorizontalContentAlignment="Right" Content="Installation Method" HorizontalAlignment="Left" Margin="50,370,0,0" VerticalAlignment="Top" Width="126"></Label>
+            <Label HorizontalContentAlignment="Right" Content="Patch Option" HorizontalAlignment="Left" Margin="50,258,0,0" VerticalAlignment="Top" Width="126"/>
             <ComboBox   HorizontalAlignment="Left" Margin="184,370,0,0" VerticalAlignment="Top" Width="150"
                         ItemsSource="{Binding ExecutionModeComboViewModel.CombobBoxExecutionModes}"
                         DisplayMemberPath="Description"
                         SelectedValuePath="ExecutionMode"
                         SelectedValue="{Binding ExecutionModeComboViewModel.BatchFileExecutionMode}" />
 
-            <Button x:Name="BtnInstall" Content="Install/Update" HorizontalAlignment="Left" Margin="184,411,0,0" VerticalAlignment="Top" Width="126" Click="BtnInstall_Click"/>
+            <Button x:Name="BtnInstall" Content="Install/Update" HorizontalAlignment="Left" Margin="184,411,0,0" VerticalAlignment="Top" Width="126" Click="BtnInstall_Click" IsEnabled="False"/>
             <!-- <Button x:Name="BtnUninstall" Content="Uninstall" HorizontalAlignment="Left" Margin="184,467,0,0" VerticalAlignment="Top" Width="126"/> -->
             <CheckBox x:Name="ChkBackup" Content="Backup Files" HorizontalAlignment="Left" Margin="10,521,0,0" VerticalAlignment="Top" Width="101" IsEnabled="False"/>
             <TextBox x:Name="PathText" HorizontalAlignment="Center" Height="23" Margin="37,76,70,0"  Text="Insert install folder for the chapter" VerticalAlignment="Top" Width="387" IsEnabled="False"/>
@@ -81,132 +241,7 @@
             <TextBlock HorizontalAlignment="Center" Margin="45,65,21,0" TextWrapping="Wrap" Text="Confirm your install preferences" VerticalAlignment="Top" Width="428" FontWeight="Bold" FontSize="25"/>
         </Grid>
 
-        <!-- Makes a separated grid for the icons, making it easier to control their behaviors -->
-        <Grid x:Name="IconGrid" Height="519" VerticalAlignment="Bottom" HorizontalAlignment="Left" Width="450" >
 
-            <!-- Notes on the 'ExpanderToBooleanConverter' (only allow one expander at any one time) https://stackoverflow.com/questions/4449000/multiple-expander-have-to-collapse-if-one-is-expanded-->
-            <StackPanel Name="GameTypeStackPanel">
-                <StackPanel.Resources>
-                    <local:ExpanderToBooleanConverter x:Key="ExpanderToBooleanConverter" />
-                </StackPanel.Resources>
-                <Expander HorizontalAlignment="Stretch" Header="Higurashi Installers" IsExpanded="{Binding ExpanderListViewModel.SelectedExpander, Mode=TwoWay, Converter={StaticResource ExpanderToBooleanConverter}, ConverterParameter=1}" Margin="0,0,10,0">
-                    <StackPanel Orientation="Vertical" TextBlock.Foreground="{DynamicResource MaterialDesignBody}" Margin="3,0,0,0">
-                        <Grid Margin="0,0,0,0">
-                            <Grid Grid.Row="0" Grid.Column="0" Margin="0,0,0,0"  Width="100" Height="100">
-                                <Ellipse Stroke="White" StrokeThickness="1">
-                                    <Ellipse.Fill>
-                                        <ImageBrush x:Name="BtnImageEp1" ImageSource="Resources\07th_icons\ico\HigurashiEp01_0000.ico"/>
-                                    </Ellipse.Fill>
-                                </Ellipse>
-                                <Button Width="100" Height="100" Style="{StaticResource MaterialDesignFloatingActionMiniDarkButton}" Background="#00000000" BorderBrush="#00000000" Click="BtnOnikakushi_Click" MouseEnter="MouseEnterOni" MouseLeave="MouseLeaveEpisode">
-                                </Button>
-                            </Grid>
-                            <Grid Grid.Row="0" Grid.Column="1" Margin="0,0,0,0"  Width="100" Height="100">
-                                <Ellipse Stroke="White" StrokeThickness="1">
-                                    <Ellipse.Fill>
-                                        <ImageBrush x:Name="BtnImageEp2" ImageSource="Resources\07th_icons\ico\HigurashiEp02_0000.ico"/>
-                                    </Ellipse.Fill>
-                                </Ellipse>
-                                <Button Width="100" Height="100" Style="{StaticResource MaterialDesignFloatingActionMiniDarkButton}" Background="#00000000" BorderBrush="#00000000" Click="BtnWatanagashi_Click" MouseEnter="MouseEnterWata" MouseLeave="MouseLeaveEpisode">
-                                </Button>
-                            </Grid>
-                            <Grid Grid.Row="0" Grid.Column="2" Margin="0,0,0,0"  Width="100" Height="100">
-                                <Ellipse Stroke="White" StrokeThickness="1">
-                                    <Ellipse.Fill>
-                                        <ImageBrush x:Name="BtnImageEp3" ImageSource="Resources\07th_icons\ico\HigurashiEp03_0000.ico"/>
-                                    </Ellipse.Fill>
-                                </Ellipse>
-                                <Button Width="100" Height="100" Style="{StaticResource MaterialDesignFloatingActionMiniDarkButton}" Background="#00000000" BorderBrush="#00000000" Click="BtnTatarigoroshi_Click" MouseEnter="MouseEnterTata" MouseLeave="MouseLeaveEpisode">
-                                </Button>
-                            </Grid>
-                            <Grid Grid.Row="0" Grid.Column="3" Margin="0,0,0,0"  Width="100" Height="100">
-                                <Ellipse Stroke="White" StrokeThickness="1">
-                                    <Ellipse.Fill>
-                                        <ImageBrush x:Name="BtnImageEp4" ImageSource="Resources\07th_icons\ico\HigurashiEp04_0000.ico"/>
-                                    </Ellipse.Fill>
-                                </Ellipse>
-                                <Button Width="100" Height="100" Style="{StaticResource MaterialDesignFloatingActionMiniDarkButton}" Background="#00000000" BorderBrush="#00000000" Click="BtnHimatsubushi_Click" MouseEnter="MouseEnterHima" MouseLeave="MouseLeaveEpisode">
-                                </Button>
-                            </Grid>
-                            <Grid Grid.Row="1" Grid.Column="0" Margin="0,10,0,0"  Width="100" Height="100">
-                                <Ellipse Stroke="White" StrokeThickness="1">
-                                    <Ellipse.Fill>
-                                        <ImageBrush x:Name="BtnImageEp5" ImageSource="Resources\07th_icons\ico\HigurashiEp05_00002.ico"/>
-                                    </Ellipse.Fill>
-                                </Ellipse>
-                                <Button Width="100" Height="100" Style="{StaticResource MaterialDesignFloatingActionMiniDarkButton}" Background="#00000000" BorderBrush="#00000000" Click="BtnMeakashi_Click" MouseEnter="MouseEnterMea" MouseLeave="MouseLeaveEpisode">
-                                </Button>
-                            </Grid>
-                            <Grid Grid.Row="1" Grid.Column="3" Margin="0,10,0,0"  Width="100" Height="100">
-                                <Ellipse Stroke="White" StrokeThickness="1">
-                                    <Ellipse.Fill>
-                                        <ImageBrush x:Name="BtnImageConsole" ImageSource="Resources\07th_icons\ico\console.ico"/>
-                                    </Ellipse.Fill>
-                                </Ellipse>
-                                <Button Width="100" Height="100" Style="{StaticResource MaterialDesignFloatingActionMiniDarkButton}" Background="#00000000" BorderBrush="#00000000" Click="BtnConsole_Click" MouseEnter="MouseEnterConsole" MouseLeave="MouseLeaveEpisode">
-                                </Button>
-                            </Grid>
-                            <Grid Grid.Row="1" Grid.Column="1" Margin="0,10,0,0"  Width="100" Height="100">
-                                <Ellipse Stroke="White" StrokeThickness="1">
-                                    <Ellipse.Fill>
-                                        <ImageBrush x:Name="BtnImageEp6" ImageSource="Resources\07th_icons\ico\HigurashiEp06_0000.ico"/>
-                                    </Ellipse.Fill>
-                                </Ellipse>
-                                <!-- To restore this button, change "Background" to #00000000 and delete IsHitTestVisible="False" -->
-                                <Button Width="100" Height="100" Style="{StaticResource MaterialDesignFloatingActionMiniDarkButton}" Background="#00000000" BorderBrush="#00000000" Click="BtnTsumihoroboshi_Click" MouseEnter="BtnTsumihoroboshi_MouseEnter" MouseLeave="MouseLeaveEpisode">
-                                </Button>
-                            </Grid>
-                            <!-- Insert additional Higurashi buttons here 
-                            Button Styles are listed at bottom of this page: https://github.com/ButchersBoy/MaterialDesignInXamlToolkit/blob/master/MaterialDesignThemes.Wpf/Themes/MaterialDesignTheme.Button.xaml  -->
-                            <Grid.ColumnDefinitions>
-                                <ColumnDefinition />
-                                <ColumnDefinition />
-                                <ColumnDefinition />
-                                <ColumnDefinition />
-                            </Grid.ColumnDefinitions>
-                            <Grid.RowDefinitions>
-                                <RowDefinition />
-                                <RowDefinition />
-                            </Grid.RowDefinitions>
-                        </Grid>
-                    </StackPanel>
-                </Expander>
-                <Expander HorizontalAlignment="Stretch" Header="Umineko Installers" IsExpanded="{Binding ExpanderListViewModel.SelectedExpander, Mode=TwoWay, Converter={StaticResource ExpanderToBooleanConverter}, ConverterParameter=2}" Margin="0,0,10,0">
-                    <StackPanel Orientation="Vertical" TextBlock.Foreground="{DynamicResource MaterialDesignBody}" Margin="3,0,0,0">
-                        <Grid Margin="0,0,0,0">
-                            <Grid Grid.Row="0" Grid.Column="0" Margin="0,0,0,0"  Width="100" Height="100">
-                                <Ellipse Stroke="White" StrokeThickness="1">
-                                    <Ellipse.Fill>
-                                        <ImageBrush x:Name="BtnImageUminekoQuestion" ImageSource="Resources\07th_icons\ico\Umineko PS3 Voice and Graphics Installer_0000.ico"/>
-                                    </Ellipse.Fill>
-                                </Ellipse>
-                                <Button Width="100" Height="100" Style="{StaticResource MaterialDesignFloatingActionMiniDarkButton}" Background="#00000000" BorderBrush="#00000000" Click="BtnUminekoQuestion_Click" MouseEnter="UminekoQuestion_MouseEnter" MouseLeave="MouseLeaveEpisode">
-                                </Button>
-                            </Grid>
-                            <Grid Grid.Row="0" Grid.Column="1" Margin="0,0,0,0"  Width="100" Height="100">
-                                <Ellipse Stroke="White" StrokeThickness="1">
-                                    <Ellipse.Fill>
-                                        <ImageBrush x:Name="BtnImageUminekoAnswer" ImageSource="Resources\07th_icons\ico\Umineko Chiru PS3 Voice and Graphics Installer_0000.ico"/>
-                                    </Ellipse.Fill>
-                                </Ellipse>
-                                <Button Width="100" Height="100" Style="{StaticResource MaterialDesignFloatingActionMiniDarkButton}" Background="#00000000" BorderBrush="#00000000" Click="BtnUminekoAnswer_Click" MouseEnter="UminekoAnswer_MouseEnter" MouseLeave="MouseLeaveEpisode">
-                                </Button>
-                            </Grid>
-
-                            <Grid.ColumnDefinitions>
-                                <ColumnDefinition/>
-                                <ColumnDefinition/>
-                                <ColumnDefinition/>
-                                <ColumnDefinition/>
-                            </Grid.ColumnDefinitions>
-                            <Grid.RowDefinitions>
-                                <RowDefinition />
-                            </Grid.RowDefinitions>
-                        </Grid>
-                    </StackPanel>
-                </Expander>
-            </StackPanel>
-        </Grid>
 
         <!-- The main installer grid -->
         <Grid x:Name="InstallerGrid" HorizontalAlignment="Left" Height="550" Margin="446,3,-490,0" VerticalAlignment="Top" Width="494" Visibility="Collapsed">

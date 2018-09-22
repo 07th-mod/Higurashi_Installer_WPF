@@ -26,6 +26,6 @@
 
         <TextBox x:Name="DebugConsolePreviousLines" Grid.Row="0" Grid.Column="0" TextWrapping="Wrap" Text="" VerticalAlignment="Stretch" HorizontalAlignment="Stretch"  VerticalScrollBarVisibility="Visible" AcceptsReturn="True" Margin="10,10,10,0" BorderThickness="1" BorderBrush="White"/>
         <TextBox x:Name="DebugConsoleCurrentLine" Grid.Row="1" Grid.Column="0" TextWrapping="Wrap" Text="" HorizontalAlignment="Stretch" Height="80" AcceptsReturn="True" Margin="10,5,10,0" BorderThickness="1" BorderBrush="White"/>
-        <Button Content="Open Log File" Grid.Row="2" Grid.Column="0" Margin="0,5,10,0" VerticalAlignment="Top" HorizontalAlignment="Right" Width="148" Height="34" Click="OpenLog_Click"/>
+        <Button Content="Open Log Folder" Grid.Row="2" Grid.Column="0" Margin="0,5,10,0" VerticalAlignment="Top" HorizontalAlignment="Right" Width="148" Height="34" Click="OpenLogFolder_Click"/>
     </Grid>
 </Window>

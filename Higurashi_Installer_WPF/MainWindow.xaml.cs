@@ -32,6 +32,7 @@ namespace Higurashi_Installer_WPF
             GlobalExceptionHandler.Setup();
 
             patcher = new PatcherPOCO(ExecutionModeComboViewModel);
+            patcher.ImagePath = "/Resources/logo.png";
 
             // Set the default installation method according to windows version
             // (see https://stackoverflow.com/questions/2819934/detect-windows-version-in-net for versions)
@@ -71,6 +72,10 @@ namespace Higurashi_Installer_WPF
                     MessageBox.Show("The installer will try to run anyway, but if you have issues, please try to update your .net version!");
                 }
             }
+
+            //Programmatically make window smaller to hide right hand side panel
+            //Not done in xaml so that xaml can still be edited
+            Application.Current.MainWindow.Width = 450;
         }
 
         private void BtnOnikakushi_Click(object sender, RoutedEventArgs e)
@@ -235,7 +240,6 @@ namespace Higurashi_Installer_WPF
 
         private void BtnInstallerFinish_Click(object sender, RoutedEventArgs e)
         {
-            MainImage.Source = null;
             Utils.FinishInstallation(this);
             patcher.BatName = "higurashi-delete.bat";
             /* Higurashi now has a separate bat file to clean the Temp folder to avoid errors in the script */
@@ -360,14 +364,7 @@ namespace Higurashi_Installer_WPF
 
         private void MouseLeaveEpisode(object sender, MouseEventArgs e)
         {
-            if (ActualWidth < 950)
-            {
-                EpisodeImage.Visibility = Visibility.Collapsed;
-            }
-            else
-            {
-                EpisodeImage.Source = new BitmapImage(new Uri(patcher.ImagePath, UriKind.Relative));
-            }
+            EpisodeImage.Source = new BitmapImage(new Uri(patcher.ImagePath, UriKind.Relative));
         }
 
         private void BtnToggleConsole(object sender, RoutedEventArgs e)
@@ -391,6 +388,58 @@ namespace Higurashi_Installer_WPF
         {
             consoleWindow = new DebugConsole { Owner = this };
             Logger.guiDebugConsoleAppender.SetDebugConsole(consoleWindow);
+        }
+
+        //Open the installer logs folder in Explorer
+        private void Button_ShowInstallerLogs(object sender, RoutedEventArgs e)
+        {
+            Logger.TryShowLogFolder();
+        }
+
+        //Open the folder containing the game log file in Explorer
+        private void Button_ShowGameLog(object sender, RoutedEventArgs e)
+        {
+            try
+            {
+                //scan inside the game folder for folder which end with '_Data'
+                if (!BtnInstall.IsEnabled)
+                {
+                    MessageBox.Show("Please select the game folder first!");
+                    return;
+                }
+
+                string[] subfoldersInGameFolder = Directory.GetDirectories(PathText.Text);
+
+                string gameLogFolderPath = null;
+                foreach (string subfolder in subfoldersInGameFolder)
+                {
+                    if (subfolder.ToLower().Contains("_data"))
+                    {
+                        gameLogFolderPath = subfolder;
+                        break;
+                    }
+                }
+
+                //open the folder
+                if (gameLogFolderPath != null)
+                {
+                    bool gameLogFileFound = StandaloneUtils.SelectFileInExplorer(Path.Combine(gameLogFolderPath, "output_log.txt"));
+                    if (!gameLogFileFound)
+                    {
+                        MessageBox.Show("Can't find log file. Maybe you haven't run the game yet?\n" +
+                                        "Opening log file folder anyway.");
+                        StandaloneUtils.OpenFolderInExplorer(gameLogFolderPath);
+                    }
+                }
+                else
+                {
+                    MessageBox.Show("Couldn't find the game log folder!");
+                }
+            }
+            catch
+            {
+                MessageBox.Show("Unexpected error while showing the game log.");
+            }
         }
     }
 

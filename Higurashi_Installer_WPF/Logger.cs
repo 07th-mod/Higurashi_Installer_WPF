@@ -5,6 +5,7 @@ using log4net.Layout;
 using log4net.Repository.Hierarchy;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Text;
@@ -78,6 +79,27 @@ namespace Higurashi_Installer_WPF
         public static string GetFullLogFilePath()
         {
             return Path.GetFullPath(logFilePath);
+        }
+
+        public static string GetLogFolderPath()
+        {
+            return Path.GetFullPath(Path.GetDirectoryName(logFilePath));
+        }
+
+        /// <summary>
+        /// Will attempt to show the installer log folder to the user. On any failure
+        /// will show a message box indicating that the log folder couldn't be shown.
+        /// </summary>
+        public static void TryShowLogFolder()
+        {
+            try
+            {
+                StandaloneUtils.OpenFolderInExplorer(GetLogFolderPath());
+            }
+            catch
+            {
+                MessageBox.Show("Couldn't open log folder!");
+            }
         }
     }
 }

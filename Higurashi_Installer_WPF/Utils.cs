@@ -53,7 +53,7 @@ namespace Higurashi_Installer_WPF
 
             window.TextWarningPath.Width = 422;
             window.TextWarningPath.Visibility = Visibility.Collapsed;
-            window.BtnInstall.IsEnabled = true;
+            window.BtnInstall.IsEnabled = false;
             //   window.BtnUninstall.IsEnabled = true;
         }
 
@@ -702,7 +702,6 @@ namespace Higurashi_Installer_WPF
             window.AnimateWindowSize(window.ActualWidth - 500);
             window.IconGrid.IsEnabled = true;
             window.EpisodeImage.Visibility = Visibility.Collapsed;
-            window.MainImage.Source = new BitmapImage(new Uri("/Resources/logo.png", UriKind.Relative));
             ResetInstallerGrid(window);
         }
 
