@@ -212,6 +212,7 @@
 
             <Button x:Name="BtnInstall" Content="Install/Update" HorizontalAlignment="Left" Margin="184,411,0,0" VerticalAlignment="Top" Width="126" Click="BtnInstall_Click" IsEnabled="False"/>
             <!-- <Button x:Name="BtnUninstall" Content="Uninstall" HorizontalAlignment="Left" Margin="184,467,0,0" VerticalAlignment="Top" Width="126"/> -->
+            <CheckBox x:Name="ChkDisableIPV6" Content="Disable IPV6 (use if download stalls)" HorizontalAlignment="Left" Margin="243,523,0,0" VerticalAlignment="Top"/>
             <CheckBox x:Name="ChkBackup" Content="Backup Files" HorizontalAlignment="Left" Margin="10,521,0,0" VerticalAlignment="Top" Width="101" IsEnabled="False"/>
             <TextBox x:Name="PathText" HorizontalAlignment="Center" Height="23" Margin="37,76,70,0"  Text="Insert install folder for the chapter" VerticalAlignment="Top" Width="387" IsEnabled="False"/>
             <TextBlock x:Name="TextWarningPath" HorizontalAlignment="Center" Margin="50,179,22,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="422" IsEnabled="False" FontWeight="Bold" Foreground="#DDFFFFFF" Visibility="Collapsed"/>

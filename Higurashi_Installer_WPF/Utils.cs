@@ -435,13 +435,15 @@ namespace Higurashi_Installer_WPF
             Directory.SetCurrentDirectory(dir);
 
             //Force the batch file to CRLF format before executing it
-            //https://stackoverflow.com/questions/841396/what-is-a-quick-way-to-force-crlf-in-c-sharp-net
-            string entireBatchFile = File.ReadAllText(bat);
-            string fixedBatchFile = entireBatchFile.Replace("\r\n", "\n").Replace("\r", "\n").Replace("\n", "\r\n");
-            if (entireBatchFile != fixedBatchFile)
+            if (StandaloneUtils.BatchFileModifier.ForceWindowsLineEndings(bat))
             {
                 _log.Warn("Batch file does not have windows line endings! Installation will continue - will try to fix automatically...");
-                File.WriteAllText(bat, fixedBatchFile);
+            }
+
+            //Apply ipv4/v6 fix
+            if(window.ChkDisableIPV6.IsChecked == true)
+            {
+                StandaloneUtils.BatchFileModifier.DisableIPV6(bat);
             }
 
             process = new Process();
