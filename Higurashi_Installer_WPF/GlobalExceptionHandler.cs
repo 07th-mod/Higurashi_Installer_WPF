@@ -34,9 +34,14 @@ namespace Higurashi_Installer_WPF
             try
             {
                 _log.Error(outerErrorDescription);
+            }
+            catch { }
+
+            try
+            {
                 _log.Error(innerErrorDescription);
             }
-            catch (Exception _) { }
+            catch { }
 
             try
             {
