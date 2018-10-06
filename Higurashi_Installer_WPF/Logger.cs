@@ -39,6 +39,7 @@ namespace Higurashi_Installer_WPF
     {
         public static GUIDebugConsoleAppender guiDebugConsoleAppender;
         public static readonly string logFilePath = @"Logs\PatcherLog.txt";
+        public static RollingFileAppender roller;
 
         public static void Setup()
         {
@@ -48,9 +49,9 @@ namespace Higurashi_Installer_WPF
             patternLayout.ConversionPattern = "%date [%thread] %-5level - %message%newline";
             patternLayout.ActivateOptions();
 
-            RollingFileAppender roller = new RollingFileAppender();
+            roller = new RollingFileAppender();
             roller.AppendToFile = false;
-            roller.File = logFilePath;
+            roller.File = Path.Combine(Directory.GetCurrentDirectory(), logFilePath);
             roller.Layout = patternLayout;
             roller.MaxSizeRollBackups = 5;
             roller.MaximumFileSize = "1GB";
@@ -76,14 +77,13 @@ namespace Higurashi_Installer_WPF
             hierarchy.Configured = true;
         }
 
+        /// <summary>
+        /// This function MUST be called after logger's Setup() function has been called.
+        /// </summary>
+        /// <returns></returns>
         public static string GetFullLogFilePath()
         {
-            return Path.GetFullPath(logFilePath);
-        }
-
-        public static string GetLogFolderPath()
-        {
-            return Path.GetFullPath(Path.GetDirectoryName(logFilePath));
+            return roller.File;
         }
 
         /// <summary>
@@ -94,11 +94,11 @@ namespace Higurashi_Installer_WPF
         {
             try
             {
-                StandaloneUtils.OpenFolderInExplorer(GetLogFolderPath());
+                StandaloneUtils.OpenFolderInExplorer(Path.GetDirectoryName(GetFullLogFilePath()));
             }
-            catch
+            catch(Exception e)
             {
-                MessageBox.Show("Couldn't open log folder!");
+                MessageBox.Show($"Couldn't open log folder at [{GetFullLogFilePath()}]:\n\n{e.ToString()}");
             }
         }
     }
