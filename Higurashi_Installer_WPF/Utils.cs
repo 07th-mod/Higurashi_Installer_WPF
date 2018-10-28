@@ -129,7 +129,7 @@ namespace Higurashi_Installer_WPF
                 {
                     _log.Info("Wrong path selected");
                     window.TextWarningPath.Width = 422;
-                    window.TextWarningPath.Text = "Invalid path! Please select a folder with the " + patcher.ChapterName + " .exe file";
+                    window.TextWarningPath.Text = "Invalid path! Please select a folder with the " + (patcher.ChapterName == "console0arcs" ? "himatsubishi" : patcher.ChapterName) + " .exe file";
                     window.TextWarningPath.Visibility = Visibility.Visible;
                     window.BtnInstall.IsEnabled = false;
                     //    window.BtnUninstall.IsEnabled = false;
@@ -147,7 +147,7 @@ namespace Higurashi_Installer_WPF
                     }
 
                     _log.Info("Correct path selected");
-                    window.TextWarningPath.Text = patcher.ChapterName + " .exe file found!";
+                    window.TextWarningPath.Text = (patcher.ChapterName == "console0arcs" ? "himatsubishi" : patcher.ChapterName) + " .exe file found!";
                     window.TextWarningPath.Visibility = Visibility.Visible;
                     window.BtnInstall.IsEnabled = true;
                     //   window.BtnUninstall.IsEnabled = true;
