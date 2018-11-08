@@ -104,6 +104,7 @@ namespace Higurashi_Installer_WPF
             patcher.ChapterName = "onikakushi";            
             patcher.SetExeNames("HigurashiEp01.exe");
             patcher.ImagePath = "/Resources/header1.jpg";
+            patcher.FriendlyName = "Ch.1 Onikakushi";
             InstallCombo.IsEnabled = true;
         }
 
@@ -119,6 +120,7 @@ namespace Higurashi_Installer_WPF
             patcher.ChapterName = "watanagashi";
             patcher.SetExeNames("HigurashiEp02.exe");
             patcher.ImagePath = "/Resources/header2.jpg";
+            patcher.FriendlyName = "Ch.2 Watanagashi";
             InstallCombo.IsEnabled = true;
         }
 
@@ -134,6 +136,7 @@ namespace Higurashi_Installer_WPF
             patcher.ChapterName = "tatarigoroshi";
             patcher.SetExeNames("HigurashiEp03.exe");
             patcher.ImagePath = "/Resources/header3.jpg";
+            patcher.FriendlyName = "Ch.3 Tatarigoroshi";
             InstallCombo.IsEnabled = true;
         }
 
@@ -149,6 +152,7 @@ namespace Higurashi_Installer_WPF
             patcher.ChapterName = "himatsubushi";
             patcher.SetExeNames("HigurashiEp04.exe");
             patcher.ImagePath = "/Resources/header4.jpg";
+            patcher.FriendlyName = "Ch.4 Himatsubushi";
             InstallCombo.IsEnabled = true;
         }
 
@@ -164,6 +168,7 @@ namespace Higurashi_Installer_WPF
             patcher.ChapterName = "meakashi";
             patcher.SetExeNames("HigurashiEp05.exe");
             patcher.ImagePath = "/Resources/header5.jpg";
+            patcher.FriendlyName = "Ch.5 Meakashi";
             InstallCombo.IsEnabled = true;
         }
 
@@ -180,6 +185,7 @@ namespace Higurashi_Installer_WPF
             patcher.ChapterName = "tsumihoroboshi";
             patcher.SetExeNames("HigurashiEp06.exe");
             patcher.ImagePath = "/Resources/header6.jpg";
+            patcher.FriendlyName = "Ch.6 Tsumihoroboshi";
             InstallCombo.IsEnabled = true;
         }
 
@@ -195,6 +201,7 @@ namespace Higurashi_Installer_WPF
             patcher.ChapterName = "console0arcs";
             patcher.SetExeNames("HigurashiEp04.exe");
             patcher.ImagePath = "/Resources/console.png";
+            patcher.FriendlyName = "Console Arcs";
             InstallCombo.IsEnabled = false;
         }
 
@@ -210,6 +217,7 @@ namespace Higurashi_Installer_WPF
             patcher.ChapterName = "umineko-question-1080p";
             patcher.SetExeNames("Umineko1to4.exe", "Umineko1to4", "Umineko1to4.app");
             patcher.ImagePath = "/Resources/header_umineko_question.jpg";
+            patcher.FriendlyName = "Umineko Question Arcs - 1080p";
             //Since Umineko dosn't have the voice patch only option, the user can't select it.
             InstallCombo.IsEnabled = false;
         }
@@ -226,6 +234,7 @@ namespace Higurashi_Installer_WPF
             patcher.ChapterName = "umineko-question";
             patcher.SetExeNames("Umineko1to4.exe", "Umineko1to4", "Umineko1to4.app");
             patcher.ImagePath = "/Resources/header_umineko_question.jpg";
+            patcher.FriendlyName = "Umineko Question Arcs";
             //Since Umineko dosn't have the voice patch only option, the user can't select it.
             InstallCombo.IsEnabled = false;
         }
@@ -242,6 +251,7 @@ namespace Higurashi_Installer_WPF
             patcher.ChapterName = "umineko-answer";
             patcher.SetExeNames("Umineko5to8.exe", "umineko5to8", "Umineko5to8.app");
             patcher.ImagePath = "/Resources/header_umineko_answer.jpg";
+            patcher.FriendlyName = "Umineko Answer Arcs";
             //Since Umineko dosn't have the voice patchonly option, the user can't select it.
             InstallCombo.IsEnabled = false;
         }

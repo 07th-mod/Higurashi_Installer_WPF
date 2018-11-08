@@ -66,5 +66,8 @@ namespace Higurashi_Installer_WPF
         public Boolean IsInstallTatarigoroshi { get; set; }
         public Boolean IsInstallHimatsubushi { get; set; }
         public Boolean IsInstallMeakashi { get; set; }
+
+        //Extra information not critical for installation
+        public String FriendlyName { get; set; }    //User facing name, eg "Ch.1 Onikakushi"
     }
 }
