@@ -198,6 +198,22 @@ namespace Higurashi_Installer_WPF
             InstallCombo.IsEnabled = false;
         }
 
+        private void ButtonUminekoQuestion1080p_Click(object sender, RoutedEventArgs e)
+        {
+            _log.Info("Clicked Umineko Question 1080p");
+            Utils.ResizeWindow(this);
+            Utils.ResetPath(this, true);
+
+            EpisodeImage.Visibility = Visibility.Visible;
+            EpisodeImage.Source = new BitmapImage(new Uri(@"/Resources/header_umineko_question.jpg", UriKind.Relative));
+
+            patcher.ChapterName = "umineko-question-1080p";
+            patcher.SetExeNames("Umineko1to4.exe", "Umineko1to4", "Umineko1to4.app");
+            patcher.ImagePath = "/Resources/header_umineko_question.jpg";
+            //Since Umineko dosn't have the voice patch only option, the user can't select it.
+            InstallCombo.IsEnabled = false;
+        }
+
         private void BtnUminekoQuestion_Click(object sender, RoutedEventArgs e)
         {
             _log.Info("Clicked Umineko Question");

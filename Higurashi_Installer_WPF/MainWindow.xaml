@@ -120,7 +120,7 @@
                         <Expander x:Name="UminekoExpander" HorizontalAlignment="Stretch" Header="Umineko Installers" IsExpanded="{Binding ExpanderListViewModel.SelectedExpander, Mode=TwoWay, Converter={StaticResource ExpanderToBooleanConverter}, ConverterParameter=2}" Margin="0,0,10,0">
                             <StackPanel Orientation="Vertical" TextBlock.Foreground="{DynamicResource MaterialDesignBody}" Margin="3,0,0,0">
                                 <Grid Margin="0,0,0,0">
-                                    <Grid Grid.Row="0" Grid.Column="0" Margin="0,0,0,0"  Width="100" Height="100">
+                                    <Grid Grid.Row="0" Grid.Column="1" Margin="0,0,0,0"  Width="100" Height="100">
                                         <Ellipse Stroke="White" StrokeThickness="1">
                                             <Ellipse.Fill>
                                                 <ImageBrush x:Name="BtnImageUminekoQuestion" ImageSource="Resources\07th_icons\ico\Umineko PS3 Voice and Graphics Installer_0000.ico"/>
@@ -129,7 +129,7 @@
                                         <Button Width="100" Height="100" Style="{StaticResource MaterialDesignFloatingActionMiniDarkButton}" Background="#00000000" BorderBrush="#00000000" Click="BtnUminekoQuestion_Click" MouseEnter="UminekoQuestion_MouseEnter" MouseLeave="MouseLeaveEpisode">
                                         </Button>
                                     </Grid>
-                                    <Grid Grid.Row="0" Grid.Column="1" Margin="0,0,0,0"  Width="100" Height="100">
+                                    <Grid Grid.Row="0" Grid.Column="2" Margin="0,0,0,0"  Width="100" Height="100">
                                         <Ellipse Stroke="White" StrokeThickness="1">
                                             <Ellipse.Fill>
                                                 <ImageBrush x:Name="BtnImageUminekoAnswer" ImageSource="Resources\07th_icons\ico\Umineko Chiru PS3 Voice and Graphics Installer_0000.ico"/>
@@ -138,7 +138,16 @@
                                         <Button Width="100" Height="100" Style="{StaticResource MaterialDesignFloatingActionMiniDarkButton}" Background="#00000000" BorderBrush="#00000000" Click="BtnUminekoAnswer_Click" MouseEnter="UminekoAnswer_MouseEnter" MouseLeave="MouseLeaveEpisode">
                                         </Button>
                                     </Grid>
-
+                                    <Grid Grid.Row="0" Grid.Column="0" Margin="0,0,0,0"  Width="100" Height="100">
+                                        <Ellipse Stroke="White" StrokeThickness="1">
+                                            <Ellipse.Fill>
+                                                <ImageBrush ImageSource="Resources\07th_icons\ico\Umineko PS3 Voice and Graphics Installer_0000.ico"/>
+                                            </Ellipse.Fill>
+                                        </Ellipse>
+                                        <TextBlock Text="Question Arcs 1080p Beta Test" TextWrapping="Wrap" HorizontalAlignment="Center" Margin="0,0,0,0" VerticalAlignment="Center" Background="Black"/>
+                                        <Button Width="100" Height="100" Style="{StaticResource MaterialDesignFloatingActionMiniDarkButton}" Background="#00000000" BorderBrush="#00000000" Click="ButtonUminekoQuestion1080p_Click" MouseEnter="UminekoQuestion_MouseEnter" MouseLeave="MouseLeaveEpisode">
+                                        </Button>
+                                    </Grid>
                                     <Grid.ColumnDefinitions>
                                         <ColumnDefinition/>
                                         <ColumnDefinition/>
