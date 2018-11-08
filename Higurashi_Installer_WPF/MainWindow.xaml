@@ -203,10 +203,11 @@
                 </materialDesign:Card>
             </materialDesign:Card>
 
-            <CheckBox x:Name="ChkPS3" Content="PS3 Graphics (Required)" HorizontalAlignment="Left" Margin="180,309,0,0" VerticalAlignment="Top" Width="164" IsChecked="True" IsEnabled="False" Opacity="0.7" Visibility="Collapsed"/>
-            <CheckBox x:Name="ChkSteamSprites" Content="Better Steam Sprites" HorizontalAlignment="Left" Margin="180,345,0,0" VerticalAlignment="Top" Width="143" Visibility="Collapsed"/>
-            <CheckBox x:Name="ChkVoices" Content="Voices (Required)" HorizontalAlignment="Left" Margin="180,327,0,0" VerticalAlignment="Top" Width="130" IsChecked="True" IsEnabled="False" Opacity="0.7" Visibility="Collapsed"/>
-            <CheckBox x:Name="ChkPatch" Content="Patch (Required)" HorizontalAlignment="Left" Margin="180,291,0,0" VerticalAlignment="Top" Width="130" IsChecked="True" IsEnabled="False" Opacity="0.7" Visibility="Collapsed"/>
+            
+            <CheckBox x:Name="ChkPS3" Content="PS3 Graphics (Required)" HorizontalAlignment="Left" Margin="180,309,0,0" VerticalAlignment="Top" Width="164" IsChecked="True" IsEnabled="False" Opacity="0.7"/>
+            <CheckBox x:Name="ChkSteamSprites" Content="Better Steam Sprites" HorizontalAlignment="Left" Margin="180,345,0,0" VerticalAlignment="Top" Width="143"/>
+            <CheckBox x:Name="ChkVoices" Content="Voices (Required)" HorizontalAlignment="Left" Margin="180,327,0,0" VerticalAlignment="Top" Width="130" IsChecked="True" IsEnabled="False" Opacity="0.7"/>
+            <CheckBox x:Name="ChkPatch" Content="Patch (Required)" HorizontalAlignment="Left" Margin="180,291,0,0" VerticalAlignment="Top" Width="130" IsChecked="True" IsEnabled="False" Opacity="0.7"/>
             <CheckBox x:Name="ChkUI" Content="UI Mod" HorizontalAlignment="Left" Margin="180,363,0,0" VerticalAlignment="Top" Width="130" Visibility="Collapsed"/>
             <ComboBox x:Name="InstallCombo" HorizontalAlignment="Left" Margin="184,258,0,0" VerticalAlignment="Top" Width="120" SelectionChanged="InstallCombo_SelectionChanged" SelectedIndex="0" IsEnabled="True">
                 <ComboBoxItem x:Name="FullInstall" Content="Full"/>
