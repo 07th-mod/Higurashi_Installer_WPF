@@ -127,6 +127,7 @@
       <DependentUpon>DebugConsole.xaml</DependentUpon>
     </Compile>
     <Compile Include="GlobalExceptionHandler.cs" />
+    <Compile Include="MainWindow_Utility.cs" />
     <Compile Include="JobManagement.cs" />
     <Compile Include="Logger.cs" />
     <Compile Include="PatcherPOCO.cs" />

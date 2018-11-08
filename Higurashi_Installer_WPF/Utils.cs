@@ -51,8 +51,7 @@ namespace Higurashi_Installer_WPF
                 window.PathText.Text = "Insert install folder for the chapter";
             }
 
-            window.TextWarningPath.Width = 422;
-            window.TextWarningPath.Visibility = Visibility.Collapsed;
+            window.TextWarningPath_SetTextInformation($"Please select path for {window.patcher.FriendlyName}");
             window.BtnInstall.IsEnabled = false;
             //   window.BtnUninstall.IsEnabled = true;
         }
@@ -109,9 +108,7 @@ namespace Higurashi_Installer_WPF
             }
             else
             {
-                window.TextWarningPath.Width = 250;
-                window.TextWarningPath.Text = "Please select a folder before installing!";
-                window.TextWarningPath.Visibility = Visibility.Visible;
+                window.TextWarningPath_SetTextError("Please select a folder before installing!");
             }
         }
 
@@ -128,9 +125,7 @@ namespace Higurashi_Installer_WPF
                 if (!CheckValidFileExists(dialog.FileName, patcher))
                 {
                     _log.Info("Wrong path selected");
-                    window.TextWarningPath.Width = 422;
-                    window.TextWarningPath.Text = "Invalid path! Please select a folder with the " + patcher.ChapterName + " .exe file";
-                    window.TextWarningPath.Visibility = Visibility.Visible;
+                    window.TextWarningPath_SetTextError("Invalid path! Please select a folder with the " + patcher.ChapterName + " .exe file");
                     window.BtnInstall.IsEnabled = false;
                     //    window.BtnUninstall.IsEnabled = false;
                 }
@@ -147,11 +142,9 @@ namespace Higurashi_Installer_WPF
                     }
 
                     _log.Info("Correct path selected");
-                    window.TextWarningPath.Text = patcher.ChapterName + " .exe file found!";
-                    window.TextWarningPath.Visibility = Visibility.Visible;
+                    window.TextWarningPath_SetTextSuccess(patcher.ChapterName + " .exe file found!");
                     window.BtnInstall.IsEnabled = true;
                     //   window.BtnUninstall.IsEnabled = true;
-                    window.TextWarningPath.Width = 180;
                 }
             }
         }
