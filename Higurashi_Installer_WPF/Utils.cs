@@ -312,6 +312,15 @@ namespace Higurashi_Installer_WPF
                     await client.DownloadFileTaskAsync("http://07th-mod.com/dependencies.zip", patcher.InstallPath + "\\resources.zip");
                 }
             }
+            catch (WebException webException)
+            {
+                string friendlyMessage = "Couldn't reach 07th mod server to download patch files.\n\n" +
+                    "Note that we have blocked Japan from downloading (VPNs are compatible with this installer, however)\n\n" +
+                    $"[{webException.Message}]\nClick 'Show Detailed Progress' to view the full error.";
+                _log.Error(friendlyMessage + webException);
+                MessageBox.Show(friendlyMessage);
+                return false;
+            }
             catch (Exception error)
             {
                 string errormsg = "Couldn't download resources for installer: " + error;
