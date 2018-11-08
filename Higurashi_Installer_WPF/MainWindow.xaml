@@ -194,9 +194,9 @@
 
         <Grid x:Name="InstallGrid" HorizontalAlignment="Left" Height="565" Margin="446,3,-490,0" VerticalAlignment="Top" Width="494">
             <materialDesign:Card Height="565">
-                <materialDesign:Card Height="201" Margin="10,22,10,0">
+                <materialDesign:Card Height="201" Margin="10,10,10,0">
                     <StackPanel VerticalAlignment="Center">
-                        <TextBox x:Name="PathText" HorizontalAlignment="Center" Height="23" Margin="0,0,0,0"  Text="Please select the install folder for the chapter you want to install" VerticalAlignment="Top" Width="387" IsEnabled="False"/>
+                        <TextBox x:Name="PathText" HorizontalAlignment="Center" Margin="20,0,20,0" Text="Please select the install folder for the chapter you want to install" VerticalAlignment="Top" IsEnabled="False" TextWrapping="WrapWithOverflow"/>
                         <Button x:Name="BtnPath" Content="Select Install folder" HorizontalAlignment="Center" Margin="0,30,0,0" VerticalAlignment="Top" IsCancel="True" Click="BtnPath_Click"/>
                         <TextBlock x:Name="TextWarningPath" Text="Please select the install folder" HorizontalAlignment="Center" Margin="0,30,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="422" IsEnabled="False" FontWeight="Bold" Foreground="#DDFFFFFF"/>
                     </StackPanel>

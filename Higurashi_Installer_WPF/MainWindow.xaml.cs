@@ -95,7 +95,6 @@ namespace Higurashi_Installer_WPF
         private void BtnOnikakushi_Click(object sender, RoutedEventArgs e)
         {
             _log.Info("clicked onikakushi");
-            Utils.ResizeWindow(this);
 
             EpisodeImage.Visibility = Visibility.Visible;
             EpisodeImage.Source = new BitmapImage(new Uri("/Resources/header1.jpg", UriKind.Relative));
@@ -105,13 +104,12 @@ namespace Higurashi_Installer_WPF
             patcher.ImagePath = "/Resources/header1.jpg";
             patcher.FriendlyName = "Ch.1 Onikakushi";
             InstallCombo.IsEnabled = true;
-            Utils.ResetPath(this, true);
+            ActionAfterGameSelected();
         }
 
         private void BtnWatanagashi_Click(object sender, RoutedEventArgs e)
         {
             _log.Info("Clicked Watanagashi");
-            Utils.ResizeWindow(this);
 
             EpisodeImage.Visibility = Visibility.Visible;
             EpisodeImage.Source = new BitmapImage(new Uri("/Resources/header2.jpg", UriKind.Relative));
@@ -121,13 +119,12 @@ namespace Higurashi_Installer_WPF
             patcher.ImagePath = "/Resources/header2.jpg";
             patcher.FriendlyName = "Ch.2 Watanagashi";
             InstallCombo.IsEnabled = true;
-            Utils.ResetPath(this, true);
+            ActionAfterGameSelected();
         }
 
         private void BtnTatarigoroshi_Click(object sender, RoutedEventArgs e)
         {
             _log.Info("Clicked Tatarigoroshi");
-            Utils.ResizeWindow(this);
 
             EpisodeImage.Visibility = Visibility.Visible;
             EpisodeImage.Source = new BitmapImage(new Uri("/Resources/header3.jpg", UriKind.Relative));
@@ -137,13 +134,12 @@ namespace Higurashi_Installer_WPF
             patcher.ImagePath = "/Resources/header3.jpg";
             patcher.FriendlyName = "Ch.3 Tatarigoroshi";
             InstallCombo.IsEnabled = true;
-            Utils.ResetPath(this, true);
+            ActionAfterGameSelected();
         }
 
         private void BtnHimatsubushi_Click(object sender, RoutedEventArgs e)
         {
             _log.Info("Clicked Himatsubushi");
-            Utils.ResizeWindow(this);
 
             EpisodeImage.Visibility = Visibility.Visible;
             EpisodeImage.Source = new BitmapImage(new Uri("/Resources/header4.jpg", UriKind.Relative));
@@ -153,13 +149,12 @@ namespace Higurashi_Installer_WPF
             patcher.ImagePath = "/Resources/header4.jpg";
             patcher.FriendlyName = "Ch.4 Himatsubushi";
             InstallCombo.IsEnabled = true;
-            Utils.ResetPath(this, true);
+            ActionAfterGameSelected();
         }
 
         private void BtnMeakashi_Click(object sender, RoutedEventArgs e)
         {
             _log.Info("Clicked Meakashi");
-            Utils.ResizeWindow(this);
 
             EpisodeImage.Visibility = Visibility.Visible;
             EpisodeImage.Source = new BitmapImage(new Uri("/Resources/header5.jpg", UriKind.Relative));
@@ -169,14 +164,12 @@ namespace Higurashi_Installer_WPF
             patcher.ImagePath = "/Resources/header5.jpg";
             patcher.FriendlyName = "Ch.5 Meakashi";
             InstallCombo.IsEnabled = true;
-            Utils.ResetPath(this, true);
+            ActionAfterGameSelected();
         }
 
         private void BtnTsumihoroboshi_Click(object sender, RoutedEventArgs e)
         {
             _log.Info("Clicked Tsumihoroboshi");
-
-            Utils.ResizeWindow(this);
 
             EpisodeImage.Visibility = Visibility.Visible;
             EpisodeImage.Source = new BitmapImage(new Uri("/Resources/header6.jpg", UriKind.Relative));
@@ -186,13 +179,12 @@ namespace Higurashi_Installer_WPF
             patcher.ImagePath = "/Resources/header6.jpg";
             patcher.FriendlyName = "Ch.6 Tsumihoroboshi";
             InstallCombo.IsEnabled = true;
-            Utils.ResetPath(this, true);
+            ActionAfterGameSelected();
         }
 
         private void BtnConsole_Click(object sender, RoutedEventArgs e)
         {
             _log.Info("Clicked Console Arcs");
-            Utils.ResizeWindow(this);
 
             EpisodeImage.Visibility = Visibility.Visible;
             EpisodeImage.Source = new BitmapImage(new Uri("/Resources/console.png", UriKind.Relative));
@@ -202,13 +194,12 @@ namespace Higurashi_Installer_WPF
             patcher.ImagePath = "/Resources/console.png";
             patcher.FriendlyName = "Console Arcs";
             InstallCombo.IsEnabled = false;
-            Utils.ResetPath(this, true);
+            ActionAfterGameSelected();
         }
 
         private void ButtonUminekoQuestion1080p_Click(object sender, RoutedEventArgs e)
         {
             _log.Info("Clicked Umineko Question 1080p");
-            Utils.ResizeWindow(this);
 
             EpisodeImage.Visibility = Visibility.Visible;
             EpisodeImage.Source = new BitmapImage(new Uri(@"/Resources/header_umineko_question.jpg", UriKind.Relative));
@@ -219,13 +210,12 @@ namespace Higurashi_Installer_WPF
             patcher.FriendlyName = "Umineko Question Arcs - 1080p";
             //Since Umineko dosn't have the voice patch only option, the user can't select it.
             InstallCombo.IsEnabled = false;
-            Utils.ResetPath(this, true);
+            ActionAfterGameSelected();
         }
 
         private void BtnUminekoQuestion_Click(object sender, RoutedEventArgs e)
         {
             _log.Info("Clicked Umineko Question");
-            Utils.ResizeWindow(this);
 
             EpisodeImage.Visibility = Visibility.Visible;
             EpisodeImage.Source = new BitmapImage(new Uri(@"/Resources/header_umineko_question.jpg", UriKind.Relative));
@@ -236,13 +226,12 @@ namespace Higurashi_Installer_WPF
             patcher.FriendlyName = "Umineko Question Arcs";
             //Since Umineko dosn't have the voice patch only option, the user can't select it.
             InstallCombo.IsEnabled = false;
-            Utils.ResetPath(this, true);
+            ActionAfterGameSelected();
         }
 
         private void BtnUminekoAnswer_Click(object sender, RoutedEventArgs e)
         {
             _log.Info("Clicked Umineko Answer");
-            Utils.ResizeWindow(this);
 
             EpisodeImage.Visibility = Visibility.Visible;
             EpisodeImage.Source = new BitmapImage(new Uri(@"/Resources/header_umineko_answer.jpg", UriKind.Relative));
@@ -253,7 +242,14 @@ namespace Higurashi_Installer_WPF
             patcher.FriendlyName = "Umineko Answer Arcs";
             //Since Umineko dosn't have the voice patchonly option, the user can't select it.
             InstallCombo.IsEnabled = false;
+            ActionAfterGameSelected();
+        }
+
+        private void ActionAfterGameSelected()
+        {
+            Utils.ResizeWindow(this);
             Utils.ResetPath(this, true);
+            Utils.AutoDetectGamePathAndValidate(this, patcher);
         }
 
         private void InstallCombo_SelectionChanged(object sender, SelectionChangedEventArgs e)
@@ -275,7 +271,7 @@ namespace Higurashi_Installer_WPF
 
         private void BtnPath_Click(object sender, RoutedEventArgs e)
         {
-            Utils.ValidateFilePath(this, patcher);
+            Utils.AskFilePathAndValidate(this, patcher);
         }
 
         private void BtnInstallerFinish_Click(object sender, RoutedEventArgs e)

@@ -69,5 +69,6 @@ namespace Higurashi_Installer_WPF
 
         //Extra information not critical for installation
         public String FriendlyName { get; set; }    //User facing name, eg "Ch.1 Onikakushi"
+        public String GetFriendlyExeNamesList() => String.Join(" or ", GetExeNames());
     }
 }

@@ -51,7 +51,8 @@ namespace Higurashi_Installer_WPF
                 window.PathText.Text = "Insert install folder for the chapter";
             }
 
-            window.TextWarningPath_SetTextInformation($"Please select path for {window.patcher.FriendlyName}");
+            window.TextWarningPath_SetTextInformation($"Please select game folder for '{window.patcher.FriendlyName}'\n" +
+                $"Folder should contain '{window.patcher.GetFriendlyExeNamesList()}'");
             window.BtnInstall.IsEnabled = false;
             //   window.BtnUninstall.IsEnabled = true;
         }
@@ -112,8 +113,69 @@ namespace Higurashi_Installer_WPF
             }
         }
 
-        //Validates the path the user informs in the install grid
-        public static void ValidateFilePath(MainWindow window, PatcherPOCO patcher)
+        /// <summary>
+        /// Gets the root folder of your steam installation from the registry
+        /// the returned path may or may not be valid - make sure to validate it yourself!
+        /// </summary>
+        /// <param name="steamPath"></param>
+        /// <returns></returns>
+        private static bool GetSteamappsCommonFolderFromRegistry(out string steamPath)
+        {
+            steamPath = String.Empty;
+
+            try
+            {
+                //steamRootPath is like C:\games\Steam
+                string steamRootPath = Microsoft.Win32.Registry.GetValue(
+                    keyName: @"HKEY_CURRENT_USER\Software\Valve\Steam", 
+                    valueName: "SteamPath", 
+                    defaultValue:String.Empty) as string;
+
+                //steamPath is like C:\games\Steam\steamapps\common\
+                steamPath = Path.Combine(steamRootPath, @"steamapps\common\")
+                    .Replace("/", "\\"); //convert any forward slashes to backslashes to fix various issues...
+            }
+            catch(Exception e)
+            {
+                _log.Error($"Couldn't retrieve steam path from registry: {e}");
+                return false;
+            }
+
+            return steamPath != String.Empty;            
+        }
+
+        /// <summary>
+        /// Attempts to Auto-detect steam game install path. On failure, no action is taken.
+        /// On success, still does the regular validation of the path as if path was selcted manually
+        /// </summary>
+        public static bool AutoDetectGamePathAndValidate(MainWindow window, PatcherPOCO patcher)
+        {
+            try
+            {
+                if (GetSteamappsCommonFolderFromRegistry(out string steamPath))
+                {
+                    foreach (string gameFolder in Directory.EnumerateDirectories(steamPath))
+                    {
+                        if(CheckValidFileExists(gameFolder, patcher))
+                        {
+                            ValidateFilePath(window, patcher, gameFolder);
+                            return true;
+                        }
+                    }
+                }
+            }
+            catch(Exception e)
+            {
+                _log.Info($"Couldn't auto-detect path: {e}");
+            }
+
+            return false;
+        }
+
+        /// <summary>
+        /// Show a FolderPicker Dialog for the user to select the game directory, then validates it is correct
+        /// </summary>
+        public static void AskFilePathAndValidate(MainWindow window, PatcherPOCO patcher)
         {
             _log.Info("Checking if path is valid");
             var dialog = new CommonOpenFileDialog();
@@ -121,31 +183,40 @@ namespace Higurashi_Installer_WPF
             CommonFileDialogResult result = dialog.ShowDialog();
             if (result.ToString() == "Ok")
             {
-                window.PathText.Text = dialog.FileName;
-                if (!CheckValidFileExists(dialog.FileName, patcher))
-                {
-                    _log.Info("Wrong path selected");
-                    window.TextWarningPath_SetTextError("Invalid path! Please select a folder with the " + patcher.ChapterName + " .exe file");
-                    window.BtnInstall.IsEnabled = false;
-                    //    window.BtnUninstall.IsEnabled = false;
-                }
-                else
-                {
-                    //installer won't run properly if install location is on a different drive to the installer.
-                    //Just warn the user to move the install file to the same drive.
-                    string currentDrive = Path.GetPathRoot(Environment.CurrentDirectory);
-                    string selectedPathDrive = Path.GetPathRoot(dialog.FileName);
-                    if (currentDrive != selectedPathDrive)
-                    {
-                        MessageBox.Show($"Warning!! The installer is on a different drive to the game location!\n\n" +
-                            $"Please move the installer to the {selectedPathDrive} drive, and start the installer again!");
-                    }
+                ValidateFilePath(window, patcher, dialog.FileName);
+            }
+        }
 
-                    _log.Info("Correct path selected");
-                    window.TextWarningPath_SetTextSuccess(patcher.ChapterName + " .exe file found!");
-                    window.BtnInstall.IsEnabled = true;
-                    //   window.BtnUninstall.IsEnabled = true;
+        //Validates the path the user informs in the install 
+        private static void ValidateFilePath(MainWindow window, PatcherPOCO patcher, string gamePath)
+        {
+            window.PathText.Text = gamePath;
+            if (!CheckValidFileExists(gamePath, patcher))
+            {
+                _log.Info("Wrong path selected");
+                window.TextWarningPath_SetTextError($"Path is INVALID for '{patcher.FriendlyName}'\n" +
+                    $"(Couldn't find {patcher.GetFriendlyExeNamesList()})");
+                window.BtnInstall.IsEnabled = false;
+                //    window.BtnUninstall.IsEnabled = false;
+            }
+            else
+            {
+                //installer won't run properly if install location is on a different drive to the installer.
+                //Just warn the user to move the install file to the same drive.
+                string currentDrive = Path.GetPathRoot(Environment.CurrentDirectory).ToLower();
+                string selectedPathDrive = Path.GetPathRoot(gamePath).ToLower();
+                if (currentDrive != selectedPathDrive)
+                {
+                    MessageBox.Show($"Warning!! The installer is on a different drive to the game location!\n\n" +
+                        $"Please move the installer to the {selectedPathDrive} drive, and start the installer again!");
+                    _log.Info($"Installer on different drive inst: {currentDrive} game: {selectedPathDrive}");
                 }
+
+                _log.Info("Correct path selected");
+                window.TextWarningPath_SetTextSuccess($"Path is valid for '{patcher.FriendlyName}'\n" +
+                    $"(Found {patcher.GetFriendlyExeNamesList()})");
+                window.BtnInstall.IsEnabled = true;
+                //   window.BtnUninstall.IsEnabled = true;
             }
         }
 
@@ -215,7 +286,7 @@ namespace Higurashi_Installer_WPF
             patcher.IsBackup = (Boolean)window.ChkBackup.IsChecked;
             patcher.InstallUpdate = "Installation";
 
-            window.List1.Content = "Chapter: " + patcher.ChapterName;
+            window.List1.Content = "Chapter: " + patcher.FriendlyName;
             window.List2.Content = "Path: " + window.PathText.Text;
             window.List3.Content = "Process: Installation";
             window.List5.Content = "Backup: " + (patcher.IsBackup ? "Yes" : "No");
