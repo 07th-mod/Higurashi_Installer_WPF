@@ -477,6 +477,33 @@ namespace Higurashi_Installer_WPF
                 MessageBox.Show("Unexpected error while showing the game log.");
             }
         }
+
+        private void Button_ClearInstallerTempFiles(object sender, RoutedEventArgs e)
+        {
+            try
+            {
+                if (!BtnInstall.IsEnabled)
+                {
+                    MessageBox.Show("Please select the game folder first!");
+                    return;
+                }
+
+                MessageBox.Show("When you press 'OK', the installer temp folder will be opened in explorer. Please manually delete the files in this folder." +
+                "\n\nIf you are attemping to overwrite an existing install, it may be better 'start from scrach' by reinstalling the base game" +
+                "\n\nShould you still encounter issues, contact us on our discord.");
+
+                StandaloneUtils.OpenFolderInExplorer(Path.Combine(PathText.Text,"temp"));
+            }
+            catch
+            {
+                MessageBox.Show("Unexpected error while showing the game log.");
+            }
+        }
+
+        private void Button_OpenDiscord(object sender, RoutedEventArgs e)
+        {
+            Process.Start("https://discord.gg/acSbBtD");
+        }
     }
 
     // The following two classes are required to ensure only one expander is expanded at any time

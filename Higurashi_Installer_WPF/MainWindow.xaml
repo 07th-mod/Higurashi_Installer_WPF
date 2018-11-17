@@ -170,11 +170,19 @@
                                         <Button Content="Show Game Log" HorizontalAlignment="Center" VerticalAlignment="Center" Click="Button_ShowGameLog"/>
                                     </Grid>
 
+                                    <Grid Grid.Row="1" Grid.Column="0" Margin="0,0,0,0"  Height="40">
+                                        <Button Content="Clear Installer Temp Files" HorizontalAlignment="Center" VerticalAlignment="Center" Click="Button_ClearInstallerTempFiles"/>
+                                    </Grid>
+                                    <Grid Grid.Row="1" Grid.Column="1" Margin="0,0,0,0"  Height="40">
+                                        <Button Content="Open 07th-Mod Discord" HorizontalAlignment="Center" VerticalAlignment="Center" Click="Button_OpenDiscord"/>
+                                    </Grid>
+
                                     <Grid.ColumnDefinitions>
                                         <ColumnDefinition/>
                                         <ColumnDefinition/>
                                     </Grid.ColumnDefinitions>
                                     <Grid.RowDefinitions>
+                                        <RowDefinition />
                                         <RowDefinition />
                                     </Grid.RowDefinitions>
                                 </Grid>
