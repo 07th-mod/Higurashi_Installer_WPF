@@ -1,3 +1,5 @@
+# WARNING: This repo is no longer used! Please visit the new installer repo at https://github.com/07th-mod/python-patcher
+
 ## Read me first!
 
 If you want to download the installer, go to the [Releases Page](https://github.com/07th-mod/Higurashi_Installer_WPF/releases), and grab the latest installer.
