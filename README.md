@@ -1,4 +1,4 @@
-# WARNING: This repo is no longer used! Please visit the new installer repo at https://github.com/07th-mod/python-patcher
+# WARNING: This repo is no longer used! Please visit the wiki http://07th-mod.com/wiki/ or the new installer repo at https://github.com/07th-mod/python-patcher
 
 ## Read me first!
 
